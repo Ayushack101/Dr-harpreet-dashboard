@@ -32,10 +32,52 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 // Images
 import bgImage from "assets/images/bg-sign-up-cover.jpeg";
 
+import axios from "axios";
+import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useState } from "react";
+
 function Cover() {
+  const [username, setUsername] = useState("a");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    const userData = {
+      username: data.username,
+      email: data.email,
+      password: data.password,
+    };
+    console.log(userData);
+    try {
+      const resp = await axios.post("localhost:3000/sign-up", userData);
+      console.log(resp);
+      if (resp.status === false) {
+        toast.warning(`Error occured, ${resp.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (resp.status === true) {
+        toast.success(`Success, New user created successfully!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(`Error occured, ${error}`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
   return (
     <CoverLayout image={bgImage}>
       <Card>
+        <ToastContainer />
         <MDBox
           variant="gradient"
           bgColor="info"
@@ -47,23 +89,69 @@ function Cover() {
           mb={1}
           textAlign="center"
         >
-          <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
+          {/* <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
             Join us today
-          </MDTypography>
+          </MDTypography> */}
           <MDTypography display="block" variant="button" color="white" my={1}>
-            Enter your email and password to register
+            Enter your username, email and password to register
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
+          <MDBox component="form" role="form" onSubmit={handleSubmit(onSubmit)}>
             <MDBox mb={2}>
-              <MDInput type="text" label="Name" variant="standard" fullWidth />
+              <MDInput
+                type="text"
+                label="Username"
+                variant="standard"
+                fullWidth
+                {...register("username", {
+                  required: "username is required",
+                  minLength: {
+                    value: 5,
+                    message:
+                      "Username should be 5-10 characters and should not include anyspecial characters",
+                  },
+                  maxLength: {
+                    value: 10,
+                    message:
+                      "Username should be 5-10 characters and should not include anyspecial characters",
+                  },
+                })}
+              />
+              <MDTypography>{errors?.username?.message}</MDTypography>
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" variant="standard" fullWidth />
+              <MDInput
+                type="email"
+                label="Email"
+                variant="standard"
+                fullWidth
+                {...register("email", {
+                  required: "email is required!",
+                  pattern: {
+                    value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                    message: "It should be a valid email address!",
+                  },
+                })}
+              />
+              <MDTypography>{errors?.email?.message}</MDTypography>
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" variant="standard" fullWidth />
+              <MDInput
+                type="password"
+                label="Password"
+                variant="standard"
+                fullWidth
+                {...register("password", {
+                  required: "password is required",
+                  pattern: {
+                    value: /^(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,16}/,
+                    message:
+                      "Username should be 8-16 characters and should include atleast, 1 number, 1 letter, 1 special characters ",
+                  },
+                })}
+              />
+              <MDTypography>{errors?.password?.message}</MDTypography>
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Checkbox />
@@ -87,7 +175,7 @@ function Cover() {
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+              <MDButton type="submit" variant="gradient" color="info" fullWidth>
                 sign in
               </MDButton>
             </MDBox>

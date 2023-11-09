@@ -110,7 +110,7 @@ function DefaultNavbar({ transparent, light, action }) {
           pl={{ xs: 0, lg: 1 }}
         >
           <MDTypography variant="button" fontWeight="bold" color={light ? "white" : "dark"}>
-            Material Dashboard 2
+            Dr Harpreet
           </MDTypography>
         </MDBox>
         <MDBox color="inherit" display={{ xs: "none", lg: "flex" }} m={0} p={0}>
@@ -144,7 +144,7 @@ function DefaultNavbar({ transparent, light, action }) {
             </MDBox>
           ) : (
             <MDBox display={{ xs: "none", lg: "inline-block" }}>
-              <MDButton
+              {/* <MDButton
                 component="a"
                 href={action.route}
                 target="_blank"
@@ -155,7 +155,7 @@ function DefaultNavbar({ transparent, light, action }) {
                 sx={{ mt: -0.3 }}
               >
                 {action.label}
-              </MDButton>
+              </MDButton> */}
             </MDBox>
           ))}
         <MDBox

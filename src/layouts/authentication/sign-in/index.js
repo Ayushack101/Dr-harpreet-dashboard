@@ -41,10 +41,54 @@ import BasicLayout from "layouts/authentication/components/BasicLayout";
 // Images
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 
+import axios from "axios";
+import { useForm } from "react-hook-form";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (data) => {
+    const userData = {
+      username: data.username,
+      email: data.email,
+      password: data.password,
+    };
+    console.log(userData);
+    try {
+      const resp = await axios.post("https://indush.in/api/sign-up.php", userData);
+      console.log(resp);
+      if (resp.data.status === false) {
+        toast.warning(`Error occured, ${resp.data.msg}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (resp.data.status === true) {
+        setTimeout(() => {
+          toast.success(`Success, New user created successfully!`, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }, 500);
+        setShowSignupPopup(false);
+        setShowLoginPopup(true);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(`Error occured, ${error}`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
 
   return (
     <BasicLayout image={bgImage}>

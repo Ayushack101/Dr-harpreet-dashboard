@@ -36,7 +36,7 @@ function BasicLayout({ image, children }) {
         action={{
           type: "external",
           route: "https://creative-tim.com/product/material-dashboard-react",
-          label: "free download",
+          label: "",
           color: "dark",
         }}
       />
@@ -63,7 +63,7 @@ function BasicLayout({ image, children }) {
           </Grid>
         </Grid>
       </MDBox>
-      <Footer light />
+      {/* <Footer light /> */}
     </PageLayout>
   );
 }
