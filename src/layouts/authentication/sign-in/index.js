@@ -45,7 +45,7 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+// import {useState}from "react";
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
 
@@ -65,7 +65,7 @@ function Basic() {
     };
     console.log(userData);
     try {
-      const resp = await axios.post("https://indush.in/api/sign-up.php", userData);
+      const resp = await axios.post("localhost:3000/login", userData);
       console.log(resp);
       if (resp.data.status === false) {
         toast.warning(`Error occured, ${resp.data.msg}!`, {
@@ -104,10 +104,10 @@ function Basic() {
           mb={1}
           textAlign="center"
         >
-          <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
+          {/* <MDTypography variant="h4" fontWeight="medium" color="white" mt={1}>
             Sign in
-          </MDTypography>
-          <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
+          </MDTypography> */}
+          {/* <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
             <Grid item xs={2}>
               <MDTypography component={MuiLink} href="#" variant="body1" color="white">
                 <FacebookIcon color="inherit" />
@@ -123,7 +123,10 @@ function Basic() {
                 <GoogleIcon color="inherit" />
               </MDTypography>
             </Grid>
-          </Grid>
+          </Grid> */}
+          <MDTypography display="block" variant="button" color="white" my={1}>
+            Enter your  email and password to login dashboard
+          </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
