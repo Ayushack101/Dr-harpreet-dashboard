@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 import { useState } from "react";
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -48,8 +48,11 @@ import "react-toastify/dist/ReactToastify.css";
 // import {useState}from "react";
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
+  const navigate = useNavigate();
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
 
   const {
     register,
@@ -59,13 +62,12 @@ function Basic() {
 
   const onSubmit = async (data) => {
     const userData = {
-      username: data.username,
       email: data.email,
       password: data.password,
     };
     console.log(userData);
     try {
-      const resp = await axios.post("localhost:3000/login", userData);
+      const resp = await axios.post("https://indush.in/api/sign-up.php", userData);
       console.log(resp);
       if (resp.data.status === false) {
         toast.warning(`Error occured, ${resp.data.msg}!`, {
@@ -79,8 +81,7 @@ function Basic() {
             position: toast.POSITION.TOP_RIGHT,
           });
         }, 500);
-        setShowSignupPopup(false);
-        setShowLoginPopup(true);
+        navigate("/");
       }
     } catch (error) {
       console.log(error);
@@ -90,9 +91,41 @@ function Basic() {
     }
   };
 
+  // const handleForm = async () => {
+  //   const userData = {
+  //     email: email,
+  //     password: password,
+  //   };
+  //   console.log(userData, "asd");
+  //   try {
+  //     const resp = await axios.post("localhost:3000/sign-in", userData);
+  //     console.log(resp);
+  //     if (resp.data.status === false) {
+  //       toast.warning(`Error occured, ${resp.data.msg}!`, {
+  //         position: toast.POSITION.TOP_RIGHT,
+  //       });
+  //       return;
+  //     }
+  //     if (resp.data.status === true) {
+  //       setTimeout(() => {
+  //         toast.success(`Success, New user created successfully!`, {
+  //           position: toast.POSITION.TOP_RIGHT,
+  //         });
+  //       }, 500);
+  //       navigate("/");
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //     toast.error(`Error occured, ${error}`, {
+  //       position: toast.POSITION.TOP_RIGHT,
+  //     });
+  //   }
+  // };
+
   return (
     <BasicLayout image={bgImage}>
       <Card>
+        <ToastContainer />
         <MDBox
           variant="gradient"
           bgColor="info"
@@ -129,12 +162,46 @@ function Basic() {
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
-          <MDBox component="form" role="form">
+          <MDBox component="form" role="form" onSubmit={handleSubmit(onSubmit)}>
+            {/* <MDBox component="form" role="form" onSubmit={handleForm}> */}
             <MDBox mb={2}>
-              <MDInput type="email" label="Email" fullWidth />
+              <MDInput
+                type="email"
+                label="Email"
+                fullWidth
+                {...register("email", {
+                  required: "email is required!",
+                  pattern: {
+                    value: /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/,
+                    message: "It should be a valid email address!",
+                  },
+                })}
+                // value={email}
+                // onChange={(e) => {
+                //   setEmail(e.target.value);
+                // }}
+              />
+              <MDTypography>{errors?.email?.message}</MDTypography>
             </MDBox>
             <MDBox mb={2}>
-              <MDInput type="password" label="Password" fullWidth />
+              <MDInput
+                type="password"
+                label="Password"
+                fullWidth
+                {...register("password", {
+                  required: "password is required",
+                  pattern: {
+                    value: /^(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,16}/,
+                    message:
+                      "Username should be 8-16 characters and should include atleast, 1 number, 1 letter, 1 special characters ",
+                  },
+                })}
+                // value={password}
+                // onChange={(e) => {
+                //   setPassword(e.target.value);
+                // }}
+              />
+              <MDTypography>{errors?.password?.message}</MDTypography>
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
               <Switch checked={rememberMe} onChange={handleSetRememberMe} />
@@ -149,7 +216,7 @@ function Basic() {
               </MDTypography>
             </MDBox>
             <MDBox mt={4} mb={1}>
-              <MDButton variant="gradient" color="info" fullWidth>
+              <MDButton type="submit" variant="gradient" color="info" fullWidth>
                 sign in
               </MDButton>
             </MDBox>
