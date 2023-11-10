@@ -39,7 +39,6 @@ import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 
 function Cover() {
-  const [username, setUsername] = useState("a");
   const {
     register,
     handleSubmit,
