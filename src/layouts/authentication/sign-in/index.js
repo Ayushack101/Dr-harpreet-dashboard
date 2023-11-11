@@ -67,20 +67,19 @@ function Basic() {
     };
     console.log(userData);
     try {
-      const resp = await axios.post("localhost:3000/login", userData);
+      const resp = await axios.post("https://indush.in/api/sign-up.php", userData);
       console.log(resp);
-      if (resp.data.status === false) {
-        toast.warning(`Error occured, ${resp.data.msg}!`, {
+      if (resp.data.success === false) {
+        toast.warning(`Error occured, ${resp.data.message}!`, {
           position: toast.POSITION.TOP_RIGHT,
         });
         return;
       }
-      if (resp.data.status === true) {
-        setTimeout(() => {
-          toast.success(`Success, New user created successfully!`, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }, 500);
+      if (resp.data.success === true) {
+        toast.success(`Success, ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        localStorage.setItem("Credentials", JSON.stringify(resp.data.data));
         navigate("/");
       }
     } catch (error) {
@@ -158,7 +157,7 @@ function Basic() {
             </Grid>
           </Grid> */}
           <MDTypography display="block" variant="button" color="white" my={1}>
-            {/* Enter your  email and password to login dashboard */}
+            Enter your  email and password to login dashboard
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>

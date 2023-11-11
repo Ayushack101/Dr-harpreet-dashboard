@@ -14,7 +14,7 @@ Coded by www.creative-tim.com
 */
 
 // react-router-dom components
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // @mui material components
 import Card from "@mui/material/Card";
@@ -45,6 +45,8 @@ function Cover() {
     formState: { errors },
   } = useForm();
 
+  const navigate = useNavigate();
+
   const onSubmit = async (data) => {
     const userData = {
       userName: data.username,
@@ -55,16 +57,17 @@ function Cover() {
     try {
       const resp = await axios.post("http://localhost:3000/signup", userData);
       console.log(resp);
-      if (resp.status === false) {
-        toast.warning(`Error occured, ${resp.message}!`, {
+      if (resp.data.success === false) {
+        toast.warning(`Error occured, ${resp.data.message}!`, {
           position: toast.POSITION.TOP_RIGHT,
         });
         return;
       }
-      if (resp.status === true) {
-        toast.success(`Success, New user created successfully!`, {
+      if (resp.data.success === true) {
+        toast.success(`Success, ${resp.data.message}!`, {
           position: toast.POSITION.TOP_RIGHT,
         });
+        navigate("/authentication/sign-in");
       }
     } catch (error) {
       console.log(error);
