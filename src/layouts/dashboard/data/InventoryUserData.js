@@ -18,27 +18,18 @@ Coded by www.creative-tim.com
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
-import MDAvatar from "components/MDAvatar";
-import MDBadge from "components/MDBadge";
-
-// Images
-import team2 from "assets/images/team-2.jpg";
-import team3 from "assets/images/team-3.jpg";
-import team4 from "assets/images/team-4.jpg";
 
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MDButton from "components/MDButton";
-import { useNavigate } from "react-router-dom";
 
 export default function data() {
   const [allUsers, setAllUsers] = useState([]);
   const [isLoading, setLoading] = useState(false);
-  const navigate = useNavigate();
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/allUser");
+      const resp = await axios.get("http://localhost:3000/inventry/user");
       console.log(resp);
       if (resp.data.success === false) {
         return;
@@ -55,24 +46,6 @@ export default function data() {
   useEffect(() => {
     fetchUsers();
   }, []);
-
-  const changeUserType = async (_id) => {
-    try {
-      const resp = await axios.put("http://localhost:3000/convert/inventry", {
-        _id,
-      });
-      console.log(resp);
-      if (resp.data.success === false) {
-        return;
-      }
-      if (resp.data.success === true) {
-        navigate("/inventory");
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   // const Author = ({ image, name, email }) => (
   //   <MDBox display="flex" alignItems="center" lineHeight={1}>
   //     {/* <MDAvatar src={image} name={name} size="sm" /> */}
@@ -104,14 +77,14 @@ export default function data() {
     </MDBox>
   );
 
-  const Job = ({ title, description }) => (
-    <MDBox lineHeight={1} textAlign="left">
-      <MDTypography display="block" variant="caption" color="text" fontWeight="medium">
-        {title}
-      </MDTypography>
-      <MDTypography variant="caption">{description}</MDTypography>
-    </MDBox>
-  );
+  //   const Job = ({ title, description }) => (
+  //     <MDBox lineHeight={1} textAlign="left">
+  //       <MDTypography display="block" variant="caption" color="text" fontWeight="medium">
+  //         {title}
+  //       </MDTypography>
+  //       <MDTypography variant="caption">{description}</MDTypography>
+  //     </MDBox>
+  //   );
   // width: "45%", align: "left"
   return {
     columns: [
@@ -132,14 +105,7 @@ export default function data() {
         ),
         action: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            <MDButton
-              color="info"
-              onClick={() => {
-                changeUserType(item?._id);
-              }}
-            >
-              Convert inventory
-            </MDButton>
+            <MDButton color="info">Hii</MDButton>
           </MDTypography>
         ),
       };
