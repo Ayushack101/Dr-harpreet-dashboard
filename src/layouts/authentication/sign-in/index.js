@@ -67,7 +67,7 @@ function Basic() {
     };
     console.log(userData);
     try {
-      const resp = await axios.post("https://indush.in/api/sign-up.php", userData);
+      const resp = await axios.post("localhost:3000/login", userData);
       console.log(resp);
       if (resp.data.status === false) {
         toast.warning(`Error occured, ${resp.data.msg}!`, {
@@ -158,7 +158,7 @@ function Basic() {
             </Grid>
           </Grid> */}
           <MDTypography display="block" variant="button" color="white" my={1}>
-            Enter your  email and password to login dashboard
+            {/* Enter your  email and password to login dashboard */}
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
@@ -190,11 +190,11 @@ function Basic() {
                 fullWidth
                 {...register("password", {
                   required: "password is required",
-                  pattern: {
-                    value: /^(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,16}/,
-                    message:
-                      "Username should be 8-16 characters and should include atleast, 1 number, 1 letter, 1 special characters ",
-                  },
+                  // pattern: {
+                  //   value: /^(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,16}/,
+                  //   message:
+                  //     "Username should be 8-16 characters and should include atleast, 1 number, 1 letter, 1 special characters ",
+                  // },
                 })}
                 // value={password}
                 // onChange={(e) => {

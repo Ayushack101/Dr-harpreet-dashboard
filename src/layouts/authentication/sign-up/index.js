@@ -47,13 +47,13 @@ function Cover() {
 
   const onSubmit = async (data) => {
     const userData = {
-      username: data.username,
+      userName: data.username,
       email: data.email,
       password: data.password,
     };
     console.log(userData);
     try {
-      const resp = await axios.post("localhost:3000/sign-up", userData);
+      const resp = await axios.post("http://localhost:3000/signup", userData);
       console.log(resp);
       if (resp.status === false) {
         toast.warning(`Error occured, ${resp.message}!`, {
@@ -143,11 +143,11 @@ function Cover() {
                 fullWidth
                 {...register("password", {
                   required: "password is required",
-                  pattern: {
-                    value: /^(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,16}/,
-                    message:
-                      "Username should be 8-16 characters and should include atleast, 1 number, 1 letter, 1 special characters ",
-                  },
+                  // pattern: {
+                  //   value: /^(?=.*d)(?=.*[a-z])(?=.*[A-Z]).{8,16}/,
+                  //   message:
+                  //     "Username should be 8-16 characters and should include atleast, 1 number, 1 letter, 1 special characters ",
+                  // },
                 })}
               />
               <MDTypography>{errors?.password?.message}</MDTypography>
