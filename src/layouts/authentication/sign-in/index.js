@@ -67,20 +67,19 @@ function Basic() {
     };
     console.log(userData);
     try {
-      const resp = await axios.post("localhost:3000/sign-up", userData);
+      const resp = await axios.post("http://localhost:3000/login", userData);
       console.log(resp);
-      if (resp.data.status === false) {
-        toast.warning(`Error occured, ${resp.data.msg}!`, {
+      if (resp.data.success === false) {
+        toast.warning(`Error occured, ${resp.data.message}!`, {
           position: toast.POSITION.TOP_RIGHT,
         });
         return;
       }
-      if (resp.data.status === true) {
-        setTimeout(() => {
-          toast.success(`Success, New user created successfully!`, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }, 500);
+      if (resp.data.success === true) {
+        toast.success(`Success, ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        localStorage.setItem("Credentials", JSON.stringify(resp.data.data));
         navigate("/");
       }
     } catch (error) {

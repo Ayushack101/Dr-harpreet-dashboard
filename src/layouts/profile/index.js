@@ -50,13 +50,81 @@ import team1 from "assets/images/team-1.jpg";
 import team2 from "assets/images/team-2.jpg";
 import team3 from "assets/images/team-3.jpg";
 import team4 from "assets/images/team-4.jpg";
+import DataTable from "examples/Tables/DataTable";
+import {
+  Button,
+  Card,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from "@mui/material";
+import authorsTableData from "layouts/tables/data/authorsTableData";
+import UserData from "layouts/profile/data/UserData";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 function Overview() {
+  // const [allUsers, setAllUsers] = useState([]);
+  // const [isLoading, setLoading] = useState(false);
+  // const fetchUsers = async () => {
+  //   try {
+  //     setLoading(true);
+  //     const resp = await axios.get("http://localhost:3000/allUser");
+  //     console.log(resp);
+  //     if (resp.data.success === false) {
+  //       return;
+  //     }
+  //     if (resp.data.success === true) {
+  //       setLoading(false);
+  //       setAllUsers(resp.data.data);
+  //     }
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+  // console.log(allUsers);
+  // useEffect(() => {
+  //   fetchUsers();
+  // }, []);
+  const { columns, rows } = UserData();
   return (
     <DashboardLayout>
       <DashboardNavbar />
-      <MDBox mb={2} />
-      <Header>
+      <MDBox pt={6} pb={3}>
+        <Grid container spacing={6}>
+          <Grid item xs={12}>
+            <Card>
+              <MDBox
+                mx={2}
+                mt={-3}
+                py={3}
+                px={2}
+                variant="gradient"
+                bgColor="info"
+                borderRadius="lg"
+                coloredShadow="info"
+              >
+                <MDTypography variant="h6" color="white">
+                  All User
+                </MDTypography>
+              </MDBox>
+              <MDBox pt={3}>
+                <DataTable
+                  table={{ columns, rows }}
+                  isSorted={false}
+                  entriesPerPage={false}
+                  showTotalEntries={false}
+                  noEndBorder
+                />
+              </MDBox>
+            </Card>
+          </Grid>
+        </Grid>
+      </MDBox>
+      {/* <Header>
         <MDBox mt={5} mb={3}>
           <Grid container spacing={1}>
             <Grid item xs={12} md={6} xl={4}>
@@ -194,8 +262,7 @@ function Overview() {
             </Grid>
           </Grid>
         </MDBox>
-      </Header>
-      <Footer />
+      </Header> */}
     </DashboardLayout>
   );
 }
