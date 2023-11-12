@@ -54,6 +54,7 @@ import DataTable from "examples/Tables/DataTable";
 import {
   Button,
   Card,
+  OutlinedInput,
   Table,
   TableBody,
   TableCell,
@@ -63,36 +64,60 @@ import {
 } from "@mui/material";
 import authorsTableData from "layouts/tables/data/authorsTableData";
 import UserData from "layouts/products/data/ProductData";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import axios from "axios";
+import MDInput from "components/MDInput";
+import MDButton from "components/MDButton";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { useNavigate } from "react-router-dom";
 
 function Overview() {
-  // const [allUsers, setAllUsers] = useState([]);
-  // const [isLoading, setLoading] = useState(false);
-  // const fetchUsers = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const resp = await axios.get("http://localhost:3000/allUser");
-  //     console.log(resp);
-  //     if (resp.data.success === false) {
-  //       return;
-  //     }
-  //     if (resp.data.success === true) {
-  //       setLoading(false);
-  //       setAllUsers(resp.data.data);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // console.log(allUsers);
-  // useEffect(() => {
-  //   fetchUsers();
-  // }, []);
-  const { columns, rows } = UserData();
+  const { columns, rows, fetchProduct } = UserData();
+  const [productName, setProductName] = useState("");
+  const [productPrice, setProductPrice] = useState("");
+  const navigate = useNavigate();
+
+  const addProduct = async () => {
+    if (productName === "") {
+      toast.warn(`Product name can not be empty!`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      return;
+    }
+    if (productPrice === "") {
+      toast.warn(`Product price can not be empty!`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      return;
+    }
+    try {
+      const resp = await axios.post("http://localhost:3000/create/product", {
+        productName: productName,
+        price: productPrice,
+      });
+      console.log(resp);
+      if (resp.data.success === true) {
+        toast.success(`Success, ${resp.data.message}`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        fetchProduct();
+        // navigate("/allproduct");
+      }
+      if (resp.data.success === false) {
+        toast.warn(`Error, ${resp.data.message}`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      <ToastContainer />
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
@@ -107,10 +132,41 @@ function Overview() {
                 borderRadius="lg"
                 coloredShadow="info"
               >
-                <MDTypography variant="h6" color="white">
-                  All Product
-                </MDTypography>
+                <Grid container spacing={1}>
+                  <Grid item xs={2}>
+                    <MDBox variant="h6" color="white">
+                      Create Product
+                    </MDBox>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <OutlinedInput
+                      color="primary"
+                      placeholder="Product Name "
+                      value={productName}
+                      onChange={(e) => {
+                        setProductName(e.target.value);
+                      }}
+                    ></OutlinedInput>
+                  </Grid>
+                  <Grid item xs={3}>
+                    <OutlinedInput
+                      color="primary"
+                      placeholder="Product Price"
+                      value={productPrice}
+                      onChange={(e) => {
+                        setProductPrice(e.target.value);
+                      }}
+                      type="number"
+                    ></OutlinedInput>
+                  </Grid>
+                  <Grid item xs={2}>
+                    <MDButton color="secondary" onClick={addProduct}>
+                      Add Product
+                    </MDButton>
+                  </Grid>
+                </Grid>
               </MDBox>
+
               <MDBox pt={3}>
                 <DataTable
                   table={{ columns, rows }}

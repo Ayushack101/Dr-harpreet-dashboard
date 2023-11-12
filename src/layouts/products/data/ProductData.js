@@ -59,16 +59,16 @@ export default function data() {
   const deleteProduct = async (_id) => {
     try {
       console.log("--www--", _id);
-
-      console.log(resp);
-      const resp = await axios.delete("http://localhost:3000/deleteProduct", {
+      const resp = await axios.post("http://localhost:3000/deleteProduct", {
         _id,
       });
+      console.log(resp);
       if (resp.data.success === false) {
         return;
       }
       if (resp.data.success === true) {
-        navigate("/allproduct");
+        // navigate("/allproduct");
+        fetchProduct();
       }
     } catch (error) {
       console.log(error);
@@ -116,6 +116,7 @@ export default function data() {
   );
   // width: "45%", align: "left"
   return {
+    fetchProduct: fetchProduct,
     columns: [
       { Header: "ProductName", accessor: "ProductName" },
       { Header: "Price", accessor: "Price" },
