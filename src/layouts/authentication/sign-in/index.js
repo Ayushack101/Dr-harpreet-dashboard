@@ -80,7 +80,7 @@ function Basic() {
           position: toast.POSITION.TOP_RIGHT,
         });
         localStorage.setItem("Credentials", JSON.stringify(resp.data.data));
-        navigate("/");
+        // navigate("/");
       }
     } catch (error) {
       console.log(error);
