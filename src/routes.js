@@ -47,6 +47,7 @@ import SignUp from "layouts/authentication/sign-up";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 const routes = [
   {
@@ -120,6 +121,13 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/authentication/sign-up",
     component: <SignUp />,
+  },
+  {
+    type: "collapse",
+    name: "Buy Product",
+    key: "buy-product",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/buyproduct",
   },
 ];
 

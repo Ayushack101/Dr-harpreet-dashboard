@@ -16,7 +16,7 @@ Coded by www.creative-tim.com
 import { useState, useEffect, useMemo } from "react";
 
 // react-router components
-import { Routes, Route, Navigate, useLocation } from "react-router-dom";
+import { Routes, Route, Navigate, useLocation, Router } from "react-router-dom";
 
 // @mui material components
 import { ThemeProvider } from "@mui/material/styles";
@@ -32,16 +32,16 @@ import Configurator from "examples/Configurator";
 
 // Material Dashboard 2 React themes
 import theme from "assets/theme";
-import themeRTL from "assets/theme/theme-rtl";
+// import themeRTL from "assets/theme/theme-rtl";
 
 // Material Dashboard 2 React Dark Mode themes
 import themeDark from "assets/theme-dark";
-import themeDarkRTL from "assets/theme-dark/theme-rtl";
+// import themeDarkRTL from "assets/theme-dark/theme-rtl";
 
 // RTL plugins
-import rtlPlugin from "stylis-plugin-rtl";
-import { CacheProvider } from "@emotion/react";
-import createCache from "@emotion/cache";
+// import rtlPlugin from "stylis-plugin-rtl";
+// import { CacheProvider } from "@emotion/react";
+// import createCache from "@emotion/cache";
 
 // Material Dashboard 2 React routes
 import routes from "routes";
@@ -52,6 +52,14 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
+import Dashboard from "layouts/dashboard";
+import Tables from "layouts/tables";
+import Billing from "layouts/billing";
+import Profile from "layouts/profile";
+import Product from "layouts/products";
+import SignIn from "layouts/authentication/sign-in";
+import SignUp from "layouts/authentication/sign-up";
+import BuyProduct from "layouts/buyproducts";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -66,18 +74,18 @@ export default function App() {
     darkMode,
   } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
-  const [rtlCache, setRtlCache] = useState(null);
+  // const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
 
   // Cache for the rtl
-  useMemo(() => {
-    const cacheRtl = createCache({
-      key: "rtl",
-      stylisPlugins: [rtlPlugin],
-    });
+  // useMemo(() => {
+  //   const cacheRtl = createCache({
+  //     key: "rtl",
+  //     stylisPlugins: [rtlPlugin],
+  //   });
 
-    setRtlCache(cacheRtl);
-  }, []);
+  //   setRtlCache(cacheRtl);
+  // }, []);
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
@@ -109,18 +117,18 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  const getRoutes = (allRoutes) =>
-    allRoutes.map((route) => {
-      if (route.collapse) {
-        return getRoutes(route.collapse);
-      }
+  // const getRoutes = (allRoutes) =>
+  //   allRoutes.map((route) => {
+  //     if (route.collapse) {
+  //       return getRoutes(route.collapse);
+  //     }
 
-      if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
-      }
+  //     if (route.route) {
+  //       return <Route exact path={route.route} element={route.component} key={route.key} />;
+  //     }
 
-      return null;
-    });
+  //     return null;
+  //   });
 
   const configsButton = (
     <MDBox
@@ -146,32 +154,7 @@ export default function App() {
     </MDBox>
   );
 
-  return direction === "rtl" ? (
-    <CacheProvider value={rtlCache}>
-      <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
-        <CssBaseline />
-        {layout === "dashboard" && (
-          <>
-            <Sidenav
-              color={sidenavColor}
-              brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-              brandName="Material Dashboard 2"
-              routes={routes}
-              onMouseEnter={handleOnMouseEnter}
-              onMouseLeave={handleOnMouseLeave}
-            />
-            <Configurator />
-            {configsButton}
-          </>
-        )}
-        {layout === "vr" && <Configurator />}
-        <Routes>
-          {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/dashboard" />} />
-        </Routes>
-      </ThemeProvider>
-    </CacheProvider>
-  ) : (
+  return (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
       {layout === "dashboard" && (
@@ -179,7 +162,7 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName="Harpreet"
+            brandName="Dr Harpreet"
             routes={routes}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
@@ -190,9 +173,78 @@ export default function App() {
       )}
       {layout === "vr" && <Configurator />}
       <Routes>
-        {getRoutes(routes)}
+        <Route path="/inventory" element={<Dashboard />}></Route>
+        <Route path="/accounts" element={<Tables />}></Route>
+        <Route path="/quality" element={<Billing />}></Route>
+        <Route path="/guards" element={<Billing />}></Route>
+        <Route path="/orderplacement" element={<Billing />}></Route>
+        <Route path="/alluser" element={<Profile />}></Route>
+        <Route path="/allproduct" element={<Product />}></Route>
+        <Route path="/alluser" element={<Profile />}></Route>
+        <Route path="/authentication/sign-in" element={<SignIn />}></Route>
+        <Route path="/authentication/sign-up" element={<SignUp />}></Route>
+        <Route path="/buyproduct" element={<BuyProduct />}></Route>
         <Route path="*" element={<Navigate to="/inventory" />} />
       </Routes>
     </ThemeProvider>
   );
+
+  // direction === "rtl" ? (
+  //   <CacheProvider value={rtlCache}>
+  //     <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
+  //       <CssBaseline />
+  //       {layout === "dashboard" && (
+  //         <>
+  //           <Sidenav
+  //             color={sidenavColor}
+  //             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+  //             brandName="Dr Harpreet"
+  //             routes={routes}
+  //             onMouseEnter={handleOnMouseEnter}
+  //             onMouseLeave={handleOnMouseLeave}
+  //           />
+  //           <Configurator />
+  //           {configsButton}
+  //         </>
+  //       )}
+  //       {layout === "vr" && <Configurator />}
+  //       <Routes>
+  //         {getRoutes(routes)}
+  //         <Route path="*" element={<Navigate to="/dashboard" />} />
+  //       </Routes>
+  //     </ThemeProvider>
+  //   </CacheProvider>
+  // ) : (
+  //   <ThemeProvider theme={darkMode ? themeDark : theme}>
+  //     <CssBaseline />
+  //     {layout === "dashboard" && (
+  //       <>
+  //         <Sidenav
+  //           color={sidenavColor}
+  //           brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
+  //           brandName="Dr Harpreet"
+  //           routes={routes}
+  //           onMouseEnter={handleOnMouseEnter}
+  //           onMouseLeave={handleOnMouseLeave}
+  //         />
+  //         <Configurator />
+  //         {configsButton}
+  //       </>
+  //     )}
+  //     {layout === "vr" && <Configurator />}
+  //     <Routes>
+  //       <Route path="/inventory" element={<Dashboard />}></Route>
+  //       <Route path="/accounts" element={<Tables />}></Route>
+  //       <Route path="/quality" element={<Billing />}></Route>
+  //       <Route path="/guards" element={<Billing />}></Route>
+  //       <Route path="/orderplacement" element={<Billing />}></Route>
+  //       <Route path="/alluser" element={<Profile />}></Route>
+  //       <Route path="/allproduct" element={<Product />}></Route>
+  //       <Route path="/alluser" element={<Profile />}></Route>
+  //       <Route path="/authentication/sign-in" element={<SignIn />}></Route>
+  //       <Route path="/authentication/sign-up" element={<SignUp />}></Route>
+  //       <Route path="*" element={<Navigate to="/inventory" />} />
+  //     </Routes>
+  //   </ThemeProvider>
+  // );
 }
