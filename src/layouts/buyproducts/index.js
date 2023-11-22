@@ -32,7 +32,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
 import { Card } from "@mui/material";
 import UserData from "layouts/buyproducts/data/ProductData";
-import React, { useEffect, useReducer, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
@@ -40,17 +40,25 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import ClipLoader from "react-spinners/ClipLoader";
+import { useAuthContext } from "context/Auth/AuthContext";
 
 function BuyProduct() {
+  const { user } = useAuthContext();
   const [allProduct, setAllProducts] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
   const [productRange, setProductRange] = useState({});
+  console.log(allProduct);
 
   const fetchProduct = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/allProducts");
+
+      const resp = await axios.get("http://localhost:3000/allProducts", {
+        headers: {
+          Authorization: user?.token,
+        },
+      });
       console.log(resp);
       if (resp.data.success === false) {
         return;
@@ -76,9 +84,19 @@ function BuyProduct() {
     console.log(productRange.inputValues[_id]);
     const inputValue = productRange.inputValues[_id];
     try {
-      const resp = await axios.post("", {
-        inputValue,
-      });
+      const resp = await axios.post(
+        "http://localhost:3000/buyProduct",
+        {
+          user: user?._id,
+          product_id: _id,
+          quantity: inputValue,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
       console.log(resp);
       if (resp.data.success === false) {
         toast.warn(`Error occured, ${resp.data.message}`, {
@@ -188,19 +206,6 @@ function BuyProduct() {
               >
                 <MDTypography color="white">Buy Products</MDTypography>
               </MDBox>
-
-              {/* {isLoading === true ? (
-                <MDBox>
-                  <Grid>
-                    <ClipLoader
-                      // loading={isLoading}
-                      size={150}
-                      aria-label="Loading Spinner"
-                      data-testid="loader"
-                    />
-                  </Grid>
-                </MDBox>
-              ) : ( */}
               <MDBox pt={3}>
                 <DataTable
                   table={{ columns, rows }}

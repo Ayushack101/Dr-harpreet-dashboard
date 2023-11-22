@@ -22,14 +22,20 @@ import MDTypography from "components/MDTypography";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MDButton from "components/MDButton";
+import { useAuthContext } from "context/Auth/AuthContext";
 
 export default function data() {
   const [allUsers, setAllUsers] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const { user } = useAuthContext();
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/inventry/user");
+      const resp = await axios.get("http://localhost:3000/inventry/user", {
+        headers: {
+          Authorization: user?.token,
+        },
+      });
       console.log(resp);
       if (resp.data.success === false) {
         return;

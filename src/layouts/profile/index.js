@@ -66,7 +66,7 @@ import UserData from "layouts/profile/data/UserData";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-function Overview() {
+function Alluser() {
   // const [allUsers, setAllUsers] = useState([]);
   // const [isLoading, setLoading] = useState(false);
   // const fetchUsers = async () => {
@@ -173,4 +173,4 @@ function Overview() {
   );
 }
 
-export default Overview;
+export default Alluser;

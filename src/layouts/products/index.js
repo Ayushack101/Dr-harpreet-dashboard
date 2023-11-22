@@ -71,12 +71,14 @@ import MDButton from "components/MDButton";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "context/Auth/AuthContext";
 
 function Overview() {
   const { columns, rows, fetchProduct } = UserData();
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const navigate = useNavigate();
+  const { user } = useAuthContext();
 
   const addProduct = async () => {
     if (productName === "") {
@@ -92,10 +94,18 @@ function Overview() {
       return;
     }
     try {
-      const resp = await axios.post("http://localhost:3000/create/product", {
-        productName: productName,
-        price: productPrice,
-      });
+      const resp = await axios.post(
+        "http://localhost:3000/create/product",
+        {
+          productName: productName,
+          price: productPrice,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
       console.log(resp);
       if (resp.data.success === true) {
         toast.success(`Success, ${resp.data.message}`, {

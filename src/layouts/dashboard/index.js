@@ -68,7 +68,7 @@ function Dashboard() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  All User
+                  Inventory User
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>

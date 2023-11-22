@@ -30,15 +30,21 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MDButton from "components/MDButton";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "context/Auth/AuthContext";
 
 export default function data() {
   const [allUsers, setAllUsers] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const { user } = useAuthContext();
   const navigate = useNavigate();
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/allUser");
+      const resp = await axios.get("http://localhost:3000/allUser", {
+        headers: {
+          Authorization: user?.token,
+        },
+      });
       console.log(resp);
       if (resp.data.success === false) {
         return;
@@ -58,9 +64,17 @@ export default function data() {
 
   const changeUserType = async (_id) => {
     try {
-      const resp = await axios.put("http://localhost:3000/convert/inventry", {
-        _id,
-      });
+      const resp = await axios.put(
+        "http://localhost:3000/convert/inventry",
+        {
+          _id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
       console.log(resp);
       if (resp.data.success === false) {
         return;

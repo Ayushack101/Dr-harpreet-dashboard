@@ -30,15 +30,21 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MDButton from "components/MDButton";
 import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "context/Auth/AuthContext";
 
 export default function data() {
   const [allProduct, setAllProducts] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const { user } = useAuthContext();
   const navigate = useNavigate();
   const fetchProduct = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/allProducts");
+      const resp = await axios.get("http://localhost:3000/allProducts", {
+        headers: {
+          Authorization: user?.token,
+        },
+      });
       console.log(resp);
       if (resp.data.success === false) {
         return;
@@ -59,9 +65,17 @@ export default function data() {
   const deleteProduct = async (_id) => {
     try {
       console.log("--www--", _id);
-      const resp = await axios.post("http://localhost:3000/deleteProduct", {
-        _id,
-      });
+      const resp = await axios.post(
+        "http://localhost:3000/deleteProduct",
+        {
+          _id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
       console.log(resp);
       if (resp.data.success === false) {
         return;

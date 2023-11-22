@@ -46,8 +46,11 @@ import {
   setTransparentSidenav,
   setWhiteSidenav,
 } from "context";
+import { useAuthContext } from "context/Auth/AuthContext";
 
 function Sidenav({ color, brand, brandName, routes, ...rest }) {
+  const { user, authDispatch } = useAuthContext();
+  console.log(user);
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentSidenav, whiteSidenav, darkMode, sidenavColor } = controller;
   const location = useLocation();
@@ -178,7 +181,104 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
           (darkMode && !transparentSidenav && whiteSidenav)
         }
       />
-      <List>{renderRoutes}</List>
+      {/* <List>{renderRoutes}</List> */}
+      {user?.user?.userType === 1 ? (
+        <List>
+          <NavLink to={routes[0].route}>
+            <SidenavCollapse name={routes[0].name} icon={routes[0].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
+      {user?.user?.userType === 2 ? (
+        <List>
+          <NavLink to={routes[1].route}>
+            <SidenavCollapse name={routes[1].name} icon={routes[1].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
+      {user?.user?.userType === 4 ? (
+        <List>
+          <NavLink to={routes[2].route}>
+            <SidenavCollapse name={routes[2].name} icon={routes[2].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
+      {user?.user?.userType === 5 ? (
+        <List>
+          <NavLink to={routes[3].route}>
+            <SidenavCollapse name={routes[3].name} icon={routes[3].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
+      {user?.user?.userType === 6 ? (
+        <List>
+          <NavLink to={routes[4].route}>
+            <SidenavCollapse name={routes[4].name} icon={routes[4].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
+      {user?.user?.userType === 1 ? (
+        <List>
+          <NavLink to={routes[5].route}>
+            <SidenavCollapse name={routes[5].name} icon={routes[5].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
+      {user?.user?.userType === 1 ? (
+        <List>
+          <NavLink to={routes[6].route}>
+            <SidenavCollapse name={routes[6].name} icon={routes[6].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
+      {/* {user ? (
+        ""
+      ) : (
+        <List>
+          <NavLink to={routes[7].route}>
+            <SidenavCollapse name={routes[7].name} icon={routes[7].icon} />
+          </NavLink>
+        </List>
+      )}
+
+      {user ? (
+        ""
+      ) : (
+        <List>
+          <NavLink to={routes[8].route}>
+            <SidenavCollapse name={routes[8].name} icon={routes[8].icon} />
+          </NavLink>
+        </List>
+      )} */}
+
+      {user?.user?.userType === 3 ? (
+        <List>
+          <NavLink to={routes[9].route}>
+            <SidenavCollapse name={routes[9].name} icon={routes[9].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
+      <List>
+        <NavLink to={"/authentication/sign-in"}>
+          <SidenavCollapse name={routes[10].name} icon={routes[10].icon} />
+        </NavLink>
+      </List>
       {/* <MDBox p={2} mt="auto">
         <MDButton
           component="a"

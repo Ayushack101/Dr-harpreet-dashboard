@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // react-router-dom components
 import { Link, useNavigate } from "react-router-dom";
@@ -45,9 +45,14 @@ import axios from "axios";
 import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useAuthContext } from "context/Auth/AuthContext";
 // import {useState}from "react";
 function Basic() {
+  useEffect(() => {
+    localStorage.clear();
+  }, []);
   const [rememberMe, setRememberMe] = useState(false);
+  const { authDispatch } = useAuthContext();
   const navigate = useNavigate();
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
@@ -68,19 +73,29 @@ function Basic() {
     console.log(userData);
     try {
       const resp = await axios.post("http://localhost:3000/login", userData);
-      console.log(resp);
       if (resp.data.success === false) {
         toast.warning(`Error occured, ${resp.data.message}!`, {
           position: toast.POSITION.TOP_RIGHT,
         });
         return;
       }
+      console.log(resp);
       if (resp.data.success === true) {
         toast.success(`Success, ${resp.data.message}!`, {
           position: toast.POSITION.TOP_RIGHT,
         });
-        localStorage.setItem("Credentials", JSON.stringify(resp.data.data));
-        // navigate("/");
+        const user = resp.data.data;
+        localStorage.setItem("Credentials", JSON.stringify(user));
+        authDispatch({
+          type: "LOGIN",
+          payload: resp.data.data,
+        });
+        if (user.user.userType === 1) {
+          console.log(user.user.userType);
+          navigate("/inventory");
+        } else if (user.user.userType === 3) {
+          navigate("/buyproduct");
+        }
       }
     } catch (error) {
       console.log(error);

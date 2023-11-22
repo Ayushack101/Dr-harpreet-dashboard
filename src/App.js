@@ -60,8 +60,14 @@ import Product from "layouts/products";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import BuyProduct from "layouts/buyproducts";
+import { useAuthContext } from "context/Auth/AuthContext";
+import Overview from "layouts/products";
+import Alluser from "layouts/profile";
 
 export default function App() {
+  // const { user, authDispatch } = useAuthContext();
+  const user = JSON.parse(localStorage.getItem("Credentials"));
+
   const [controller, dispatch] = useMaterialUIController();
   const {
     miniSidenav,
@@ -173,18 +179,58 @@ export default function App() {
       )}
       {layout === "vr" && <Configurator />}
       <Routes>
-        <Route path="/inventory" element={<Dashboard />}></Route>
-        <Route path="/accounts" element={<Tables />}></Route>
-        <Route path="/quality" element={<Billing />}></Route>
-        <Route path="/guards" element={<Billing />}></Route>
-        <Route path="/orderplacement" element={<Billing />}></Route>
-        <Route path="/alluser" element={<Profile />}></Route>
-        <Route path="/allproduct" element={<Product />}></Route>
-        <Route path="/alluser" element={<Profile />}></Route>
+        <Route path="/" element={<Navigate to="/authentication/sign-in" replace />}></Route>
+        {user?.user?.userType === 1 ? (
+          <Route path="/inventory" element={<Dashboard />}></Route>
+        ) : (
+          <Route path="/inventory" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 2 ? (
+          <Route path="/accounts" element={<Tables />}></Route>
+        ) : (
+          <Route path="/accounts" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 4 ? (
+          <Route path="/quality" element={<Billing />}></Route>
+        ) : (
+          <Route path="/quality" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 5 ? (
+          <Route path="/guards" element={<Billing />}></Route>
+        ) : (
+          <Route path="/guards" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 6 ? (
+          <Route path="/orderplacement" element={<Billing />}></Route>
+        ) : (
+          <Route path="/orderplacement" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 1 ? (
+          <Route path="/alluser" element={<Alluser />}></Route>
+        ) : (
+          <Route path="/alluser" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 1 ? (
+          <Route path="/allproduct" element={<Overview />}></Route>
+        ) : (
+          <Route path="/allproduct" element={<Navigate to="/" replace />}></Route>
+        )}
         <Route path="/authentication/sign-in" element={<SignIn />}></Route>
-        <Route path="/authentication/sign-up" element={<SignUp />}></Route>
-        <Route path="/buyproduct" element={<BuyProduct />}></Route>
-        <Route path="*" element={<Navigate to="/inventory" />} />
+        {user?.user ? (
+          <Route
+            path="/authentication/sign-up"
+            element={<Navigate to="/authentication/sign-in" />}
+          ></Route>
+        ) : (
+          <Route path="/authentication/sign-up" element={<SignUp />}></Route>
+        )}
+
+        {user?.user?.userType === 3 ? (
+          <Route path="/buyproduct" element={<BuyProduct />}></Route>
+        ) : (
+          <Route path="/buyproduct" element={<Navigate to="/" replace />}></Route>
+        )}
+        <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
       </Routes>
     </ThemeProvider>
   );
