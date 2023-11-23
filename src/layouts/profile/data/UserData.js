@@ -62,7 +62,79 @@ export default function data() {
     fetchUsers();
   }, []);
 
-  const changeUserType = async (_id) => {
+  const changeQuality = async (_id) => {
+    try {
+      const resp = await axios.put(
+        "http://localhost:3000/convert/Quality",
+        {
+          _id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
+      console.log(resp);
+      if (resp.data.success === false) {
+        return;
+      }
+      if (resp.data.success === true) {
+        navigate("/inventory");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const changeAccounts = async (_id) => {
+    try {
+      const resp = await axios.put(
+        "http://localhost:3000/convert/account",
+        {
+          _id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
+      console.log(resp);
+      if (resp.data.success === false) {
+        return;
+      }
+      if (resp.data.success === true) {
+        navigate("/inventory");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const changeGuards = async (_id) => {
+    try {
+      const resp = await axios.put(
+        "http://localhost:3000/convert/guard",
+        {
+          _id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
+      console.log(resp);
+      if (resp.data.success === false) {
+        return;
+      }
+      if (resp.data.success === true) {
+        navigate("/inventory");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const changeInventory = async (_id) => {
     try {
       const resp = await axios.put(
         "http://localhost:3000/convert/inventry",
@@ -133,7 +205,7 @@ export default function data() {
       { Header: "email", accessor: "email" },
       // { Header: "status", accessor: "status", align: "center" },
       { Header: "userType", accessor: "userType", align: "center" },
-      { Header: "action", accessor: "action", align: "center" },
+      { Header: "convert User", accessor: "convert", align: "center" },
     ],
     rows: allUsers.map((item) => {
       return {
@@ -144,15 +216,43 @@ export default function data() {
             {item?.userType}
           </MDTypography>
         ),
-        action: (
+        convert: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
             <MDButton
               color="info"
               onClick={() => {
-                changeUserType(item?._id);
+                changeInventory(item?._id);
               }}
+              style={{ marginRight: "8px" }}
             >
-              Convert inventory
+              Inventory
+            </MDButton>
+            <MDButton
+              color="info"
+              onClick={() => {
+                changeQuality(item?._id);
+              }}
+              style={{ marginRight: "8px" }}
+            >
+              Quality
+            </MDButton>
+            <MDButton
+              color="info"
+              onClick={() => {
+                changeAccounts(item?._id);
+              }}
+              style={{ marginRight: "8px" }}
+            >
+              Accounts
+            </MDButton>
+            <MDButton
+              color="info"
+              onClick={() => {
+                changeGuards(item?._id);
+              }}
+              style={{ marginRight: "8px" }}
+            >
+              Guards
             </MDButton>
           </MDTypography>
         ),

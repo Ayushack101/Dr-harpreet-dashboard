@@ -63,6 +63,9 @@ import BuyProduct from "layouts/buyproducts";
 import { useAuthContext } from "context/Auth/AuthContext";
 import Overview from "layouts/products";
 import Alluser from "layouts/profile";
+import Quality from "layouts/quality";
+import Accounts from "layouts/accounts";
+import Guards from "layouts/guards";
 
 export default function App() {
   // const { user, authDispatch } = useAuthContext();
@@ -185,25 +188,20 @@ export default function App() {
         ) : (
           <Route path="/inventory" element={<Navigate to="/" replace />}></Route>
         )}
-        {user?.user?.userType === 2 ? (
-          <Route path="/accounts" element={<Tables />}></Route>
+        {user?.user?.userType === 1 ? (
+          <Route path="/accounts" element={<Accounts />}></Route>
         ) : (
           <Route path="/accounts" element={<Navigate to="/" replace />}></Route>
         )}
-        {user?.user?.userType === 4 ? (
-          <Route path="/quality" element={<Billing />}></Route>
+        {user?.user?.userType === 1 ? (
+          <Route path="/quality" element={<Quality />}></Route>
         ) : (
           <Route path="/quality" element={<Navigate to="/" replace />}></Route>
         )}
-        {user?.user?.userType === 5 ? (
-          <Route path="/guards" element={<Billing />}></Route>
+        {user?.user?.userType === 1 ? (
+          <Route path="/guards" element={<Guards />}></Route>
         ) : (
           <Route path="/guards" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 6 ? (
-          <Route path="/orderplacement" element={<Billing />}></Route>
-        ) : (
-          <Route path="/orderplacement" element={<Navigate to="/" replace />}></Route>
         )}
         {user?.user?.userType === 1 ? (
           <Route path="/alluser" element={<Alluser />}></Route>

@@ -55,14 +55,7 @@ const routes = [
     route: "/inventory",
     component: <Dashboard />,
   },
-  {
-    type: "collapse",
-    name: "Accounts",
-    key: "accounts",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/accounts",
-    component: <Tables />,
-  },
+
   {
     type: "collapse",
     name: "Quality",
@@ -73,18 +66,18 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Accounts",
+    key: "accounts",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/accounts",
+    component: <Tables />,
+  },
+  {
+    type: "collapse",
     name: "Guards",
     key: "guards",
     icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
     route: "/guards",
-    component: <Billing />,
-  },
-  {
-    type: "collapse",
-    name: "Order Placement",
-    key: "orderplacement",
-    icon: <Icon fontSize="small">notifications</Icon>,
-    route: "/orderplacement",
     component: <Billing />,
   },
   {
@@ -105,22 +98,6 @@ const routes = [
   },
   {
     type: "collapse",
-    name: "Sign In",
-    key: "sign-in",
-    icon: <Icon fontSize="small">login</Icon>,
-    route: "/authentication/sign-in",
-    component: <SignIn />,
-  },
-  {
-    type: "collapse",
-    name: "Sign Up",
-    key: "sign-up",
-    icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/authentication/sign-up",
-    component: <SignUp />,
-  },
-  {
-    type: "collapse",
     name: "Buy Product",
     key: "buy-product",
     icon: <Icon fontSize="small">assignment</Icon>,
@@ -129,8 +106,24 @@ const routes = [
   {
     type: "collapse",
     name: "Logout",
-    icon: <Icon fontSize="small">login</Icon>,
+    icon: <Icon fontSize="small">logout</Icon>,
   },
+  {
+    type: "collapse",
+    name: "Sign In",
+    key: "sign-in",
+    icon: <Icon fontSize="small">login</Icon>,
+    route: "/authentication/sign-in",
+    component: <SignIn />,
+  },
+  // {
+  //   type: "collapse",
+  //   name: "Sign Up",
+  //   key: "sign-up",
+  //   icon: <Icon fontSize="small">assignment</Icon>,
+  //   route: "/authentication/sign-up",
+  //   component: <SignUp />,
+  // },
 ];
 
 export default routes;
