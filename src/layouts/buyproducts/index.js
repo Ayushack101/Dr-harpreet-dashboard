@@ -54,7 +54,7 @@ function BuyProduct() {
     try {
       setLoading(true);
 
-      const resp = await axios.get("http://localhost:3000/allProducts", {
+      const resp = await axios.get("http://localhost:3000/inventry/allProduct", {
         headers: {
           Authorization: user?.token,
         },
@@ -81,23 +81,29 @@ function BuyProduct() {
   }, []);
 
   const buyProduct = async (_id) => {
-    console.log(productRange.inputValues[_id]);
+    // console.log(productRange.inputValues[_id]);
     const inputValue = productRange.inputValues[_id];
     try {
+      const productData = {
+        // userId: user?._id,
+        product_id: _id,
+        quantity: inputValue,
+      };
       const resp = await axios.post(
         "http://localhost:3000/buyProduct",
-        {
-          user: user?._id,
-          product_id: _id,
-          quantity: inputValue,
-        },
+        // {
+        //   userID: user?._id,
+        //   product_id: _id,
+        //   quantity: inputValue,
+        // },
+        productData,
         {
           headers: {
             Authorization: user?.token,
           },
         }
       );
-      console.log(resp);
+      // console.log(resp);
       if (resp.data.success === false) {
         toast.warn(`Error occured, ${resp.data.message}`, {
           position: toast.POSITION.TOP_RIGHT,
@@ -204,7 +210,7 @@ function BuyProduct() {
                 borderRadius="lg"
                 coloredShadow="info"
               >
-                <MDTypography color="white">Buy Products</MDTypography>
+                <MDTypography color="white">Buy Products(Inventory)</MDTypography>
               </MDBox>
               <MDBox pt={3}>
                 <DataTable

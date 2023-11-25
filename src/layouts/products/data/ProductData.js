@@ -81,7 +81,6 @@ export default function data() {
         return;
       }
       if (resp.data.success === true) {
-        // navigate("/allproduct");
         fetchProduct();
       }
     } catch (error) {
