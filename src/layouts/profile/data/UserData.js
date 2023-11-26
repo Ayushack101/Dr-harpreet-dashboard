@@ -80,7 +80,7 @@ export default function data() {
         return;
       }
       if (resp.data.success === true) {
-        navigate("/inventory");
+        navigate("/quality");
       }
     } catch (error) {
       console.log(error);
@@ -104,7 +104,7 @@ export default function data() {
         return;
       }
       if (resp.data.success === true) {
-        navigate("/inventory");
+        navigate("/accounts");
       }
     } catch (error) {
       console.log(error);
@@ -128,7 +128,7 @@ export default function data() {
         return;
       }
       if (resp.data.success === true) {
-        navigate("/inventory");
+        navigate("/guards");
       }
     } catch (error) {
       console.log(error);
@@ -159,17 +159,6 @@ export default function data() {
     }
   };
 
-  // const Author = ({ image, name, email }) => (
-  //   <MDBox display="flex" alignItems="center" lineHeight={1}>
-  //     {/* <MDAvatar src={image} name={name} size="sm" /> */}
-  //     <MDBox ml={2} lineHeight={1}>
-  //       <MDTypography display="block" variant="button" fontWeight="medium">
-  //         {name}
-  //       </MDTypography>
-  //       <MDTypography variant="caption">{email}</MDTypography>
-  //     </MDBox>
-  //   </MDBox>
-  // );
   const Author = ({ image, name, email }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDBox ml={2} lineHeight={1}>

@@ -252,9 +252,60 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ) : (
         ""
       )}
+      {/* Inventory Task */}
+      {user?.user?.userType === 3 ? (
+        <List>
+          <NavLink to={routes[7].route}>
+            <SidenavCollapse name={routes[7].name} icon={routes[7].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
+      {/* All Task */}
+      {user?.user?.userType === 1 ? (
+        <List>
+          <NavLink to={routes[8].route}>
+            <SidenavCollapse name={routes[8].name} icon={routes[8].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
+      {/* Quality */}
+      {user?.user?.userType === 5 ? (
+        <List>
+          <NavLink to={routes[9].route}>
+            <SidenavCollapse name={routes[9].name} icon={routes[9].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
+      {/* Accounts */}
+      {user?.user?.userType === 2 ? (
+        <List>
+          <NavLink to={routes[10].route}>
+            <SidenavCollapse name={routes[10].name} icon={routes[10].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
+      {/* Guards */}
+      {user?.user?.userType === 4 ? (
+        <List>
+          <NavLink to={routes[11].route}>
+            <SidenavCollapse name={routes[11].name} icon={routes[11].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
+
       <List>
         <NavLink to={"/authentication/sign-in"}>
-          <SidenavCollapse name={routes[7].name} icon={routes[7].icon} />
+          <SidenavCollapse name={routes[12].name} icon={routes[12].icon} />
         </NavLink>
       </List>
       {/* <MDBox p={2} mt="auto">

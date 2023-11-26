@@ -66,6 +66,11 @@ import Alluser from "layouts/profile";
 import Quality from "layouts/quality";
 import Accounts from "layouts/accounts";
 import Guards from "layouts/guards";
+import InventoryTask from "layouts/InventoryTask";
+import Task from "layouts/Task";
+import QualityDashboard from "layouts/QualityDashboard";
+import GuardDashboard from "layouts/GuardDashboard";
+import AccountDashboard from "layouts/AccountDashboard";
 
 export default function App() {
   // const { user, authDispatch } = useAuthContext();
@@ -213,6 +218,11 @@ export default function App() {
         ) : (
           <Route path="/allproduct" element={<Navigate to="/" replace />}></Route>
         )}
+        {user?.user?.userType === 1 ? (
+          <Route path="/alltask" element={<Task />}></Route>
+        ) : (
+          <Route path="/alltask" element={<Navigate to="/" replace />}></Route>
+        )}
         <Route path="/authentication/sign-in" element={<SignIn />}></Route>
         {user?.user ? (
           <Route
@@ -223,10 +233,33 @@ export default function App() {
           <Route path="/authentication/sign-up" element={<SignUp />}></Route>
         )}
 
+        {user?.user?.userType === 5 ? (
+          <Route path="/dashboard/quality" element={<QualityDashboard />} />
+        ) : (
+          <Route path="/dashboard/quality" element={<Navigate to={"/"} replace />} />
+        )}
+
+        {user?.user?.userType === 2 ? (
+          <Route path="/dashboard/account" element={<AccountDashboard />} />
+        ) : (
+          <Route path="/dashboard/account" element={<Navigate to={"/"} replace />} />
+        )}
+
+        {user?.user?.userType === 4 ? (
+          <Route path="/dashboard/guard" element={<GuardDashboard />} />
+        ) : (
+          <Route path="/dashboard/guard" element={<Navigate to={"/"} replace />} />
+        )}
+
         {user?.user?.userType === 3 ? (
           <Route path="/buyproduct" element={<BuyProduct />}></Route>
         ) : (
           <Route path="/buyproduct" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 3 ? (
+          <Route path="/inventorytask" element={<InventoryTask />}></Route>
+        ) : (
+          <Route path="/inventorytask" element={<Navigate to="/" replace />}></Route>
         )}
         <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
       </Routes>

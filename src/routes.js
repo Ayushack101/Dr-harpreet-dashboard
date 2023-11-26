@@ -105,6 +105,41 @@ const routes = [
   },
   {
     type: "collapse",
+    name: "Inventory Task",
+    key: "inventory-task",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/inventorytask",
+  },
+  {
+    type: "collapse",
+    name: "All Task",
+    key: "all-task",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/alltask",
+  },
+  {
+    type: "collapse",
+    name: "Quality",
+    key: "quality",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/dashboard/quality",
+  },
+  {
+    type: "collapse",
+    name: "Accounts",
+    key: "accounts",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/dashboard/account",
+  },
+  {
+    type: "collapse",
+    name: "Guard",
+    key: "guard",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/dashboard/guard",
+  },
+  {
+    type: "collapse",
     name: "Logout",
     icon: <Icon fontSize="small">logout</Icon>,
   },
@@ -116,14 +151,6 @@ const routes = [
     route: "/authentication/sign-in",
     component: <SignIn />,
   },
-  // {
-  //   type: "collapse",
-  //   name: "Sign Up",
-  //   key: "sign-up",
-  //   icon: <Icon fontSize="small">assignment</Icon>,
-  //   route: "/authentication/sign-up",
-  //   component: <SignUp />,
-  // },
 ];
 
 export default routes;

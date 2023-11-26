@@ -44,17 +44,13 @@ import { useAuthContext } from "context/Auth/AuthContext";
 
 function Guards() {
   const { user } = useAuthContext();
-  const [allProduct, setAllProducts] = useState([]);
+  const [allAccounts, setAllAccounts] = useState([]);
   const [isLoading, setLoading] = useState(false);
 
-  const [productRange, setProductRange] = useState({});
-  console.log(allProduct);
-
-  const fetchProduct = async () => {
+  const fetchQuality = async () => {
     try {
       setLoading(true);
-
-      const resp = await axios.get("http://localhost:3000/allProducts", {
+      const resp = await axios.get("http://localhost:3000/allGuard", {
         headers: {
           Authorization: user?.token,
         },
@@ -64,64 +60,85 @@ function Guards() {
         return;
       }
       if (resp.data.success === true) {
-        const initialData = {};
         setLoading(false);
-        setAllProducts(resp.data.data);
-        resp?.data?.data.forEach((item) => {
-          initialData[item?._id] = "";
-        });
-        setProductRange({ inputValues: initialData });
+        setAllAccounts(resp.data.data);
       }
     } catch (error) {
       console.log(error);
     }
   };
+  const deleteUser = async (_id) => {
+    try {
+      const resp = await axios.post(
+        "http://localhost:3000/delete",
+        {
+          id: _id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
+      console.log(resp);
+      if (resp.data.success === false) {
+        return;
+      }
+      if (resp.data.success === true) {
+        fetchQuality();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
-    // fetchProduct();
+    fetchQuality();
   }, []);
 
   const columns = [
-    { Header: "ProductName", accessor: "ProductName" },
-    { Header: "Price", accessor: "Price", align: "center" },
-    { Header: "Range", accessor: "Range", align: "center" },
-    { Header: "Action", accessor: "BuyProduct", align: "center" },
+    { Header: "author", accessor: "author" },
+    { Header: "email", accessor: "email" },
+    { Header: "userType", accessor: "userType", align: "center" },
+    { Header: "action", accessor: "action", align: "center" },
   ];
 
-  const rows = allProduct.map((item) => {
+  const rows = allAccounts.map((item) => {
     return {
-      ProductName: (
+      author: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox ml={2} lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.productName}
+              {item?.userName}
             </MDTypography>
           </MDBox>
         </MDBox>
       ),
-      Price: (
+      email: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox ml={2} lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.price}
+              {item?.email}
             </MDTypography>
           </MDBox>
         </MDBox>
       ),
-      Range: (
-        <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox ml={2} lineHeight={1}>
-            <MDTypography display="block" variant="button" fontWeight="medium">
-              <form itemID={item?._id}>
-                <MDInput placeholder="Enter range" type="number"></MDInput>
-              </form>
-            </MDTypography>
-          </MDBox>
-        </MDBox>
+      userType: (
+        <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+          {item?.userType}
+        </MDTypography>
       ),
 
-      BuyProduct: (
+      action: (
         <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-          <MDButton color="info">Buy Product</MDButton>
+          <MDButton
+            color="info"
+            onClick={() => {
+              deleteUser(item?._id);
+            }}
+          >
+            Delete
+          </MDButton>
         </MDTypography>
       ),
     };

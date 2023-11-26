@@ -93,8 +93,18 @@ function Basic() {
         if (user.user.userType === 1) {
           console.log(user.user.userType);
           navigate("/inventory");
-        } else if (user.user.userType === 3) {
+        }
+        if (user.user.userType === 2) {
+          navigate("/dashboard/account");
+        }
+        if (user.user.userType === 3) {
           navigate("/buyproduct");
+        }
+        if (user.user.userType === 4) {
+          navigate("/dashboard/guard");
+        }
+        if (user.user.userType === 5) {
+          navigate("/dashboard/quality");
         }
       }
     } catch (error) {
@@ -104,37 +114,6 @@ function Basic() {
       });
     }
   };
-
-  // const handleForm = async () => {
-  //   const userData = {
-  //     email: email,
-  //     password: password,
-  //   };
-  //   console.log(userData, "asd");
-  //   try {
-  //     const resp = await axios.post("localhost:3000/sign-in", userData);
-  //     console.log(resp);
-  //     if (resp.data.status === false) {
-  //       toast.warning(`Error occured, ${resp.data.msg}!`, {
-  //         position: toast.POSITION.TOP_RIGHT,
-  //       });
-  //       return;
-  //     }
-  //     if (resp.data.status === true) {
-  //       setTimeout(() => {
-  //         toast.success(`Success, New user created successfully!`, {
-  //           position: toast.POSITION.TOP_RIGHT,
-  //         });
-  //       }, 500);
-  //       navigate("/");
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //     toast.error(`Error occured, ${error}`, {
-  //       position: toast.POSITION.TOP_RIGHT,
-  //     });
-  //   }
-  // };
 
   return (
     <BasicLayout image={bgImage}>
@@ -172,7 +151,7 @@ function Basic() {
             </Grid>
           </Grid> */}
           <MDTypography display="block" variant="button" color="white" my={1}>
-            {/* Enter your  email and password to login dashboard */}
+            Enter your email and password to login
           </MDTypography>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>

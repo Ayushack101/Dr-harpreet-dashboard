@@ -48,21 +48,35 @@ export default function data() {
       console.log(error);
     }
   };
-  console.log(allUsers);
+
+  const deleteUser = async (_id) => {
+    try {
+      const resp = await axios.post(
+        "http://localhost:3000/delete",
+        {
+          id: _id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
+      console.log(resp);
+      if (resp.data.success === false) {
+        return;
+      }
+      if (resp.data.success === true) {
+        fetchUsers();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     fetchUsers();
   }, []);
-  // const Author = ({ image, name, email }) => (
-  //   <MDBox display="flex" alignItems="center" lineHeight={1}>
-  //     {/* <MDAvatar src={image} name={name} size="sm" /> */}
-  //     <MDBox ml={2} lineHeight={1}>
-  //       <MDTypography display="block" variant="button" fontWeight="medium">
-  //         {name}
-  //       </MDTypography>
-  //       <MDTypography variant="caption">{email}</MDTypography>
-  //     </MDBox>
-  //   </MDBox>
-  // );
   const Author = ({ image, name, email }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDBox ml={2} lineHeight={1}>
@@ -83,15 +97,6 @@ export default function data() {
     </MDBox>
   );
 
-  //   const Job = ({ title, description }) => (
-  //     <MDBox lineHeight={1} textAlign="left">
-  //       <MDTypography display="block" variant="caption" color="text" fontWeight="medium">
-  //         {title}
-  //       </MDTypography>
-  //       <MDTypography variant="caption">{description}</MDTypography>
-  //     </MDBox>
-  //   );
-  // width: "45%", align: "left"
   return {
     columns: [
       { Header: "author", accessor: "author" },
@@ -111,7 +116,14 @@ export default function data() {
         ),
         action: (
           <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
-            <MDButton color="info">Hii</MDButton>
+            <MDButton
+              color="info"
+              onClick={() => {
+                deleteUser(item?._id);
+              }}
+            >
+              Delete
+            </MDButton>
           </MDTypography>
         ),
       };
