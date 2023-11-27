@@ -30,7 +30,7 @@ import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
-import { Button, Card } from "@mui/material";
+import { Button, Card, CircularProgress, circularProgressClasses } from "@mui/material";
 import UserData from "layouts/buyproducts/data/ProductData";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -86,9 +86,15 @@ function GuardDashboard() {
       );
       console.log(resp);
       if (resp.data.success === false) {
+        toast.warn(`Error occuerd, ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
         return;
       }
       if (resp.data.success === true) {
+        toast.success(`Success,  ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
         fetchTaskApprovedByAccount();
       }
     } catch (error) {
@@ -185,16 +191,42 @@ function GuardDashboard() {
               >
                 <MDTypography color="white">Guard Task</MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
-              </MDBox>
-              {/* )} */}
+              {isLoading === true ? (
+                <MDBox
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "25px",
+                    marginBottom: "25px",
+                  }}
+                >
+                  <CircularProgress
+                    variant="indeterminate"
+                    disableShrink
+                    sx={{
+                      color: (theme) => (theme.palette.mode === "light" ? "#1a90ff" : "#308fe8"),
+                      animationDuration: "550ms",
+
+                      [`& .${circularProgressClasses.circle}`]: {
+                        strokeLinecap: "round",
+                      },
+                    }}
+                    size={50}
+                    thickness={4}
+                  />
+                </MDBox>
+              ) : (
+                <MDBox pt={3}>
+                  <DataTable
+                    table={{ columns, rows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                </MDBox>
+              )}
             </Card>
           </Grid>
         </Grid>

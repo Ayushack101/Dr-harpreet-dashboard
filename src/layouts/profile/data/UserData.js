@@ -159,7 +159,7 @@ export default function data() {
     }
   };
 
-  const Author = ({ image, name, email }) => (
+  const Author = ({ name }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
       <MDBox ml={2} lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">

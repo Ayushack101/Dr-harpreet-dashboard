@@ -186,7 +186,7 @@ function Cover() {
                 Already have an account?{" "}
                 <MDTypography
                   component={Link}
-                  to="/authentication/sign-in"
+                  to="/"
                   variant="button"
                   color="info"
                   fontWeight="medium"

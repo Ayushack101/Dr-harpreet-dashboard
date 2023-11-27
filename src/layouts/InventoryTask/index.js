@@ -32,15 +32,13 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
 import { Button, Card } from "@mui/material";
 import UserData from "layouts/buyproducts/data/ProductData";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
+import { useAuthContext } from "context/Auth/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
-import ClipLoader from "react-spinners/ClipLoader";
-import { useAuthContext } from "context/Auth/AuthContext";
+import CircularProgress, { circularProgressClasses } from "@mui/material/CircularProgress";
 
 function InventoryTask() {
   const { user } = useAuthContext();
@@ -73,16 +71,6 @@ function InventoryTask() {
   useEffect(() => {
     fetchTaskByInventory();
   }, []);
-
-  const handleInputChange = (_id, value) => {
-    setProductRange((prevState) => ({
-      ...prevState,
-      inputValues: {
-        ...prevState.inputValues,
-        [_id]: value,
-      },
-    }));
-  };
 
   const columns = [
     { Header: "ProductName", accessor: "ProductName" },
@@ -209,16 +197,42 @@ function InventoryTask() {
               >
                 <MDTypography color="white">Inventory Task</MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
-              </MDBox>
-              {/* )} */}
+              {isLoading === true ? (
+                <MDBox
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "25px",
+                    marginBottom: "25px",
+                  }}
+                >
+                  <CircularProgress
+                    variant="indeterminate"
+                    disableShrink
+                    sx={{
+                      color: (theme) => (theme.palette.mode === "light" ? "#1a90ff" : "#308fe8"),
+                      animationDuration: "550ms",
+
+                      [`& .${circularProgressClasses.circle}`]: {
+                        strokeLinecap: "round",
+                      },
+                    }}
+                    size={50}
+                    thickness={4}
+                  />
+                </MDBox>
+              ) : (
+                <MDBox pt={3}>
+                  <DataTable
+                    table={{ columns, rows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                </MDBox>
+              )}
             </Card>
           </Grid>
         </Grid>

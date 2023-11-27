@@ -27,6 +27,7 @@ import { useAuthContext } from "context/Auth/AuthContext";
 export default function data() {
   const [allUsers, setAllUsers] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [deleteMessage, setDeleteMessage] = useState("");
   const { user } = useAuthContext();
   const fetchUsers = async () => {
     try {
@@ -67,6 +68,10 @@ export default function data() {
         return;
       }
       if (resp.data.success === true) {
+        toast.success(`Success, ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        setDeleteMessage(resp.data.message);
         fetchUsers();
       }
     } catch (error) {
@@ -98,6 +103,8 @@ export default function data() {
   );
 
   return {
+    deleteMessage,
+    isLoading,
     columns: [
       { Header: "author", accessor: "author" },
       { Header: "email", accessor: "email" },

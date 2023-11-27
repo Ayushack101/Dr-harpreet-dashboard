@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /**
 =========================================================
 * Material Dashboard 2 React - v2.2.0
@@ -54,45 +55,261 @@ import DataTable from "examples/Tables/DataTable";
 import {
   Button,
   Card,
+  CircularProgress,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
+  circularProgressClasses,
 } from "@mui/material";
 import authorsTableData from "layouts/tables/data/authorsTableData";
 import UserData from "layouts/profile/data/UserData";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import MDButton from "components/MDButton";
+import { useNavigate } from "react-router-dom";
+import { useAuthContext } from "context/Auth/AuthContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function Alluser() {
-  // const [allUsers, setAllUsers] = useState([]);
-  // const [isLoading, setLoading] = useState(false);
-  // const fetchUsers = async () => {
-  //   try {
-  //     setLoading(true);
-  //     const resp = await axios.get("http://localhost:3000/allUser");
-  //     console.log(resp);
-  //     if (resp.data.success === false) {
-  //       return;
-  //     }
-  //     if (resp.data.success === true) {
-  //       setLoading(false);
-  //       setAllUsers(resp.data.data);
-  //     }
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
-  // console.log(allUsers);
-  // useEffect(() => {
-  //   fetchUsers();
-  // }, []);
-  const { columns, rows } = UserData();
+  const [allUsers, setAllUsers] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  const { user } = useAuthContext();
+  const navigate = useNavigate();
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const resp = await axios.get("http://localhost:3000/allUser", {
+        headers: {
+          Authorization: user?.token,
+        },
+      });
+      console.log(resp);
+      if (resp.data.success === false) {
+        return;
+      }
+      if (resp.data.success === true) {
+        setLoading(false);
+        setAllUsers(resp.data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  console.log(allUsers);
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const changeQuality = async (_id) => {
+    try {
+      const resp = await axios.put(
+        "http://localhost:3000/convert/Quality",
+        {
+          _id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
+      console.log(resp);
+      if (resp.data.success === false) {
+        toast.warn(`Error occuerd, ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (resp.data.success === true) {
+        toast.success(`Success,  ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        fetchUsers();
+        navigate("/admin/quality");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const changeAccounts = async (_id) => {
+    try {
+      const resp = await axios.put(
+        "http://localhost:3000/convert/account",
+        {
+          _id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
+      console.log(resp);
+      if (resp.data.success === false) {
+        toast.warn(`Error occuerd, ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (resp.data.success === true) {
+        toast.success(`Success,  ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        fetchUsers();
+        navigate("/admin/accounts");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const changeGuards = async (_id) => {
+    try {
+      const resp = await axios.put(
+        "http://localhost:3000/convert/guard",
+        {
+          _id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
+      console.log(resp);
+      if (resp.data.success === false) {
+        toast.warn(`Error occuerd, ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (resp.data.success === true) {
+        toast.success(`Success,  ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        fetchUsers();
+        navigate("/admin/guards");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const changeInventory = async (_id) => {
+    try {
+      const resp = await axios.put(
+        "http://localhost:3000/convert/inventry",
+        {
+          _id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
+      console.log(resp);
+      if (resp.data.success === false) {
+        toast.warn(`Error occuerd, ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (resp.data.success === true) {
+        toast.success(`Success,  ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        fetchUsers();
+        navigate("/admin/inventory");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const Author = ({ name }) => (
+    <MDBox display="flex" alignItems="center" lineHeight={1}>
+      <MDBox ml={2} lineHeight={1}>
+        <MDTypography display="block" variant="button" fontWeight="medium">
+          {name}
+        </MDTypography>
+      </MDBox>
+    </MDBox>
+  );
+  const Email = ({ email }) => (
+    <MDBox display="flex" alignItems="center" lineHeight={1}>
+      <MDBox ml={2} lineHeight={1}>
+        <MDTypography display="block" variant="button" fontWeight="medium">
+          {email}
+        </MDTypography>
+      </MDBox>
+    </MDBox>
+  );
+
+  const columns = [
+    { Header: "author", accessor: "author" },
+    { Header: "email", accessor: "email" },
+    { Header: "userType", accessor: "userType", align: "center" },
+    { Header: "convert User", accessor: "convert", align: "center" },
+  ];
+  const rows = allUsers.map((item) => {
+    return {
+      author: <Author name={item?.userName} email={item?.email} />,
+      email: <Email email={item?.email} />,
+      userType: (
+        <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+          {item?.userType}
+        </MDTypography>
+      ),
+      convert: (
+        <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+          <MDButton
+            color="info"
+            onClick={() => {
+              changeInventory(item?._id);
+            }}
+            style={{ marginRight: "8px" }}
+          >
+            Inventory
+          </MDButton>
+          <MDButton
+            color="info"
+            onClick={() => {
+              changeQuality(item?._id);
+            }}
+            style={{ marginRight: "8px" }}
+          >
+            Quality
+          </MDButton>
+          <MDButton
+            color="info"
+            onClick={() => {
+              changeAccounts(item?._id);
+            }}
+            style={{ marginRight: "8px" }}
+          >
+            Accounts
+          </MDButton>
+          <MDButton
+            color="info"
+            onClick={() => {
+              changeGuards(item?._id);
+            }}
+            style={{ marginRight: "8px" }}
+          >
+            Guards
+          </MDButton>
+        </MDTypography>
+      ),
+    };
+  });
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
+      <ToastContainer />
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
@@ -111,15 +328,42 @@ function Alluser() {
                   All User
                 </MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
-              </MDBox>
+              {isLoading === true ? (
+                <MDBox
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "25px",
+                    marginBottom: "25px",
+                  }}
+                >
+                  <CircularProgress
+                    variant="indeterminate"
+                    disableShrink
+                    sx={{
+                      color: (theme) => (theme.palette.mode === "light" ? "#1a90ff" : "#308fe8"),
+                      animationDuration: "550ms",
+
+                      [`& .${circularProgressClasses.circle}`]: {
+                        strokeLinecap: "round",
+                      },
+                    }}
+                    size={50}
+                    thickness={4}
+                  />
+                </MDBox>
+              ) : (
+                <MDBox pt={3}>
+                  <DataTable
+                    table={{ columns, rows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                </MDBox>
+              )}
             </Card>
           </Grid>
         </Grid>

@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /**
 =========================================================
 * Material Dashboard 2 React - v2.2.0
@@ -42,17 +43,131 @@ import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 // import authorsTableData from "layouts/tables/data/authorsTableData";
 // import projectsTableData from "layouts/tables/data/projectsTableData";
 import InventoryUserData from "layouts/dashboard/data/InventoryUserData";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import MDButton from "components/MDButton";
+import { useAuthContext } from "context/Auth/AuthContext";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import CircularProgress, { circularProgressClasses } from "@mui/material/CircularProgress";
 
 function Dashboard() {
   // const { sales, tasks } = reportsLineChartData;
   // const { columns, rows } = authorsTableData();
   // const { columns: pColumns, rows: pRows } = projectsTableData();
-  const { columns, rows } = InventoryUserData();
+  const [allUsers, setAllUsers] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  const { user } = useAuthContext();
+  const fetchUsers = async () => {
+    try {
+      setLoading(true);
+      const resp = await axios.get("http://localhost:3000/inventry/user", {
+        headers: {
+          Authorization: user?.token,
+        },
+      });
+      console.log(resp);
+      if (resp.data.success === false) {
+        return;
+      }
+      if (resp.data.success === true) {
+        setLoading(false);
+        setAllUsers(resp.data.data);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const deleteUser = async (_id) => {
+    try {
+      const resp = await axios.post(
+        "http://localhost:3000/delete",
+        {
+          id: _id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
+      console.log(resp);
+      if (resp.data.success === false) {
+        toast.warn(`Error occuerd, ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (resp.data.success === true) {
+        toast.success(`Success, Inventory user deleted!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        fetchUsers();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+  const Author = ({ name }) => (
+    <MDBox display="flex" alignItems="center" lineHeight={1}>
+      <MDBox ml={2} lineHeight={1}>
+        <MDTypography display="block" variant="button" fontWeight="medium">
+          {name}
+        </MDTypography>
+        {/* <MDTypography variant="caption">{email}</MDTypography> */}
+      </MDBox>
+    </MDBox>
+  );
+  const Email = ({ email }) => (
+    <MDBox display="flex" alignItems="center" lineHeight={1}>
+      <MDBox ml={2} lineHeight={1}>
+        <MDTypography display="block" variant="button" fontWeight="medium">
+          {email}
+        </MDTypography>
+      </MDBox>
+    </MDBox>
+  );
+
+  const columns = [
+    { Header: "author", accessor: "author" },
+    { Header: "email", accessor: "email" },
+    { Header: "userType", accessor: "userType", align: "center" },
+    { Header: "action", accessor: "action", align: "center" },
+  ];
+  const rows = allUsers.map((item) => {
+    return {
+      author: <Author name={item?.userName} email={item?.email} />,
+      email: <Email email={item?.email} />,
+      userType: (
+        <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+          {item?.userType}
+        </MDTypography>
+      ),
+      action: (
+        <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
+          <MDButton
+            color="info"
+            onClick={() => {
+              deleteUser(item?._id);
+            }}
+          >
+            Delete
+          </MDButton>
+        </MDTypography>
+      ),
+    };
+  });
 
   return (
     <DashboardLayout>
       <DashboardNavbar />
-
+      <ToastContainer />
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
@@ -71,15 +186,42 @@ function Dashboard() {
                   Inventory User
                 </MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
-              </MDBox>
+              {isLoading === true ? (
+                <MDBox
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "25px",
+                    marginBottom: "25px",
+                  }}
+                >
+                  <CircularProgress
+                    variant="indeterminate"
+                    disableShrink
+                    sx={{
+                      color: (theme) => (theme.palette.mode === "light" ? "#1a90ff" : "#308fe8"),
+                      animationDuration: "550ms",
+
+                      [`& .${circularProgressClasses.circle}`]: {
+                        strokeLinecap: "round",
+                      },
+                    }}
+                    size={50}
+                    thickness={4}
+                  />
+                </MDBox>
+              ) : (
+                <MDBox pt={3}>
+                  <DataTable
+                    table={{ columns, rows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                </MDBox>
+              )}
             </Card>
           </Grid>
         </Grid>

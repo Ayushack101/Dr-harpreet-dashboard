@@ -32,15 +32,13 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
 import { Button, Card } from "@mui/material";
 import UserData from "layouts/buyproducts/data/ProductData";
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
-import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
+import { useAuthContext } from "context/Auth/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useNavigate } from "react-router-dom";
-import ClipLoader from "react-spinners/ClipLoader";
-import { useAuthContext } from "context/Auth/AuthContext";
+import CircularProgress, { circularProgressClasses } from "@mui/material/CircularProgress";
 
 function Task() {
   const { user } = useAuthContext();
@@ -87,9 +85,15 @@ function Task() {
       );
       console.log(resp);
       if (resp.data.success === false) {
+        toast.warn(`Error occuerd, ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
         return;
       }
       if (resp.data.success === true) {
+        toast.success(`Success,  ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
         fetchTaskByInventory();
       }
     } catch (error) {
@@ -111,9 +115,15 @@ function Task() {
       );
       console.log(resp);
       if (resp.data.success === false) {
+        toast.warn(`Error occuerd, ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
         return;
       }
       if (resp.data.success === true) {
+        toast.success(`Success,  ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
         fetchTaskByInventory();
       }
     } catch (error) {
@@ -223,16 +233,42 @@ function Task() {
               >
                 <MDTypography color="white">All Task</MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
-              </MDBox>
-              {/* )} */}
+              {isLoading === true ? (
+                <MDBox
+                  sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginTop: "25px",
+                    marginBottom: "25px",
+                  }}
+                >
+                  <CircularProgress
+                    variant="indeterminate"
+                    disableShrink
+                    sx={{
+                      color: (theme) => (theme.palette.mode === "light" ? "#1a90ff" : "#308fe8"),
+                      animationDuration: "550ms",
+
+                      [`& .${circularProgressClasses.circle}`]: {
+                        strokeLinecap: "round",
+                      },
+                    }}
+                    size={50}
+                    thickness={4}
+                  />
+                </MDBox>
+              ) : (
+                <MDBox pt={3}>
+                  <DataTable
+                    table={{ columns, rows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                </MDBox>
+              )}
             </Card>
           </Grid>
         </Grid>

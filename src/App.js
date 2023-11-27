@@ -187,81 +187,80 @@ export default function App() {
       )}
       {layout === "vr" && <Configurator />}
       <Routes>
-        <Route path="/" element={<Navigate to="/authentication/sign-in" replace />}></Route>
-        {user?.user?.userType === 1 ? (
-          <Route path="/inventory" element={<Dashboard />}></Route>
-        ) : (
-          <Route path="/inventory" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 1 ? (
-          <Route path="/accounts" element={<Accounts />}></Route>
-        ) : (
-          <Route path="/accounts" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 1 ? (
-          <Route path="/quality" element={<Quality />}></Route>
-        ) : (
-          <Route path="/quality" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 1 ? (
-          <Route path="/guards" element={<Guards />}></Route>
-        ) : (
-          <Route path="/guards" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 1 ? (
-          <Route path="/alluser" element={<Alluser />}></Route>
-        ) : (
-          <Route path="/alluser" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 1 ? (
-          <Route path="/allproduct" element={<Overview />}></Route>
-        ) : (
-          <Route path="/allproduct" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 1 ? (
-          <Route path="/alltask" element={<Task />}></Route>
-        ) : (
-          <Route path="/alltask" element={<Navigate to="/" replace />}></Route>
-        )}
-        <Route path="/authentication/sign-in" element={<SignIn />}></Route>
+        <Route path="/" element={<SignIn />}></Route>
+        {/* Sign up */}
         {user?.user ? (
-          <Route
-            path="/authentication/sign-up"
-            element={<Navigate to="/authentication/sign-in" />}
-          ></Route>
+          <Route path="/authentication/sign-up" element={<Navigate to="/" />}></Route>
         ) : (
           <Route path="/authentication/sign-up" element={<SignUp />}></Route>
         )}
+        {/* Admin route */}
+        {user?.user?.userType === 1 ? (
+          <Route path="/admin/inventory" element={<Dashboard />}></Route>
+        ) : (
+          <Route path="/admin/inventory" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 1 ? (
+          <Route path="/admin/accounts" element={<Accounts />}></Route>
+        ) : (
+          <Route path="/admin/accounts" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 1 ? (
+          <Route path="/admin/quality" element={<Quality />}></Route>
+        ) : (
+          <Route path="/admin/quality" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 1 ? (
+          <Route path="/admin/guards" element={<Guards />}></Route>
+        ) : (
+          <Route path="/admin/guards" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 1 ? (
+          <Route path="/admin/alluser" element={<Alluser />}></Route>
+        ) : (
+          <Route path="/admin/alluser" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 1 ? (
+          <Route path="/admin/allproduct" element={<Overview />}></Route>
+        ) : (
+          <Route path="/admin/allproduct" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 1 ? (
+          <Route path="/admin/alltask" element={<Task />}></Route>
+        ) : (
+          <Route path="/admin/alltask" element={<Navigate to="/" replace />}></Route>
+        )}
 
+        {/* Quality dashboard */}
         {user?.user?.userType === 5 ? (
           <Route path="/dashboard/quality" element={<QualityDashboard />} />
         ) : (
           <Route path="/dashboard/quality" element={<Navigate to={"/"} replace />} />
         )}
-
+        {/* Account dashboard */}
         {user?.user?.userType === 2 ? (
           <Route path="/dashboard/account" element={<AccountDashboard />} />
         ) : (
           <Route path="/dashboard/account" element={<Navigate to={"/"} replace />} />
         )}
-
+        {/* Guard dashboard */}
         {user?.user?.userType === 4 ? (
           <Route path="/dashboard/guard" element={<GuardDashboard />} />
         ) : (
           <Route path="/dashboard/guard" element={<Navigate to={"/"} replace />} />
         )}
-
+        {/* Invventory dashboard */}
         {user?.user?.userType === 3 ? (
-          <Route path="/buyproduct" element={<BuyProduct />}></Route>
+          <Route path="/dashboard/buyproduct" element={<BuyProduct />}></Route>
         ) : (
-          <Route path="/buyproduct" element={<Navigate to="/" replace />}></Route>
+          <Route path="/dashboard/buyproduct" element={<Navigate to="/" replace />}></Route>
         )}
         {user?.user?.userType === 3 ? (
-          <Route path="/inventorytask" element={<InventoryTask />}></Route>
+          <Route path="/dashboard/inventorytask" element={<InventoryTask />}></Route>
         ) : (
-          <Route path="/inventorytask" element={<Navigate to="/" replace />}></Route>
+          <Route path="/dashboard/inventorytask" element={<Navigate to="/" replace />}></Route>
         )}
-        <Route path="*" element={<Navigate to="/authentication/sign-in" />} />
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </ThemeProvider>
   );

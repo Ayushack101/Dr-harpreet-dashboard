@@ -41,51 +41,25 @@ import Billing from "layouts/billing";
 import Profile from "layouts/profile";
 import Product from "layouts/products";
 import SignIn from "layouts/authentication/sign-in";
-import SignUp from "layouts/authentication/sign-up";
 
 // @mui icons
 import Icon from "@mui/material/Icon";
 
 const routes = [
+  // Admin route
   {
     type: "collapse",
-    name: "Inventory",
-    key: "inventory",
-    icon: <Icon fontSize="small">dashboard</Icon>,
-    route: "/inventory",
-    component: <Dashboard />,
-  },
-
-  {
-    type: "collapse",
-    name: "Quality",
-    key: "quality",
-    icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/quality",
-    component: <Billing />,
+    name: "All Task",
+    key: "all-task",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/admin/alltask",
   },
   {
     type: "collapse",
-    name: "Accounts",
-    key: "accounts",
-    icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/accounts",
-    component: <Tables />,
-  },
-  {
-    type: "collapse",
-    name: "Guards",
-    key: "guards",
-    icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
-    route: "/guards",
-    component: <Billing />,
-  },
-  {
-    type: "collapse",
-    name: "Alluser",
+    name: "All User",
     key: "alluser",
     icon: <Icon fontSize="small">person</Icon>,
-    route: "/alluser",
+    route: "/admin/alluser",
     component: <Profile />,
   },
   {
@@ -93,29 +67,56 @@ const routes = [
     name: "All Product",
     key: "allProducts",
     icon: <Icon fontSize="small">receipt_long</Icon>,
-    route: "/allproduct",
+    route: "/admin/allproduct",
     component: <Product />,
   },
+  {
+    type: "collapse",
+    name: "Accounts",
+    key: "accounts",
+    icon: <Icon fontSize="small">table_view</Icon>,
+    route: "/admin/accounts",
+    component: <Tables />,
+  },
+  {
+    type: "collapse",
+    name: "Inventory",
+    key: "inventory",
+    icon: <Icon fontSize="small">dashboard</Icon>,
+    route: "/admin/inventory",
+    component: <Dashboard />,
+  },
+
+  {
+    type: "collapse",
+    name: "Guards",
+    key: "guards",
+    icon: <Icon fontSize="small">format_textdirection_r_to_l</Icon>,
+    route: "/admin/guards",
+    component: <Billing />,
+  },
+  {
+    type: "collapse",
+    name: "Quality",
+    key: "quality",
+    icon: <Icon fontSize="small">receipt_long</Icon>,
+    route: "/admin/quality",
+    component: <Billing />,
+  },
+
   {
     type: "collapse",
     name: "Buy Product",
     key: "buy-product",
     icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/buyproduct",
+    route: "/dashboard/buyproduct",
   },
   {
     type: "collapse",
     name: "Inventory Task",
     key: "inventory-task",
     icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/inventorytask",
-  },
-  {
-    type: "collapse",
-    name: "All Task",
-    key: "all-task",
-    icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/alltask",
+    route: "/dashboard/inventorytask",
   },
   {
     type: "collapse",

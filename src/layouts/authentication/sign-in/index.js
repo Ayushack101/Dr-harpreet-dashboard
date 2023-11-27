@@ -91,14 +91,13 @@ function Basic() {
           payload: resp.data.data,
         });
         if (user.user.userType === 1) {
-          console.log(user.user.userType);
-          navigate("/inventory");
+          navigate("/admin/alltask");
         }
         if (user.user.userType === 2) {
           navigate("/dashboard/account");
         }
         if (user.user.userType === 3) {
-          navigate("/buyproduct");
+          navigate("/dashboard/buyproduct");
         }
         if (user.user.userType === 4) {
           navigate("/dashboard/guard");

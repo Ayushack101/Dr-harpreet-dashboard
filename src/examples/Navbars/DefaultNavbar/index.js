@@ -122,12 +122,7 @@ function DefaultNavbar({ transparent, light, action }) {
             route="/authentication/sign-up"
             light={light}
           />
-          <DefaultNavbarLink
-            icon="key"
-            name="sign in"
-            route="/authentication/sign-in"
-            light={light}
-          />
+          <DefaultNavbarLink icon="key" name="sign in" route="/" light={light} />
         </MDBox>
         {action &&
           (action.type === "internal" ? (

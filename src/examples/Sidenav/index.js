@@ -163,7 +163,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
             <Icon sx={{ fontWeight: "bold" }}>close</Icon>
           </MDTypography>
         </MDBox>
-        <MDBox component={NavLink} to="/" display="flex" alignItems="center">
+        <MDBox component={NavLink} to="/admin/alltask" display="flex" alignItems="center">
           {brand && <MDBox component="img" src={brand} alt="Brand" width="2rem" />}
           <MDBox
             width={!brandName && "100%"}
@@ -243,7 +243,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         ""
       )}
       {/* Buy Product */}
-      {user?.user?.userType === 3 ? (
+      {user?.user?.userType === 1 ? (
         <List>
           <NavLink to={routes[6].route}>
             <SidenavCollapse name={routes[6].name} icon={routes[6].icon} />
@@ -263,7 +263,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         ""
       )}
       {/* All Task */}
-      {user?.user?.userType === 1 ? (
+      {user?.user?.userType === 3 ? (
         <List>
           <NavLink to={routes[8].route}>
             <SidenavCollapse name={routes[8].name} icon={routes[8].icon} />
@@ -304,7 +304,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       )}
 
       <List>
-        <NavLink to={"/authentication/sign-in"}>
+        <NavLink to={"/"}>
           <SidenavCollapse name={routes[12].name} icon={routes[12].icon} />
         </NavLink>
       </List>
