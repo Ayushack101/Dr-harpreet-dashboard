@@ -71,6 +71,7 @@ import Task from "layouts/Task";
 import QualityDashboard from "layouts/QualityDashboard";
 import GuardDashboard from "layouts/GuardDashboard";
 import AccountDashboard from "layouts/AccountDashboard";
+import AddProduct from "layouts/products/components/AddProduct";
 
 export default function App() {
   // const { user, authDispatch } = useAuthContext();
@@ -229,6 +230,11 @@ export default function App() {
           <Route path="/admin/alltask" element={<Task />}></Route>
         ) : (
           <Route path="/admin/alltask" element={<Navigate to="/" replace />}></Route>
+        )}
+        {user?.user?.userType === 1 ? (
+          <Route path="/admin/addproduct" element={<AddProduct />}></Route>
+        ) : (
+          <Route path="/admin/addproduct" element={<Navigate to="/" replace />}></Route>
         )}
 
         {/* Quality dashboard */}

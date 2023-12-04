@@ -56,7 +56,11 @@ import {
   Button,
   Card,
   CircularProgress,
+  FormControl,
+  InputLabel,
+  MenuItem,
   OutlinedInput,
+  Select,
   Table,
   TableBody,
   TableCell,
@@ -75,6 +79,7 @@ import { useAuthContext } from "context/Auth/AuthContext";
 
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import MDInput from "components/MDInput";
 
 function Overview() {
   const [productName, setProductName] = useState("");
@@ -94,6 +99,7 @@ function Overview() {
       });
       console.log(resp);
       if (resp.data.success === false) {
+        setLoading(false);
         return;
       }
       if (resp.data.success === true) {
@@ -141,52 +147,9 @@ function Overview() {
     }
   };
 
-  const addProduct = async () => {
-    if (productName === "") {
-      toast.warn(`Product name can not be empty!`, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-      return;
-    }
-    if (productPrice === "") {
-      toast.warn(`Product price can not be empty!`, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-      return;
-    }
-    try {
-      const resp = await axios.post(
-        "http://localhost:3000/create/product",
-        {
-          productName: productName,
-          price: productPrice,
-        },
-        {
-          headers: {
-            Authorization: user?.token,
-          },
-        }
-      );
-      console.log(resp);
-      if (resp.data.success === true) {
-        toast.success(`Success, ${resp.data.message}`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        fetchProduct();
-      }
-      if (resp.data.success === false) {
-        toast.warn(`Error, ${resp.data.message}`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
-
   const ProductName = ({ image, productName, email }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDBox ml={2} lineHeight={1}>
+      <MDBox ml={0} lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">
           {productName}
         </MDTypography>
@@ -196,7 +159,7 @@ function Overview() {
   );
   const Price = ({ price }) => (
     <MDBox display="flex" alignItems="center" lineHeight={1}>
-      <MDBox ml={2} lineHeight={1}>
+      <MDBox ml={0} lineHeight={1}>
         <MDTypography display="block" variant="button" fontWeight="medium">
           {price}
         </MDTypography>
@@ -206,6 +169,8 @@ function Overview() {
 
   const columns = [
     { Header: "ProductName", accessor: "ProductName" },
+    { Header: "Product Description", accessor: "Description" },
+    { Header: "Product Category", accessor: "Category" },
     { Header: "Price", accessor: "Price" },
     { Header: "DeleteProduct", accessor: "DeleteProduct", align: "center" },
   ];
@@ -213,6 +178,24 @@ function Overview() {
     return {
       ProductName: <ProductName productName={item?.productName} />,
       Price: <Price price={item?.price} />,
+      Description: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox ml={0} lineHeight={1}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item.description.split(" ").slice(0, 25).join(" ")}...
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      Category: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox ml={0} lineHeight={1}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.category?.categoryName}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
 
       DeleteProduct: (
         <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
@@ -233,6 +216,7 @@ function Overview() {
     <DashboardLayout>
       <DashboardNavbar />
       <ToastContainer />
+
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
@@ -248,35 +232,19 @@ function Overview() {
                 coloredShadow="info"
               >
                 <Grid container spacing={1}>
-                  <Grid item xs={2}>
+                  <Grid item xs={5} lg={2}>
                     <MDBox variant="h6" color="white">
-                      Create Product
+                      All Product
                     </MDBox>
                   </Grid>
-                  <Grid item xs={3}>
-                    <OutlinedInput
-                      color="primary"
-                      placeholder="Product Name "
-                      value={productName}
-                      onChange={(e) => {
-                        setProductName(e.target.value);
+                  <Grid item xs={6} lg={2}>
+                    <MDButton
+                      color="dark"
+                      onClick={() => {
+                        navigate("/admin/addproduct");
                       }}
-                    ></OutlinedInput>
-                  </Grid>
-                  <Grid item xs={3}>
-                    <OutlinedInput
-                      color="primary"
-                      placeholder="Product Price"
-                      value={productPrice}
-                      onChange={(e) => {
-                        setProductPrice(e.target.value);
-                      }}
-                      type="number"
-                    ></OutlinedInput>
-                  </Grid>
-                  <Grid item xs={2}>
-                    <MDButton color="secondary" onClick={addProduct}>
-                      Add Product
+                    >
+                      Add New Prodcut
                     </MDButton>
                   </Grid>
                 </Grid>
@@ -318,120 +286,6 @@ function Overview() {
                   />
                 </MDBox>
               )}
-              {/* <MDBox pt={2} px={2} lineHeight={1.25}>
-                <MDTypography variant="h6" fontWeight="medium">
-                  Projects
-                </MDTypography>
-                <MDBox mb={1}>
-                  <MDTypography variant="button" color="text">
-                    Architects design houses
-                  </MDTypography>
-                </MDBox>
-              </MDBox>
-              <MDBox p={2}>
-                <Grid container spacing={6}>
-                  <Grid item xs={12} md={6} xl={3}>
-                    <DefaultProjectCard
-                      image={homeDecor1}
-                      label="project #2"
-                      title="modern"
-                      description="As Uber works through a huge amount of internal management turmoil."
-                      action={{
-                        type: "internal",
-                        route: "/pages/profile/profile-overview",
-                        color: "info",
-                        label: "view project",
-                      }}
-                      authors={[
-                        { image: team1, name: "Elena Morison" },
-                        { image: team2, name: "Ryan Milly" },
-                        { image: team3, name: "Nick Daniel" },
-                        { image: team4, name: "Peterson" },
-                      ]}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6} xl={3}>
-                    <DefaultProjectCard
-                      image={homeDecor2}
-                      label="project #1"
-                      title="scandinavian"
-                      description="Music is something that everyone has their own specific opinion about."
-                      action={{
-                        type: "internal",
-                        route: "/pages/profile/profile-overview",
-                        color: "info",
-                        label: "view project",
-                      }}
-                      authors={[
-                        { image: team3, name: "Nick Daniel" },
-                        { image: team4, name: "Peterson" },
-                        { image: team1, name: "Elena Morison" },
-                        { image: team2, name: "Ryan Milly" },
-                      ]}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6} xl={3}>
-                    <DefaultProjectCard
-                      image={homeDecor3}
-                      label="project #3"
-                      title="minimalist"
-                      description="Different people have different taste, and various types of music."
-                      action={{
-                        type: "internal",
-                        route: "/pages/profile/profile-overview",
-                        color: "info",
-                        label: "view project",
-                      }}
-                      authors={[
-                        { image: team4, name: "Peterson" },
-                        { image: team3, name: "Nick Daniel" },
-                        { image: team2, name: "Ryan Milly" },
-                        { image: team1, name: "Elena Morison" },
-                      ]}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6} xl={3}>
-                    <DefaultProjectCard
-                      image={homeDecor4}
-                      label="project #4"
-                      title="gothic"
-                      description="Why would anyone pick blue over pink? Pink is obviously a better color."
-                      action={{
-                        type: "internal",
-                        route: "/pages/profile/profile-overview",
-                        color: "info",
-                        label: "view project",
-                      }}
-                      authors={[
-                        { image: team4, name: "Peterson" },
-                        { image: team3, name: "Nick Daniel" },
-                        { image: team2, name: "Ryan Milly" },
-                        { image: team1, name: "Elena Morison" },
-                      ]}
-                    />
-                  </Grid>
-                  <Grid item xs={12} md={6} xl={3}>
-                    <DefaultProjectCard
-                      image={homeDecor4}
-                      label="project #4"
-                      title="gothic"
-                      description="Why would anyone pick blue over pink? Pink is obviously a better color."
-                      action={{
-                        type: "internal",
-                        route: "/pages/profile/profile-overview",
-                        color: "info",
-                        label: "view project",
-                      }}
-                      authors={[
-                        { image: team4, name: "Peterson" },
-                        { image: team3, name: "Nick Daniel" },
-                        { image: team2, name: "Ryan Milly" },
-                        { image: team1, name: "Elena Morison" },
-                      ]}
-                    />
-                  </Grid>
-                </Grid>
-              </MDBox> */}
             </Card>
           </Grid>
         </Grid>

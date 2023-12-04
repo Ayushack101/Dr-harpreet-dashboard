@@ -30,7 +30,7 @@ import MDTypography from "components/MDTypography";
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import DataTable from "examples/Tables/DataTable";
-import { Card } from "@mui/material";
+import { Card, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 import UserData from "layouts/buyproducts/data/ProductData";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
@@ -44,16 +44,59 @@ import MDInput from "components/MDInput";
 function BuyProduct() {
   const { user } = useAuthContext();
   const [allProduct, setAllProducts] = useState([]);
+  const [category, setCategory] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedCategoryName, setSelectedCategoryName] = useState("");
 
   const [productRange, setProductRange] = useState({});
-  console.log(allProduct);
 
-  const fetchProduct = async () => {
+  const fetchCategory = async () => {
+    try {
+      const resp = await axios.get("http://localhost:3000/inventory/all/category", {
+        headers: {
+          Authorization: user?.token,
+        },
+      });
+      console.log(resp);
+      if (resp.data.success === true) {
+        setCategory(resp.data.data);
+        setSelectedCategory(resp.data.data[0]._id);
+        setSelectedCategoryName(resp.data.data[0].categoryName);
+        console.log(resp.data.data[0]._id);
+        fetchProductByCategory(resp.data.data[0]._id);
+      }
+      if (resp.data.success === false) {
+        toast.warn(`Error, ${resp.data.message}`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleCategoryChange = async (e) => {
+    const selectedCategoryId = e.target.value;
+
+    const selectedCategory = category.find((category) => category._id === selectedCategoryId);
+
+    if (selectedCategory) {
+      setSelectedCategory(selectedCategoryId);
+      setSelectedCategoryName(selectedCategory.categoryName);
+      fetchProductByCategory(e.target.value);
+    }
+  };
+
+  const fetchProductByCategory = async (id) => {
     try {
       setLoading(true);
+      console.log(user?.token);
 
-      const resp = await axios.get("http://localhost:3000/inventry/allProduct", {
+      const resp = await axios.get("http://localhost:3000/invetry/all/product", {
+        params: {
+          id: id,
+        },
         headers: {
           Authorization: user?.token,
         },
@@ -76,7 +119,7 @@ function BuyProduct() {
     }
   };
   useEffect(() => {
-    fetchProduct();
+    fetchCategory();
   }, []);
 
   const buyProduct = async (_id) => {
@@ -134,7 +177,8 @@ function BuyProduct() {
 
   const columns = [
     { Header: "ProductName", accessor: "ProductName" },
-    { Header: "Price", accessor: "Price", align: "center" },
+    { Header: "Price", accessor: "Price" },
+    { Header: "Product Category", accessor: "Category" },
     { Header: "Range", accessor: "Range", align: "center" },
     { Header: "Action", accessor: "BuyProduct", align: "center" },
   ];
@@ -143,7 +187,7 @@ function BuyProduct() {
     return {
       ProductName: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox ml={2} lineHeight={1}>
+          <MDBox ml={0} lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               {item?.productName}
             </MDTypography>
@@ -152,16 +196,25 @@ function BuyProduct() {
       ),
       Price: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox ml={2} lineHeight={1}>
+          <MDBox ml={0} lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               {item?.price}
             </MDTypography>
           </MDBox>
         </MDBox>
       ),
+      Category: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox ml={0} lineHeight={1}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.category?.categoryName}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
       Range: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox ml={2} lineHeight={1}>
+          <MDBox ml={0} lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               <form itemID={item?._id}>
                 <MDInput
@@ -211,6 +264,46 @@ function BuyProduct() {
               >
                 <MDTypography color="white">Buy Products(Inventory)</MDTypography>
               </MDBox>
+              <Grid item xs={12} md={6} lg={3}>
+                <MDBox mx={2} px={2} pt={3}>
+                  <FormControl variant="standard" sx={{ mt: 0 }} style={{ width: "100%" }}>
+                    <InputLabel
+                      id="demo-simple-select-standard-label"
+                      sx={{ mt: -2, fontSize: "14px" }}
+                    >
+                      <MDTypography sx={{ fontSize: "14px", fontWeight: "500" }} color="text">
+                        Category
+                      </MDTypography>
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-standard-label"
+                      id="demo-simple-select-standard"
+                      label="category"
+                      value={selectedCategory}
+                      onChange={(e) => {
+                        handleCategoryChange(e);
+                      }}
+                    >
+                      {category?.map((category, i) => {
+                        return (
+                          <MenuItem value={category?._id} key={i}>
+                            <MDTypography sx={{ fontSize: "14px" }} color="text">
+                              {category?.categoryName}
+                            </MDTypography>
+                          </MenuItem>
+                        );
+                      })}
+                    </Select>
+                  </FormControl>
+                </MDBox>
+              </Grid>
+              <Grid item xs={12} md={6} lg={5}>
+                <MDBox mx={2} px={2}>
+                  <MDTypography fontWeight="bold" style={{ fontSize: "16px", marginTop: "7px" }}>
+                    selected Category : <em>{selectedCategoryName}</em>
+                  </MDTypography>
+                </MDBox>
+              </Grid>
               {isLoading === true ? (
                 <MDBox
                   sx={{
