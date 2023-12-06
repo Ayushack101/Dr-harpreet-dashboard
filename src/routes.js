@@ -103,21 +103,29 @@ const routes = [
     route: "/admin/quality",
     component: <Billing />,
   },
-
+  // Store
   {
     type: "collapse",
     name: "Buy Product",
     key: "buy-product",
     icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/dashboard/buyproduct",
+    route: "/store/dashboard/buyproduct",
+  },
+  {
+    type: "collapse",
+    name: "All vendors",
+    key: "all-vendors",
+    icon: <Icon fontSize="small">assignment</Icon>,
+    route: "/store/dashboard/allvendors",
   },
   {
     type: "collapse",
     name: "Inventory Task",
     key: "inventory-task",
     icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/dashboard/inventorytask",
+    route: "/store/dashboard/inventorytask",
   },
+  // Quality
   {
     type: "collapse",
     name: "Quality",
@@ -125,6 +133,7 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/dashboard/quality",
   },
+  // Account
   {
     type: "collapse",
     name: "Accounts",
@@ -132,6 +141,7 @@ const routes = [
     icon: <Icon fontSize="small">assignment</Icon>,
     route: "/dashboard/account",
   },
+  // Guard
   {
     type: "collapse",
     name: "Guard",
@@ -143,14 +153,6 @@ const routes = [
     type: "collapse",
     name: "Logout",
     icon: <Icon fontSize="small">logout</Icon>,
-  },
-  {
-    type: "collapse",
-    name: "Sign In",
-    key: "sign-in",
-    icon: <Icon fontSize="small">login</Icon>,
-    route: "/authentication/sign-in",
-    component: <SignIn />,
   },
 ];
 

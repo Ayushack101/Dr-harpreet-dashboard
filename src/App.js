@@ -72,6 +72,14 @@ import QualityDashboard from "layouts/QualityDashboard";
 import GuardDashboard from "layouts/GuardDashboard";
 import AccountDashboard from "layouts/AccountDashboard";
 import AddProduct from "layouts/products/components/AddProduct";
+import { ProtectedRouteAdmin } from "layouts/authentication/protectedroutes";
+import { ProtectedRouteQuality } from "layouts/authentication/protectedroutes";
+import { ProtectedRouteAccount } from "layouts/authentication/protectedroutes";
+import { ProtectedRouteStore } from "layouts/authentication/protectedroutes";
+import { ProtectedRouteGuard } from "layouts/authentication/protectedroutes";
+import AllVendors from "layouts/AllVendors";
+import CreateVendor from "layouts/AllVendors/Components/CreateVendor";
+import VendorRegistration from "layouts/AllVendors/Components/VendorRegistration";
 
 export default function App() {
   // const { user, authDispatch } = useAuthContext();
@@ -196,76 +204,42 @@ export default function App() {
           <Route path="/authentication/sign-up" element={<SignUp />}></Route>
         )}
         {/* Admin route */}
-        {user?.user?.userType === 1 ? (
-          <Route path="/admin/inventory" element={<Dashboard />}></Route>
-        ) : (
-          <Route path="/admin/inventory" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 1 ? (
-          <Route path="/admin/accounts" element={<Accounts />}></Route>
-        ) : (
-          <Route path="/admin/accounts" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 1 ? (
-          <Route path="/admin/quality" element={<Quality />}></Route>
-        ) : (
-          <Route path="/admin/quality" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 1 ? (
-          <Route path="/admin/guards" element={<Guards />}></Route>
-        ) : (
-          <Route path="/admin/guards" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 1 ? (
-          <Route path="/admin/alluser" element={<Alluser />}></Route>
-        ) : (
-          <Route path="/admin/alluser" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 1 ? (
-          <Route path="/admin/allproduct" element={<Overview />}></Route>
-        ) : (
-          <Route path="/admin/allproduct" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 1 ? (
+        <Route element={<ProtectedRouteAdmin />}>
           <Route path="/admin/alltask" element={<Task />}></Route>
-        ) : (
-          <Route path="/admin/alltask" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 1 ? (
+          <Route path="/admin/alluser" element={<Alluser />}></Route>
+          <Route path="/admin/allproduct" element={<Overview />}></Route>
           <Route path="/admin/addproduct" element={<AddProduct />}></Route>
-        ) : (
-          <Route path="/admin/addproduct" element={<Navigate to="/" replace />}></Route>
-        )}
+          <Route path="/admin/inventory" element={<Dashboard />}></Route>
+          <Route path="/admin/accounts" element={<Accounts />}></Route>
+          <Route path="/admin/quality" element={<Quality />}></Route>
+          <Route path="/admin/guards" element={<Guards />}></Route>
+        </Route>
+
+        {/* Account dashboard */}
+        <Route element={<ProtectedRouteAccount />}>
+          <Route path="account/dashboard/account" element={<AccountDashboard />} />
+        </Route>
+
+        {/* Inventory dashboard */}
+        <Route element={<ProtectedRouteStore />}>
+          <Route path="/store/dashboard/buyproduct" element={<BuyProduct />}></Route>
+          <Route path="/store/dashboard/allvendors" element={<AllVendors />}></Route>
+          <Route path="/store/dashboard/create-vendors" element={<CreateVendor />}></Route>
+          <Route path="/store/dashboard/inventorytask" element={<InventoryTask />}></Route>
+        </Route>
+
+        {/* Guard dashboard */}
+        <Route element={<ProtectedRouteGuard />}>
+          <Route path="/dashboard/guard" element={<GuardDashboard />} />
+        </Route>
 
         {/* Quality dashboard */}
-        {user?.user?.userType === 5 ? (
+        <Route element={<ProtectedRouteQuality />}>
           <Route path="/dashboard/quality" element={<QualityDashboard />} />
-        ) : (
-          <Route path="/dashboard/quality" element={<Navigate to={"/"} replace />} />
-        )}
-        {/* Account dashboard */}
-        {user?.user?.userType === 2 ? (
-          <Route path="/dashboard/account" element={<AccountDashboard />} />
-        ) : (
-          <Route path="/dashboard/account" element={<Navigate to={"/"} replace />} />
-        )}
-        {/* Guard dashboard */}
-        {user?.user?.userType === 4 ? (
-          <Route path="/dashboard/guard" element={<GuardDashboard />} />
-        ) : (
-          <Route path="/dashboard/guard" element={<Navigate to={"/"} replace />} />
-        )}
-        {/* Invventory dashboard */}
-        {user?.user?.userType === 3 ? (
-          <Route path="/dashboard/buyproduct" element={<BuyProduct />}></Route>
-        ) : (
-          <Route path="/dashboard/buyproduct" element={<Navigate to="/" replace />}></Route>
-        )}
-        {user?.user?.userType === 3 ? (
-          <Route path="/dashboard/inventorytask" element={<InventoryTask />}></Route>
-        ) : (
-          <Route path="/dashboard/inventorytask" element={<Navigate to="/" replace />}></Route>
-        )}
+        </Route>
+
+        {/* Vendor registration form */}
+        <Route path="/vendor/registration/form" element={<VendorRegistration />}></Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </ThemeProvider>

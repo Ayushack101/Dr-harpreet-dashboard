@@ -182,7 +182,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
         }
       />
       {/* <List>{renderRoutes}</List> */}
-      {/* Inventory */}
+      {/* Admin route */}
       {user?.user?.userType === 1 ? (
         <List>
           <NavLink to={routes[0].route}>
@@ -192,7 +192,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ) : (
         ""
       )}
-      {/* Quality */}
       {user?.user?.userType === 1 ? (
         <List>
           <NavLink to={routes[1].route}>
@@ -202,7 +201,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ) : (
         ""
       )}
-      {/* Accounts */}
       {user?.user?.userType === 1 ? (
         <List>
           <NavLink to={routes[2].route}>
@@ -212,7 +210,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ) : (
         ""
       )}
-      {/* Guards */}
       {user?.user?.userType === 1 ? (
         <List>
           <NavLink to={routes[3].route}>
@@ -222,7 +219,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ) : (
         ""
       )}
-      {/* Alluser */}
       {user?.user?.userType === 1 ? (
         <List>
           <NavLink to={routes[4].route}>
@@ -232,7 +228,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ) : (
         ""
       )}
-      {/* All Product */}
       {user?.user?.userType === 1 ? (
         <List>
           <NavLink to={routes[5].route}>
@@ -242,7 +237,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ) : (
         ""
       )}
-      {/* Buy Product */}
       {user?.user?.userType === 1 ? (
         <List>
           <NavLink to={routes[6].route}>
@@ -252,7 +246,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ) : (
         ""
       )}
-      {/* Inventory Task */}
+      {/* Store route */}
       {user?.user?.userType === 3 ? (
         <List>
           <NavLink to={routes[7].route}>
@@ -262,7 +256,6 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ) : (
         ""
       )}
-      {/* All Task */}
       {user?.user?.userType === 3 ? (
         <List>
           <NavLink to={routes[8].route}>
@@ -272,8 +265,7 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ) : (
         ""
       )}
-      {/* Quality */}
-      {user?.user?.userType === 5 ? (
+      {user?.user?.userType === 3 ? (
         <List>
           <NavLink to={routes[9].route}>
             <SidenavCollapse name={routes[9].name} icon={routes[9].icon} />
@@ -282,8 +274,8 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ) : (
         ""
       )}
-      {/* Accounts */}
-      {user?.user?.userType === 2 ? (
+      {/* Quality */}
+      {user?.user?.userType === 5 ? (
         <List>
           <NavLink to={routes[10].route}>
             <SidenavCollapse name={routes[10].name} icon={routes[10].icon} />
@@ -292,8 +284,8 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ) : (
         ""
       )}
-      {/* Guards */}
-      {user?.user?.userType === 4 ? (
+      {/* Accounts */}
+      {user?.user?.userType === 2 ? (
         <List>
           <NavLink to={routes[11].route}>
             <SidenavCollapse name={routes[11].name} icon={routes[11].icon} />
@@ -302,10 +294,20 @@ function Sidenav({ color, brand, brandName, routes, ...rest }) {
       ) : (
         ""
       )}
+      {/* Guards */}
+      {user?.user?.userType === 4 ? (
+        <List>
+          <NavLink to={routes[12].route}>
+            <SidenavCollapse name={routes[12].name} icon={routes[12].icon} />
+          </NavLink>
+        </List>
+      ) : (
+        ""
+      )}
 
       <List>
         <NavLink to={"/"}>
-          <SidenavCollapse name={routes[12].name} icon={routes[12].icon} />
+          <SidenavCollapse name={routes[13].name} icon={routes[13].icon} />
         </NavLink>
       </List>
       {/* <MDBox p={2} mt="auto">

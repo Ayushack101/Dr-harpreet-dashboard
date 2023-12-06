@@ -97,7 +97,7 @@ function Basic() {
           navigate("/dashboard/account");
         }
         if (user.user.userType === 3) {
-          navigate("/dashboard/buyproduct");
+          navigate("/store/dashboard/buyproduct");
         }
         if (user.user.userType === 4) {
           navigate("/dashboard/guard");
