@@ -239,7 +239,7 @@ export default function App() {
         </Route>
 
         {/* Vendor registration form */}
-        <Route path="/vendor/registration/form" element={<VendorRegistration />}></Route>
+        <Route path="/vendor/registration/form/:val" element={<VendorRegistration />}></Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </ThemeProvider>

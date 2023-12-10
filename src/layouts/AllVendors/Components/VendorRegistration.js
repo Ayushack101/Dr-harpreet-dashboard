@@ -4,10 +4,12 @@ import React from "react";
 import {
   Button,
   Card,
+  Checkbox,
   CircularProgress,
   FormControl,
   Grid,
   InputLabel,
+  ListItemText,
   MenuItem,
   OutlinedInput,
   Select,
@@ -26,7 +28,7 @@ import UserData from "layouts/products/data/ProductData";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import MDButton from "components/MDButton";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuthContext } from "context/Auth/AuthContext";
 
 import { ToastContainer, toast } from "react-toastify";
@@ -38,10 +40,34 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 import PageLayout from "examples/LayoutContainers/PageLayout";
 import DefaultNavbar from "examples/Navbars/DefaultNavbar";
+
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
 const VendorRegistration = () => {
-  const navigate = useNavigate();
+  const { val } = useParams();
   const { user } = useAuthContext();
   const [category, setCategory] = useState([]);
+  const [personName, setPersonName] = useState([]);
+
+  const handleChange = (event) => {
+    const {
+      target: { value },
+    } = event;
+    setPersonName(
+      // On autofill we get a stringified value.
+      typeof value === "string" ? value.split(",") : value
+    );
+  };
+
   const {
     register,
     handleSubmit,
@@ -73,34 +99,42 @@ const VendorRegistration = () => {
   }, []);
 
   const onSubmit = async (data) => {
+    if (personName.length === 0) {
+      toast.warn(`Error, Please select the category`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
     const vendorData = {
-      category: data.category,
-      price: data.price,
-      description: data.productDescription,
-      productName: data.vendorName,
+      category: personName,
+      email: data.email,
+      phoneNum: data.phone,
+      address: data.address,
+      val,
+      completeinfo: data.productDescription,
+      venderName: data.vendorName,
     };
     console.log(vendorData);
-    // try {
-    //   const resp = await axios.post("http://localhost:3000/create/product", {
-    //     ...productData,
-    //   });
-    //   console.log(resp);
-    //   if (resp.data.success === true) {
-    //     toast.success(`Success, ${resp.data.message}`, {
-    //       position: toast.POSITION.TOP_RIGHT,
-    //     });
-    //     setTimeout(() => {
-    //       navigate("/admin/allproduct");
-    //     }, 700);
-    //   }
-    //   if (resp.data.success === false) {
-    //     toast.warn(`Error, ${resp.data.message}`, {
-    //       position: toast.POSITION.TOP_RIGHT,
-    //     });
-    //   }
-    // } catch (error) {
-    //   console.log(error);
-    // }
+    try {
+      const resp = await axios.post("http://localhost:3000/post/email/form", {
+        ...vendorData,
+      });
+      console.log(resp);
+      if (resp.data.success === true) {
+        toast.success(`Success, ${resp.data.message}`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        // setTimeout(() => {
+        //   navigate("/admin/allproduct");
+        // }, 700);
+      }
+      if (resp.data.success === false) {
+        toast.warn(`Error, ${resp.data.message}`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
   return (
     <PageLayout>
@@ -174,19 +208,54 @@ const VendorRegistration = () => {
                     <Grid item xs={12} lg={6}>
                       <MDBox>
                         <MDInput
-                          type="number"
-                          label="Product Price"
+                          type="email"
+                          label="Email"
+                          // rows={4}
                           variant="standard"
+                          // multiline
                           fullWidth
-                          {...register("price", {
-                            required: "Product price is required!",
+                          {...register("email", {
+                            required: "Email is required",
                           })}
                         />
                         <MDTypography color="error" fontWeight="bold" style={{ fontSize: "16px" }}>
-                          {errors?.price?.message}
+                          {errors?.email?.message}
                         </MDTypography>
                       </MDBox>
                     </Grid>
+                    <Grid item xs={12} lg={6}>
+                      <MDBox>
+                        <MDInput
+                          type="text"
+                          label="address"
+                          variant="standard"
+                          fullWidth
+                          {...register("address", {
+                            required: "address is required!",
+                          })}
+                        />
+                        <MDTypography color="error" fontWeight="bold" style={{ fontSize: "16px" }}>
+                          {errors?.address?.message}
+                        </MDTypography>
+                      </MDBox>
+                    </Grid>
+                    <Grid item xs={12} lg={6}>
+                      <MDBox>
+                        <MDInput
+                          type="number"
+                          label="phone number"
+                          variant="standard"
+                          fullWidth
+                          {...register("phone", {
+                            required: "phone number is required!",
+                          })}
+                        />
+                        <MDTypography color="error" fontWeight="bold" style={{ fontSize: "16px" }}>
+                          {errors?.phone?.message}
+                        </MDTypography>
+                      </MDBox>
+                    </Grid>
+
                     <Grid item xs={12} lg={6}>
                       <MDBox>
                         <MDInput
@@ -204,44 +273,47 @@ const VendorRegistration = () => {
                         </MDTypography>
                       </MDBox>
                     </Grid>
-
                     <Grid item xs={12} lg={6}>
                       <MDBox>
-                        <FormControl variant="standard" sx={{ mt: 0 }} style={{ width: "100%" }}>
-                          <InputLabel
-                            id="demo-multiple-checkbox-label"
-                            sx={{ mt: -2, fontSize: "14px" }}
-                          >
-                            <MDTypography sx={{ fontSize: "14px", fontWeight: "500" }} color="text">
-                              Category
-                            </MDTypography>
+                        <FormControl sx={{ m: 0 }} style={{ width: "100%" }}>
+                          <InputLabel id="demo-multiple-checkbox-label" sx={{ fontSize: "14px" }}>
+                            Category
                           </InputLabel>
                           <Select
                             labelId="demo-multiple-checkbox-label"
                             id="demo-multiple-checkbox"
-                            // multiple
-                            {...register("category", { required: "Category is required" })}
-                            label="category"
+                            multiple
+                            fullWidth
+                            value={personName}
+                            onChange={handleChange}
+                            input={<OutlinedInput label="Category" />}
+                            renderValue={(selected) => selected.join(", ")}
+                            MenuProps={MenuProps}
+                            sx={{ p: 2 }}
                           >
-                            <MenuItem value="" disabled>
-                              <em>Category</em>
-                            </MenuItem>
-                            {category?.map((category, i) => {
-                              return (
-                                <MenuItem value={category?._id} key={i}>
-                                  <MDTypography sx={{ fontSize: "14px" }} color="text">
-                                    {category?.categoryName}
-                                  </MDTypography>
-                                </MenuItem>
-                              );
-                            })}
+                            {category.map((category, i) => (
+                              <MenuItem
+                                key={i}
+                                value={category?.categoryName}
+                                sx={{ p: 0, fontSize: "14px" }}
+                              >
+                                <Checkbox
+                                  checked={personName.indexOf(category?.categoryName) > -1}
+                                />
+                                <ListItemText
+                                  primary={category?.categoryName}
+                                  sx={{ p: 0, fontSize: "14px" }}
+                                />
+                              </MenuItem>
+                            ))}
                           </Select>
                         </FormControl>
-                        <MDTypography color="error" fontWeight="bold" style={{ fontSize: "16px" }}>
+                        {/* <MDTypography color="error" fontWeight="bold" style={{ fontSize: "16px" }}>
                           {errors?.category?.message}
-                        </MDTypography>
+                        </MDTypography> */}
                       </MDBox>
                     </Grid>
+
                     <Grid item xs={12}>
                       <MDButton type="submit" variant="gradient" color="info" fullWidth>
                         Submit
