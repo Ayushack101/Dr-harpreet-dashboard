@@ -80,6 +80,7 @@ import { ProtectedRouteGuard } from "layouts/authentication/protectedroutes";
 import AllVendors from "layouts/AllVendors";
 import CreateVendor from "layouts/AllVendors/Components/CreateVendor";
 import VendorRegistration from "layouts/AllVendors/Components/VendorRegistration";
+import VendorProductAccess from "layouts/VendorProductAccess/VendorProductAccess";
 
 export default function App() {
   // const { user, authDispatch } = useAuthContext();
@@ -235,11 +236,14 @@ export default function App() {
 
         {/* Quality dashboard */}
         <Route element={<ProtectedRouteQuality />}>
-          <Route path="/dashboard/quality" element={<QualityDashboard />} />
+          <Route path="quality/dashboard/qualitytask" element={<QualityDashboard />} />
         </Route>
 
         {/* Vendor registration form */}
         <Route path="/vendor/registration/form/:val" element={<VendorRegistration />}></Route>
+
+        {/* Vendor product access */}
+        <Route path="/vendor/product/access/:ser_no/:id" element={<VendorProductAccess />}></Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </ThemeProvider>

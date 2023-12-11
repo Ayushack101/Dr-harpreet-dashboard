@@ -128,10 +128,10 @@ const routes = [
   // Quality
   {
     type: "collapse",
-    name: "Quality",
+    name: "Quality Task",
     key: "quality",
     icon: <Icon fontSize="small">assignment</Icon>,
-    route: "/dashboard/quality",
+    route: "quality/dashboard/qualitytask",
   },
   // Account
   {

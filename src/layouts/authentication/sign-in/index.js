@@ -103,7 +103,7 @@ function Basic() {
           navigate("/dashboard/guard");
         }
         if (user.user.userType === 5) {
-          navigate("/dashboard/quality");
+          navigate("quality/dashboard/qualitytask");
         }
       }
     } catch (error) {

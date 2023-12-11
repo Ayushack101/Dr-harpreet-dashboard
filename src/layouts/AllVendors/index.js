@@ -168,8 +168,8 @@ function AllVendors() {
   );
 
   const columns = [
-    { Header: "ProductName", accessor: "ProductName" },
-    { Header: "Product Description", accessor: "Description" },
+    { Header: "Vendor Name", accessor: "ProductName" },
+    { Header: "Email", accessor: "Description" },
     { Header: "Product Category", accessor: "Category" },
     { Header: "Price", accessor: "Price" },
     { Header: "DeleteProduct", accessor: "DeleteProduct", align: "center" },

@@ -76,6 +76,7 @@ function InventoryTask() {
     { Header: "ProductName", accessor: "ProductName" },
     { Header: "Price", accessor: "Price", align: "center" },
     { Header: "Quantity", accessor: "Quantity", align: "center" },
+    // { Header: "Category", accessor: "Category", align: "center" },
     { Header: "Task_no", accessor: "Task_no", align: "center" },
     { Header: "Admin", accessor: "Admin", align: "center" },
     { Header: "Account", accessor: "Account", align: "center" },
@@ -112,6 +113,15 @@ function InventoryTask() {
           </MDBox>
         </MDBox>
       ),
+      // Category: (
+      //   <MDBox display="flex" alignItems="center" lineHeight={1}>
+      //     <MDBox ml={2} lineHeight={1}>
+      //       <MDTypography display="block" variant="button" fontWeight="medium">
+      //         {item?.categoryName}
+      //       </MDTypography>
+      //     </MDBox>
+      //   </MDBox>
+      // ),
       Task_no: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox ml={2} lineHeight={1}>
