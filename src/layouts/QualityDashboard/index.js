@@ -39,11 +39,14 @@ import { useAuthContext } from "context/Auth/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CircularProgress, { circularProgressClasses } from "@mui/material/CircularProgress";
+import MDBadge from "components/MDBadge";
+import { useNavigate } from "react-router-dom";
 
 function QualityDashboard() {
   const { user } = useAuthContext();
   const [qualityTask, setQualityTask] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
   const fetchTaskApprovedByAccount = async () => {
     try {
@@ -66,7 +69,8 @@ function QualityDashboard() {
     }
   };
   useEffect(() => {
-    fetchTaskApprovedByAccount();
+    // fetchTaskApprovedByAccount();
+    fetchTask();
   }, []);
 
   const approvedByQuality = async (_id) => {
@@ -100,19 +104,46 @@ function QualityDashboard() {
     }
   };
 
+  const fetchTask = async () => {
+    try {
+      setLoading(true);
+
+      const resp = await axios.get("http://localhost:3000/allTask/quality", {
+        headers: {
+          Authorization: user?.token,
+        },
+      });
+      console.log(resp);
+      if (resp.data.success === false) {
+        setLoading(false);
+        return;
+      }
+      if (resp.data.success === true) {
+        setLoading(false);
+        setQualityTask(resp.data.data);
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading(false);
+    }
+  };
+
+  console.log(qualityTask);
+
   const columns = [
     { Header: "ProductName", accessor: "ProductName" },
+    { Header: "Description", accessor: "Description" },
     { Header: "Price", accessor: "Price", align: "center" },
     { Header: "Quantity", accessor: "Quantity", align: "center" },
     { Header: "Task_no", accessor: "Task_no", align: "center" },
-    { Header: "Action", accessor: "action", align: "center" },
+    { Header: "Vendors", accessor: "Vendors", align: "center" },
   ];
 
   const rows = qualityTask.map((item) => {
     return {
       ProductName: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox ml={2} lineHeight={1}>
+          <MDBox lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               {item?.productID?.productName}
             </MDTypography>
@@ -121,7 +152,7 @@ function QualityDashboard() {
       ),
       Price: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox ml={2} lineHeight={1}>
+          <MDBox lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               {item?.price}
             </MDTypography>
@@ -130,16 +161,25 @@ function QualityDashboard() {
       ),
       Quantity: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox ml={2} lineHeight={1}>
+          <MDBox lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               {item?.quantity}
             </MDTypography>
           </MDBox>
         </MDBox>
       ),
+      Description: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1} sx={{ width: "220px" }}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.description}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
       Task_no: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox ml={2} lineHeight={1}>
+          <MDBox lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               {item?.task_no}
             </MDTypography>
@@ -147,23 +187,16 @@ function QualityDashboard() {
         </MDBox>
       ),
 
-      action: (
-        <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="bold">
-          {item?.approvedByQualityChaker === true ? (
-            <MDButton color="info" style={{ marginRight: "10px" }}>
-              Approved
-            </MDButton>
-          ) : (
-            <MDButton
-              color="info"
-              style={{ marginRight: "10px" }}
-              onClick={() => {
-                approvedByQuality(item?._id);
-              }}
-            >
-              Approve
-            </MDButton>
-          )}
+      Vendors: (
+        <MDTypography component="a" variant="caption" color="text" fontWeight="bold">
+          <MDButton
+            color="info"
+            onClick={() => {
+              navigate(`/quality/dashboard/taskvendors/${item?.task_no}`);
+            }}
+          >
+            View Vendors
+          </MDButton>
         </MDTypography>
       ),
     };

@@ -40,132 +40,141 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CircularProgress, { circularProgressClasses } from "@mui/material/CircularProgress";
 import MDBadge from "components/MDBadge";
+import { useNavigate, useParams } from "react-router-dom";
 
-function InventoryTask() {
+function QualityTaskVendors() {
   const { user } = useAuthContext();
-  const [inventoryTask, setInventoryTask] = useState([]);
+  const { ser_no } = useParams();
+  const [allVendorTask, setAllVendorTask] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const fetchTaskByInventory = async () => {
+  useEffect(() => {
+    fetchAllVendorTask();
+  }, []);
+
+  const approvedByQuality = async (_id) => {
+    try {
+      const resp = await axios.post(
+        "http://localhost:3000/quality/taskApproved",
+        {
+          _id: _id,
+        },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
+      console.log(resp);
+      if (resp.data.success === false) {
+        toast.warn(`Error occuerd, ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (resp.data.success === true) {
+        toast.success(`Success,  ${resp.data.message}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        fetchTaskApprovedByAccount();
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const fetchAllVendorTask = async () => {
     try {
       setLoading(true);
 
-      const resp = await axios.get("http://localhost:3000/inventry/allTask", {
+      const resp = await axios.get("http://localhost:3000/allvender/task", {
+        params: {
+          ser_no,
+        },
         headers: {
           Authorization: user?.token,
         },
       });
       console.log(resp);
       if (resp.data.success === false) {
+        setLoading(false);
         return;
       }
       if (resp.data.success === true) {
         setLoading(false);
-        setInventoryTask(resp.data.data);
+        setAllVendorTask(resp.data.data);
       }
     } catch (error) {
       console.log(error);
+      setLoading(false);
     }
   };
-  useEffect(() => {
-    fetchTaskByInventory();
-  }, []);
 
   const columns = [
-    { Header: "ProductName", accessor: "ProductName" },
-    { Header: "Description", accessor: "Description" },
-    { Header: "Price", accessor: "Price", align: "center" },
-    { Header: "Quantity", accessor: "Quantity", align: "center" },
-    { Header: "Task_no", accessor: "Task_no", align: "center" },
-    { Header: "Admin", accessor: "Admin", align: "center" },
-    { Header: "Account", accessor: "Account", align: "center" },
-    { Header: "Qualtiy", accessor: "Quality", align: "center" },
-    { Header: "Guard", accessor: "Guard", align: "center" },
+    { Header: "Vender Name", accessor: "venderName" },
+    { Header: "Complete Info", accessor: "completeinfo" },
+    { Header: "Address", accessor: "address" },
+    { Header: "Phone", accessor: "phoneNum", align: "center" },
+    { Header: "Category", accessor: "category", align: "center" },
+    { Header: "Approve", accessor: "Approve", align: "center" },
   ];
 
-  const rows = inventoryTask.map((item) => {
+  const rows = allVendorTask.map((item) => {
     return {
-      ProductName: (
+      venderName: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.productID?.productName}
+              {item?.venderName}
             </MDTypography>
           </MDBox>
         </MDBox>
       ),
-      Price: (
+      phoneNum: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.price}
+              {item?.phoneNum}
             </MDTypography>
           </MDBox>
         </MDBox>
       ),
-      Quantity: (
+      address: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1} sx={{ width: "140px" }}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.address}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      completeinfo: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1} sx={{ width: "220px" }}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.completeinfo}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      category: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1} sx={{ width: "220px" }}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.category.map((item) => {
+                return `${item}, `;
+              })}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      Approve: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
-            <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.quantity}
-            </MDTypography>
+            <MDButton color="info">Approve</MDButton>
           </MDBox>
         </MDBox>
-      ),
-      Description: (
-        <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox lineHeight={1} sx={{ width: "170px" }}>
-            <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.description}
-            </MDTypography>
-          </MDBox>
-        </MDBox>
-      ),
-      Task_no: (
-        <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox lineHeight={1}>
-            <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.task_no}
-            </MDTypography>
-          </MDBox>
-        </MDBox>
-      ),
-
-      Admin: (
-        <MDTypography variant="caption" color="text" fontWeight="bold">
-          {item?.approvedByAdmin === true ? (
-            <MDBadge badgeContent="Approved" color="secondary" variant="gradient" size="lg" />
-          ) : (
-            <MDBadge badgeContent="Pending" color="dark" variant="gradient" size="lg" />
-          )}
-        </MDTypography>
-      ),
-      Account: (
-        <MDTypography variant="caption" color="text" fontWeight="bold">
-          {item?.approvedByAccount === true ? (
-            <MDBadge badgeContent="Approved" color="secondary" variant="gradient" size="lg" />
-          ) : (
-            <MDBadge badgeContent="Pending" color="dark" variant="gradient" size="lg" />
-          )}
-        </MDTypography>
-      ),
-      Quality: (
-        <MDTypography variant="caption" color="text" fontWeight="bold">
-          {item?.approvedByQualityChaker === true ? (
-            <MDBadge badgeContent="Approved" color="secondary" variant="gradient" size="lg" />
-          ) : (
-            <MDBadge badgeContent="Pending" color="dark" variant="gradient" size="lg" />
-          )}
-        </MDTypography>
-      ),
-      Guard: (
-        <MDTypography component="a" variant="caption" color="text" fontWeight="bold">
-          {item?.approvedByGuird === true ? (
-            <MDBadge badgeContent="Approved" color="secondary" variant="gradient" size="lg" />
-          ) : (
-            <MDBadge badgeContent="Pending" color="dark" variant="gradient" size="lg" />
-          )}
-        </MDTypography>
       ),
     };
   });
@@ -188,7 +197,7 @@ function InventoryTask() {
                 borderRadius="lg"
                 coloredShadow="info"
               >
-                <MDTypography color="white">Inventory Task</MDTypography>
+                <MDTypography color="white">Task Vendors</MDTypography>
               </MDBox>
               {isLoading === true ? (
                 <MDBox
@@ -226,6 +235,7 @@ function InventoryTask() {
                   />
                 </MDBox>
               )}
+              {/* )} */}
             </Card>
           </Grid>
         </Grid>
@@ -234,4 +244,4 @@ function InventoryTask() {
   );
 }
 
-export default InventoryTask;
+export default QualityTaskVendors;
