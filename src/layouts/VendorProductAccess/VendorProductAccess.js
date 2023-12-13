@@ -53,7 +53,7 @@ const VendorProductAccess = () => {
 
   const onSubmit = async (data) => {
     try {
-      const resp = await axios.post("http://localhost:3000/", {
+      const resp = await axios.post("http://localhost:3000/buy/product/vender", {
         price: data.price,
         date: data.date,
         description: data.productDescription,
