@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 /**
 =========================================================
 * Material Dashboard 2 React - v2.2.0
@@ -30,67 +29,38 @@ import MDTypography from "components/MDTypography";
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
-import Footer from "examples/Footer";
-import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
-import ProfilesList from "examples/Lists/ProfilesList";
-import DefaultProjectCard from "examples/Cards/ProjectCards/DefaultProjectCard";
-
-// Overview page components
-import Header from "layouts/profile/components/Header";
-import PlatformSettings from "layouts/profile/components/PlatformSettings";
-
-// Data
-import profilesListData from "layouts/products/data/profilesListData";
-
-// Images
-import homeDecor1 from "assets/images/home-decor-1.jpg";
-import homeDecor2 from "assets/images/home-decor-2.jpg";
-import homeDecor3 from "assets/images/home-decor-3.jpg";
-import homeDecor4 from "assets/images/home-decor-4.jpeg";
-import team1 from "assets/images/team-1.jpg";
-import team2 from "assets/images/team-2.jpg";
-import team3 from "assets/images/team-3.jpg";
-import team4 from "assets/images/team-4.jpg";
 import DataTable from "examples/Tables/DataTable";
-import {
-  Button,
-  Card,
-  CircularProgress,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
-  Select,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  circularProgressClasses,
-} from "@mui/material";
-import authorsTableData from "layouts/tables/data/authorsTableData";
-import UserData from "layouts/products/data/ProductData";
-import React, { useEffect, useState } from "react";
+import { Button, Card } from "@mui/material";
+import UserData from "layouts/buyproducts/data/ProductData";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import MDButton from "components/MDButton";
-import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "context/Auth/AuthContext";
-
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import MDInput from "components/MDInput";
+import CircularProgress, { circularProgressClasses } from "@mui/material/CircularProgress";
 import MDBadge from "components/MDBadge";
+import { useNavigate, useParams } from "react-router-dom";
 
-function AllVendors() {
-  const navigate = useNavigate();
+function SelectedVendor() {
   const { user } = useAuthContext();
-  const [allVendor, setAllVendor] = useState([]);
+  const { ser_no, selectedVender } = useParams();
+  const [allVendorTask, setAllVendorTask] = useState([]);
   const [isLoading, setLoading] = useState(false);
-  const fetchAllVendors = async () => {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchAllVendorTask();
+  }, []);
+
+  const fetchAllVendorTask = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/allvender", {
+
+      const resp = await axios.get("http://localhost:3000/allvender/task", {
+        params: {
+          ser_no,
+        },
         headers: {
           Authorization: user?.token,
         },
@@ -102,45 +72,14 @@ function AllVendors() {
       }
       if (resp.data.success === true) {
         setLoading(false);
-        setAllVendor(resp.data.data);
+        const approvedVendor = resp.data.data.filter((item) => {
+          return item?._id === selectedVender;
+        });
+        setAllVendorTask(approvedVendor);
       }
     } catch (error) {
       console.log(error);
-    }
-  };
-  useEffect(() => {
-    fetchAllVendors();
-  }, []);
-
-  const deleteVendor = async (_id) => {
-    try {
-      console.log("--www--", _id);
-      const resp = await axios.post(
-        "http://localhost:3000/deleteProduct",
-        {
-          _id,
-        },
-        {
-          headers: {
-            Authorization: user?.token,
-          },
-        }
-      );
-      console.log(resp);
-      if (resp.data.success === false) {
-        toast.warn(`Error, ${resp.data.message}`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        return;
-      }
-      if (resp.data.success === true) {
-        toast.success(`Success, ${resp.data.message}`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        fetchProduct();
-      }
-    } catch (error) {
-      console.log(error);
+      setLoading(false);
     }
   };
 
@@ -150,10 +89,10 @@ function AllVendors() {
     { Header: "Address", accessor: "address" },
     { Header: "Phone", accessor: "phoneNum", align: "center" },
     { Header: "Category", accessor: "category", align: "center" },
-    // { Header: "Delete", accessor: "delete", align: "center" },
+    { Header: "Approved", accessor: "Approve", align: "center" },
   ];
 
-  const rows = allVendor.map((item) => {
+  const rows = allVendorTask.map((item) => {
     return {
       venderName: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
@@ -202,6 +141,14 @@ function AllVendors() {
           </MDBox>
         </MDBox>
       ),
+      Approve: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1}>
+            {/* <MDButton color="info">Approved</MDButton> */}
+            <MDBadge badgeContent="Approved" color="warning" variant="gradient" size="lg" />
+          </MDBox>
+        </MDBox>
+      ),
     };
   });
 
@@ -209,7 +156,6 @@ function AllVendors() {
     <DashboardLayout>
       <DashboardNavbar />
       <ToastContainer />
-
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
@@ -224,25 +170,8 @@ function AllVendors() {
                 borderRadius="lg"
                 coloredShadow="info"
               >
-                <Grid container spacing={1}>
-                  <Grid item xs={5} lg={2}>
-                    <MDBox variant="h6" color="white">
-                      All Vendors
-                    </MDBox>
-                  </Grid>
-                  <Grid item xs={6} lg={3}>
-                    <MDButton
-                      color="dark"
-                      onClick={() => {
-                        navigate("/store/dashboard/create-vendors");
-                      }}
-                    >
-                      Create New Vendor
-                    </MDButton>
-                  </Grid>
-                </Grid>
+                <MDTypography color="white">Approved Vendor</MDTypography>
               </MDBox>
-
               {isLoading === true ? (
                 <MDBox
                   sx={{
@@ -279,6 +208,7 @@ function AllVendors() {
                   />
                 </MDBox>
               )}
+              {/* )} */}
             </Card>
           </Grid>
         </Grid>
@@ -287,4 +217,4 @@ function AllVendors() {
   );
 }
 
-export default AllVendors;
+export default SelectedVendor;

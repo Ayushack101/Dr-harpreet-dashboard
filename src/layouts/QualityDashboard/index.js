@@ -137,6 +137,7 @@ function QualityDashboard() {
     { Header: "Quantity", accessor: "Quantity", align: "center" },
     { Header: "Task_no", accessor: "Task_no", align: "center" },
     { Header: "Vendors", accessor: "Vendors", align: "center" },
+    { Header: "Status", accessor: "status", align: "center" },
   ];
 
   const rows = qualityTask.map((item) => {
@@ -189,14 +190,36 @@ function QualityDashboard() {
 
       Vendors: (
         <MDTypography component="a" variant="caption" color="text" fontWeight="bold">
-          <MDButton
-            color="info"
-            onClick={() => {
-              navigate(`/quality/dashboard/taskvendors/${item?.task_no}`);
-            }}
-          >
-            View Vendors
-          </MDButton>
+          {item?.selectedVender === null ? (
+            <MDButton
+              color="info"
+              onClick={() => {
+                navigate(`/quality/dashboard/taskvendors/${item?.task_no}/${item?._id}`);
+              }}
+            >
+              View Vendors
+            </MDButton>
+          ) : (
+            <MDButton
+              color="info"
+              onClick={() => {
+                navigate(
+                  `/quality/dashboard/approvedvendor/${item?.task_no}/${item?.selectedVender}`
+                );
+              }}
+            >
+              Approved Vendor
+            </MDButton>
+          )}
+        </MDTypography>
+      ),
+      status: (
+        <MDTypography component="a" variant="caption" color="text" fontWeight="bold">
+          {item?.approvedByQualityChaker === true ? (
+            <MDBadge badgeContent="Approved" color="warning" variant="gradient" size="lg" />
+          ) : (
+            <MDBadge badgeContent="Pending" color="dark" variant="gradient" size="lg" />
+          )}
         </MDTypography>
       ),
     };

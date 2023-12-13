@@ -40,9 +40,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CircularProgress, { circularProgressClasses } from "@mui/material/CircularProgress";
 import MDInput from "components/MDInput";
+import { useNavigate } from "react-router-dom";
 
 function BuyProduct() {
   const { user } = useAuthContext();
+  const navigate = useNavigate();
   const [allProduct, setAllProducts] = useState([]);
   const [category, setCategory] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -50,6 +52,7 @@ function BuyProduct() {
   const [selectedCategoryName, setSelectedCategoryName] = useState("");
 
   const [productRange, setProductRange] = useState({});
+  const [description, setDescription] = useState({});
 
   const fetchCategory = async () => {
     try {
@@ -91,8 +94,6 @@ function BuyProduct() {
   const fetchProductByCategory = async (id) => {
     try {
       setLoading(true);
-      console.log(user?.token);
-
       const resp = await axios.get("http://localhost:3000/invetry/all/product", {
         params: {
           id: id,
@@ -113,6 +114,7 @@ function BuyProduct() {
           initialData[item?._id] = "";
         });
         setProductRange({ inputValues: initialData });
+        setDescription({ inputValues: initialData });
       }
     } catch (error) {
       console.log(error);
@@ -123,21 +125,30 @@ function BuyProduct() {
   }, []);
 
   const buyProduct = async (_id) => {
-    // console.log(productRange.inputValues[_id]);
     const inputValue = productRange.inputValues[_id];
+    const inputValue1 = description.inputValues[_id];
+    console.log(inputValue, inputValue1);
+    if (inputValue === "") {
+      toast.warn(`Error occured, Quantity is required`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      return;
+    }
+    if (inputValue1 === "") {
+      toast.warn(`Error occured, Description is required`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      return;
+    }
     try {
       const productData = {
-        // userId: user?._id,
         product_id: _id,
         quantity: inputValue,
+        description: inputValue1,
       };
       const resp = await axios.post(
         "http://localhost:3000/buyProduct",
-        // {
-        //   userID: user?._id,
-        //   product_id: _id,
-        //   quantity: inputValue,
-        // },
+
         productData,
         {
           headers: {
@@ -145,7 +156,6 @@ function BuyProduct() {
           },
         }
       );
-      // console.log(resp);
       if (resp.data.success === false) {
         toast.warn(`Error occured, ${resp.data.message}`, {
           position: toast.POSITION.TOP_RIGHT,
@@ -156,7 +166,9 @@ function BuyProduct() {
         toast.success(`Success, ${resp.data.message}`, {
           position: toast.POSITION.TOP_RIGHT,
         });
-        fetchProduct();
+        setTimeout(() => {
+          navigate("/store/dashboard/inventorytask");
+        }, 500);
       }
     } catch (error) {
       toast.error(`Error, ${error}`, {
@@ -174,12 +186,22 @@ function BuyProduct() {
       },
     }));
   };
+  const handleInputChange2 = (_id, value) => {
+    setDescription((prevState) => ({
+      ...prevState,
+      inputValues: {
+        ...prevState.inputValues,
+        [_id]: value,
+      },
+    }));
+  };
 
   const columns = [
     { Header: "ProductName", accessor: "ProductName" },
     { Header: "Price", accessor: "Price" },
     { Header: "Product Category", accessor: "Category" },
-    { Header: "Range", accessor: "Range", align: "center" },
+    { Header: "Quantity", accessor: "Range", align: "center" },
+    { Header: "Description", accessor: "description", align: "center" },
     { Header: "Action", accessor: "BuyProduct", align: "center" },
   ];
 
@@ -218,10 +240,29 @@ function BuyProduct() {
             <MDTypography display="block" variant="button" fontWeight="medium">
               <form itemID={item?._id}>
                 <MDInput
-                  placeholder="Enter range"
+                  placeholder="Enter Quantity"
                   type="number"
                   value={productRange.inputValues[item?._id] || ""}
                   onChange={(e) => handleInputChange(item?._id, e.target.value)}
+                ></MDInput>
+              </form>
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      description: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox ml={0} lineHeight={1}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              <form itemID={item?._id}>
+                <MDInput
+                  sx={{ width: "270px" }}
+                  placeholder="Description"
+                  type="text"
+                  multiline
+                  rows={3}
+                  value={description.inputValues[item?._id] || ""}
+                  onChange={(e) => handleInputChange2(item?._id, e.target.value)}
                 ></MDInput>
               </form>
             </MDTypography>
@@ -262,7 +303,7 @@ function BuyProduct() {
                 borderRadius="lg"
                 coloredShadow="info"
               >
-                <MDTypography color="white">Buy Products(Inventory)</MDTypography>
+                <MDTypography color="white">Buy Products</MDTypography>
               </MDBox>
               <Grid item xs={12} md={6} lg={3}>
                 <MDBox mx={2} px={2} pt={3}>

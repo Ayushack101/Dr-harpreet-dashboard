@@ -82,6 +82,7 @@ import CreateVendor from "layouts/AllVendors/Components/CreateVendor";
 import VendorRegistration from "layouts/AllVendors/Components/VendorRegistration";
 import VendorProductAccess from "layouts/VendorProductAccess/VendorProductAccess";
 import QualityTaskVendors from "layouts/QualityDashboard/QualityTaskVendors";
+import SelectedVendor from "layouts/QualityDashboard/SelectedVendor";
 
 export default function App() {
   // const { user, authDispatch } = useAuthContext();
@@ -238,7 +239,14 @@ export default function App() {
         {/* Quality dashboard */}
         <Route element={<ProtectedRouteQuality />}>
           <Route path="quality/dashboard/qualitytask" element={<QualityDashboard />} />
-          <Route path="quality/dashboard/taskvendors/:ser_no" element={<QualityTaskVendors />} />
+          <Route
+            path="quality/dashboard/taskvendors/:ser_no/:_id"
+            element={<QualityTaskVendors />}
+          />
+          <Route
+            path="quality/dashboard/approvedvendor/:ser_no/:selectedVender"
+            element={<SelectedVendor />}
+          />
         </Route>
 
         {/* Vendor registration form */}

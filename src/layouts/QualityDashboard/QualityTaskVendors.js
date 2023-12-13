@@ -44,7 +44,7 @@ import { useNavigate, useParams } from "react-router-dom";
 
 function QualityTaskVendors() {
   const { user } = useAuthContext();
-  const { ser_no } = useParams();
+  const { ser_no, _id } = useParams();
   const [allVendorTask, setAllVendorTask] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -53,12 +53,14 @@ function QualityTaskVendors() {
     fetchAllVendorTask();
   }, []);
 
-  const approvedByQuality = async (_id) => {
+  const approvedByQuality = async (_id, vender) => {
+    console.log(_id, vender);
     try {
       const resp = await axios.post(
         "http://localhost:3000/quality/taskApproved",
         {
-          _id: _id,
+          _id,
+          vender,
         },
         {
           headers: {
@@ -74,10 +76,10 @@ function QualityTaskVendors() {
         return;
       }
       if (resp.data.success === true) {
-        toast.success(`Success,  ${resp.data.message}!`, {
+        toast.success(`Success,  Approved by Quality!`, {
           position: toast.POSITION.TOP_RIGHT,
         });
-        fetchTaskApprovedByAccount();
+        navigate("/quality/dashboard/qualitytask");
       }
     } catch (error) {
       console.log(error);
@@ -172,7 +174,14 @@ function QualityTaskVendors() {
       Approve: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
-            <MDButton color="info">Approve</MDButton>
+            <MDButton
+              color="info"
+              onClick={() => {
+                approvedByQuality(_id, item?._id);
+              }}
+            >
+              Approve
+            </MDButton>
           </MDBox>
         </MDBox>
       ),
@@ -225,15 +234,25 @@ function QualityTaskVendors() {
                   />
                 </MDBox>
               ) : (
-                <MDBox pt={3}>
-                  <DataTable
-                    table={{ columns, rows }}
-                    isSorted={false}
-                    entriesPerPage={false}
-                    showTotalEntries={false}
-                    noEndBorder
-                  />
-                </MDBox>
+                <>
+                  {allVendorTask.length === 0 ? (
+                    <MDBox sx={{ display: "flex", justifyContent: "center", margin: "20px" }}>
+                      <MDTypography sx={{ fontWeight: 700, fontSize: "24px" }}>
+                        No Vendor found
+                      </MDTypography>
+                    </MDBox>
+                  ) : (
+                    <MDBox pt={3}>
+                      <DataTable
+                        table={{ columns, rows }}
+                        isSorted={false}
+                        entriesPerPage={false}
+                        showTotalEntries={false}
+                        noEndBorder
+                      />
+                    </MDBox>
+                  )}
+                </>
               )}
               {/* )} */}
             </Card>

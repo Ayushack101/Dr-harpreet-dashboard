@@ -134,7 +134,7 @@ function InventoryTask() {
       Admin: (
         <MDTypography variant="caption" color="text" fontWeight="bold">
           {item?.approvedByAdmin === true ? (
-            <MDBadge badgeContent="Approved" color="secondary" variant="gradient" size="lg" />
+            <MDBadge badgeContent="Approved" color="warning" variant="gradient" size="lg" />
           ) : (
             <MDBadge badgeContent="Pending" color="dark" variant="gradient" size="lg" />
           )}
@@ -143,7 +143,7 @@ function InventoryTask() {
       Account: (
         <MDTypography variant="caption" color="text" fontWeight="bold">
           {item?.approvedByAccount === true ? (
-            <MDBadge badgeContent="Approved" color="secondary" variant="gradient" size="lg" />
+            <MDBadge badgeContent="Approved" color="warning" variant="gradient" size="lg" />
           ) : (
             <MDBadge badgeContent="Pending" color="dark" variant="gradient" size="lg" />
           )}
@@ -152,7 +152,7 @@ function InventoryTask() {
       Quality: (
         <MDTypography variant="caption" color="text" fontWeight="bold">
           {item?.approvedByQualityChaker === true ? (
-            <MDBadge badgeContent="Approved" color="secondary" variant="gradient" size="lg" />
+            <MDBadge badgeContent="Approved" color="warning" variant="gradient" size="lg" />
           ) : (
             <MDBadge badgeContent="Pending" color="dark" variant="gradient" size="lg" />
           )}
@@ -161,7 +161,7 @@ function InventoryTask() {
       Guard: (
         <MDTypography component="a" variant="caption" color="text" fontWeight="bold">
           {item?.approvedByGuird === true ? (
-            <MDBadge badgeContent="Approved" color="secondary" variant="gradient" size="lg" />
+            <MDBadge badgeContent="Approved" color="warning" variant="gradient" size="lg" />
           ) : (
             <MDBadge badgeContent="Pending" color="dark" variant="gradient" size="lg" />
           )}
