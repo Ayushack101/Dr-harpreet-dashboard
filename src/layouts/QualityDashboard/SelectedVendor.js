@@ -72,9 +72,11 @@ function SelectedVendor() {
       }
       if (resp.data.success === true) {
         setLoading(false);
-        const approvedVendor = resp.data.data.filter((item) => {
-          return item?._id === selectedVender;
+        console.log(resp.data.data);
+        const approvedVendor = resp.data.data.venders.filter((item) => {
+          return item?.ven_id === selectedVender;
         });
+        console.log(approvedVendor);
         setAllVendorTask(approvedVendor);
       }
     } catch (error) {
@@ -85,20 +87,23 @@ function SelectedVendor() {
 
   const columns = [
     { Header: "Vender Name", accessor: "venderName" },
-    { Header: "Complete Info", accessor: "completeinfo" },
-    { Header: "Address", accessor: "address" },
+    // { Header: "Complete Info", accessor: "completeinfo" },
+    // { Header: "Address", accessor: "address" },
     { Header: "Phone", accessor: "phoneNum", align: "center" },
-    { Header: "Category", accessor: "category", align: "center" },
-    { Header: "Approved", accessor: "Approve", align: "center" },
+    { Header: "Category", accessor: "category" },
+    { Header: "Product Price", accessor: "price", align: "center" },
+    { Header: "Product Description", accessor: "description", align: "center" },
+    { Header: "Date", accessor: "date", align: "center" },
+    { Header: "Approve", accessor: "Approve", align: "center" },
   ];
 
-  const rows = allVendorTask.map((item) => {
+  const rows = allVendorTask?.map((item) => {
     return {
       venderName: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.venderName}
+              {item?.ven_info?.venderName}
             </MDTypography>
           </MDBox>
         </MDBox>
@@ -107,7 +112,7 @@ function SelectedVendor() {
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.phoneNum}
+              {item?.ven_info?.phoneNum}
             </MDTypography>
           </MDBox>
         </MDBox>
@@ -116,7 +121,7 @@ function SelectedVendor() {
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1} sx={{ width: "140px" }}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.address}
+              {item?.ven_info?.address}
             </MDTypography>
           </MDBox>
         </MDBox>
@@ -125,18 +130,52 @@ function SelectedVendor() {
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1} sx={{ width: "220px" }}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.completeinfo}
+              {item?.ven_info?.completeinfo}
             </MDTypography>
           </MDBox>
         </MDBox>
       ),
       category: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox lineHeight={1} sx={{ width: "220px" }}>
+          <MDBox lineHeight={1} sx={{ width: "120px" }}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.category.map((item) => {
+              {item?.ven_info?.category.map((item) => {
                 return `${item}, `;
               })}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      price: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.price}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      description: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1} sx={{ width: "200px" }}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.Prod_desc}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      date: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {/* {item?.send_Prod_date} */}
+              {item?.send_Prod_date
+                ? new Date(item.send_Prod_date).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "long", // or 'short' for abbreviated month
+                    day: "numeric",
+                  })
+                : "No date available"}
             </MDTypography>
           </MDBox>
         </MDBox>
@@ -144,7 +183,6 @@ function SelectedVendor() {
       Approve: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
-            {/* <MDButton color="info">Approved</MDButton> */}
             <MDBadge badgeContent="Approved" color="warning" variant="gradient" size="lg" />
           </MDBox>
         </MDBox>

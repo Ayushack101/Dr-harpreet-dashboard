@@ -48,61 +48,9 @@ function QualityDashboard() {
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const fetchTaskApprovedByAccount = async () => {
-    try {
-      setLoading(true);
-      const resp = await axios.get("http://localhost:3000/quality/allTask", {
-        headers: {
-          Authorization: user?.token,
-        },
-      });
-      console.log(resp);
-      if (resp.data.success === false) {
-        return;
-      }
-      if (resp.data.success === true) {
-        setLoading(false);
-        setQualityTask(resp.data.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
   useEffect(() => {
-    // fetchTaskApprovedByAccount();
     fetchTask();
   }, []);
-
-  const approvedByQuality = async (_id) => {
-    try {
-      const resp = await axios.post(
-        "http://localhost:3000/quality/taskApproved",
-        {
-          _id: _id,
-        },
-        {
-          headers: {
-            Authorization: user?.token,
-          },
-        }
-      );
-      console.log(resp);
-      if (resp.data.success === false) {
-        toast.warn(`Error occuerd, ${resp.data.message}!`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        return;
-      }
-      if (resp.data.success === true) {
-        toast.success(`Success,  ${resp.data.message}!`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        fetchTaskApprovedByAccount();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   const fetchTask = async () => {
     try {

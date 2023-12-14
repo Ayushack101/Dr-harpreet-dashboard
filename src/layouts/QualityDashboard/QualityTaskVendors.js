@@ -79,7 +79,9 @@ function QualityTaskVendors() {
         toast.success(`Success,  Approved by Quality!`, {
           position: toast.POSITION.TOP_RIGHT,
         });
-        navigate("/quality/dashboard/qualitytask");
+        setTimeout(() => {
+          navigate("/quality/dashboard/qualitytask");
+        }, 400);
       }
     } catch (error) {
       console.log(error);
@@ -89,7 +91,6 @@ function QualityTaskVendors() {
   const fetchAllVendorTask = async () => {
     try {
       setLoading(true);
-
       const resp = await axios.get("http://localhost:3000/allvender/task", {
         params: {
           ser_no,
@@ -105,7 +106,7 @@ function QualityTaskVendors() {
       }
       if (resp.data.success === true) {
         setLoading(false);
-        setAllVendorTask(resp.data.data);
+        setAllVendorTask(resp.data.data.venders);
       }
     } catch (error) {
       console.log(error);
@@ -115,20 +116,23 @@ function QualityTaskVendors() {
 
   const columns = [
     { Header: "Vender Name", accessor: "venderName" },
-    { Header: "Complete Info", accessor: "completeinfo" },
-    { Header: "Address", accessor: "address" },
+    // { Header: "Complete Info", accessor: "completeinfo" },
+    // { Header: "Address", accessor: "address" },
     { Header: "Phone", accessor: "phoneNum", align: "center" },
-    { Header: "Category", accessor: "category", align: "center" },
+    { Header: "Category", accessor: "category" },
+    { Header: "Product Price", accessor: "price", align: "center" },
+    { Header: "Product Description", accessor: "description", align: "center" },
+    { Header: "Date", accessor: "date", align: "center" },
     { Header: "Approve", accessor: "Approve", align: "center" },
   ];
 
-  const rows = allVendorTask.map((item) => {
+  const rows = allVendorTask?.map((item) => {
     return {
       venderName: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.venderName}
+              {item?.ven_info?.venderName}
             </MDTypography>
           </MDBox>
         </MDBox>
@@ -137,7 +141,7 @@ function QualityTaskVendors() {
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.phoneNum}
+              {item?.ven_info?.phoneNum}
             </MDTypography>
           </MDBox>
         </MDBox>
@@ -146,7 +150,7 @@ function QualityTaskVendors() {
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1} sx={{ width: "140px" }}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.address}
+              {item?.ven_info?.address}
             </MDTypography>
           </MDBox>
         </MDBox>
@@ -155,18 +159,52 @@ function QualityTaskVendors() {
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1} sx={{ width: "220px" }}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.completeinfo}
+              {item?.ven_info?.completeinfo}
             </MDTypography>
           </MDBox>
         </MDBox>
       ),
       category: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox lineHeight={1} sx={{ width: "220px" }}>
+          <MDBox lineHeight={1} sx={{ width: "120px" }}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.category.map((item) => {
+              {item?.ven_info?.category.map((item) => {
                 return `${item}, `;
               })}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      price: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.price}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      description: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1} sx={{ width: "200px" }}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.Prod_desc}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      date: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {/* {item?.send_Prod_date} */}
+              {item?.send_Prod_date
+                ? new Date(item.send_Prod_date).toLocaleString("en-US", {
+                    year: "numeric",
+                    month: "long", // or 'short' for abbreviated month
+                    day: "numeric",
+                  })
+                : "No date available"}
             </MDTypography>
           </MDBox>
         </MDBox>
@@ -177,7 +215,7 @@ function QualityTaskVendors() {
             <MDButton
               color="info"
               onClick={() => {
-                approvedByQuality(_id, item?._id);
+                approvedByQuality(_id, item?.ven_id);
               }}
             >
               Approve
