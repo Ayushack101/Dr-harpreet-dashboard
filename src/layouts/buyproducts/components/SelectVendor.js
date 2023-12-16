@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /**
 =========================================================
 * Material Dashboard 2 React - v2.2.0
@@ -29,34 +30,67 @@ import MDTypography from "components/MDTypography";
 // Material Dashboard 2 React example components
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
+import Footer from "examples/Footer";
+import ProfileInfoCard from "examples/Cards/InfoCards/ProfileInfoCard";
+import ProfilesList from "examples/Lists/ProfilesList";
+import DefaultProjectCard from "examples/Cards/ProjectCards/DefaultProjectCard";
+
+// Overview page components
+import Header from "layouts/profile/components/Header";
+import PlatformSettings from "layouts/profile/components/PlatformSettings";
+
+// Data
+import profilesListData from "layouts/products/data/profilesListData";
+
+// Images
+import homeDecor1 from "assets/images/home-decor-1.jpg";
+import homeDecor2 from "assets/images/home-decor-2.jpg";
+import homeDecor3 from "assets/images/home-decor-3.jpg";
+import homeDecor4 from "assets/images/home-decor-4.jpeg";
+import team1 from "assets/images/team-1.jpg";
+import team2 from "assets/images/team-2.jpg";
+import team3 from "assets/images/team-3.jpg";
+import team4 from "assets/images/team-4.jpg";
 import DataTable from "examples/Tables/DataTable";
-import { Button, Card } from "@mui/material";
-import UserData from "layouts/buyproducts/data/ProductData";
-import React, { useState, useEffect } from "react";
+import {
+  Button,
+  Card,
+  CircularProgress,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  OutlinedInput,
+  Select,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  circularProgressClasses,
+} from "@mui/material";
+import authorsTableData from "layouts/tables/data/authorsTableData";
+import UserData from "layouts/products/data/ProductData";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import MDButton from "components/MDButton";
+import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "context/Auth/AuthContext";
+
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import CircularProgress, { circularProgressClasses } from "@mui/material/CircularProgress";
+import MDInput from "components/MDInput";
 import MDBadge from "components/MDBadge";
-import { useNavigate } from "react-router-dom";
 
-function QualityDashboard() {
-  const { user } = useAuthContext();
-  const [qualityTask, setQualityTask] = useState([]);
-  const [isLoading, setLoading] = useState(false);
+function SelectVendor() {
   const navigate = useNavigate();
-
-  useEffect(() => {
-    fetchTask();
-  }, []);
-
-  const fetchTask = async () => {
+  const { user } = useAuthContext();
+  const [allVendor, setAllVendor] = useState([]);
+  const [isLoading, setLoading] = useState(false);
+  const fetchAllVendors = async () => {
     try {
       setLoading(true);
-
-      const resp = await axios.get("http://localhost:3000/allTask/quality", {
+      const resp = await axios.get("http://localhost:3000/allvender", {
         headers: {
           Authorization: user?.token,
         },
@@ -68,107 +102,82 @@ function QualityDashboard() {
       }
       if (resp.data.success === true) {
         setLoading(false);
-        setQualityTask(resp.data.data);
+        setAllVendor(resp.data.data);
       }
     } catch (error) {
       console.log(error);
-      setLoading(false);
     }
   };
-
-  console.log(qualityTask);
+  useEffect(() => {
+    fetchAllVendors();
+  }, []);
 
   const columns = [
-    { Header: "ProductName", accessor: "ProductName" },
-    { Header: "Description", accessor: "Description" },
-    // { Header: "Price", accessor: "Price", align: "center" },
-    { Header: "Quantity", accessor: "Quantity", align: "center" },
-    { Header: "Task_no", accessor: "Task_no", align: "center" },
-    { Header: "Vendors", accessor: "Vendors", align: "center" },
-    { Header: "Status", accessor: "status", align: "center" },
+    { Header: "Vender Name", accessor: "venderName" },
+    { Header: "Complete Info", accessor: "completeinfo" },
+    { Header: "Address", accessor: "address" },
+    { Header: "Phone", accessor: "phoneNum", align: "center" },
+    { Header: "Category", accessor: "category", align: "center" },
+    { Header: "Select", accessor: "Select", align: "center" },
   ];
 
-  const rows = qualityTask.map((item) => {
+  const rows = allVendor.map((item) => {
     return {
-      ProductName: (
+      venderName: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.productID?.productName}
+              {item?.venderName}
             </MDTypography>
           </MDBox>
         </MDBox>
       ),
-      Price: (
+      phoneNum: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.price}
+              {item?.phoneNum}
             </MDTypography>
           </MDBox>
         </MDBox>
       ),
-      Quantity: (
+      address: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1} sx={{ width: "140px" }}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.address}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      completeinfo: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1} sx={{ width: "220px" }}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.completeinfo}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      category: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1} sx={{ width: "220px" }}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.category.map((item) => {
+                return `${item}, `;
+              })}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      Select: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
-            <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.quantity}
-            </MDTypography>
-          </MDBox>
-        </MDBox>
-      ),
-      Description: (
-        <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox lineHeight={1} sx={{ width: "300px" }}>
-            <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.description}
-            </MDTypography>
-          </MDBox>
-        </MDBox>
-      ),
-      Task_no: (
-        <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox lineHeight={1}>
-            <MDTypography display="block" variant="button" fontWeight="medium">
-              {item?.task_no}
-            </MDTypography>
-          </MDBox>
-        </MDBox>
-      ),
-
-      Vendors: (
-        <MDTypography component="a" variant="caption" color="text" fontWeight="bold">
-          {item?.selectedVender === null ? (
-            <MDButton
-              color="info"
-              onClick={() => {
-                navigate(`/quality/dashboard/taskvendors/${item?.task_no}/${item?._id}`);
-              }}
-            >
-              View Vendors
+            <MDButton color="info" fontWeight="medium">
+              Select
             </MDButton>
-          ) : (
-            <MDButton
-              color="info"
-              onClick={() => {
-                navigate(
-                  `/quality/dashboard/approvedvendor/${item?.task_no}/${item?.selectedVender}`
-                );
-              }}
-            >
-              Approved Vendor
-            </MDButton>
-          )}
-        </MDTypography>
-      ),
-      status: (
-        <MDTypography component="a" variant="caption" color="text" fontWeight="bold">
-          {item?.approvedByQualityChaker === true ? (
-            <MDBadge badgeContent="Approved" color="warning" variant="gradient" size="lg" />
-          ) : (
-            <MDBadge badgeContent="Pending" color="dark" variant="gradient" size="lg" />
-          )}
-        </MDTypography>
+          </MDBox>
+        </MDBox>
       ),
     };
   });
@@ -177,6 +186,7 @@ function QualityDashboard() {
     <DashboardLayout>
       <DashboardNavbar />
       <ToastContainer />
+
       <MDBox pt={6} pb={3}>
         <Grid container spacing={6}>
           <Grid item xs={12}>
@@ -191,8 +201,25 @@ function QualityDashboard() {
                 borderRadius="lg"
                 coloredShadow="info"
               >
-                <MDTypography color="white">Quality Task</MDTypography>
+                <Grid container spacing={1}>
+                  <Grid item xs={5} lg={5}>
+                    <MDBox variant="h6" color="white">
+                      Select Vendors for Product
+                    </MDBox>
+                  </Grid>
+                  {/* <Grid item xs={6} lg={3}>
+                    <MDButton
+                      color="dark"
+                      onClick={() => {
+                        navigate("/store/dashboard/create-vendors");
+                      }}
+                    >
+                      Create New Vendor
+                    </MDButton>
+                  </Grid> */}
+                </Grid>
               </MDBox>
+
               {isLoading === true ? (
                 <MDBox
                   sx={{
@@ -229,7 +256,6 @@ function QualityDashboard() {
                   />
                 </MDBox>
               )}
-              {/* )} */}
             </Card>
           </Grid>
         </Grid>
@@ -238,4 +264,4 @@ function QualityDashboard() {
   );
 }
 
-export default QualityDashboard;
+export default SelectVendor;

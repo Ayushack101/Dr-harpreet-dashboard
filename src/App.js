@@ -83,6 +83,7 @@ import VendorRegistration from "layouts/AllVendors/Components/VendorRegistration
 import VendorProductAccess from "layouts/VendorProductAccess/VendorProductAccess";
 import QualityTaskVendors from "layouts/QualityDashboard/QualityTaskVendors";
 import SelectedVendor from "layouts/QualityDashboard/SelectedVendor";
+import SelectVendor from "layouts/buyproducts/components/SelectVendor";
 
 export default function App() {
   // const { user, authDispatch } = useAuthContext();
@@ -226,6 +227,10 @@ export default function App() {
         {/* Inventory dashboard */}
         <Route element={<ProtectedRouteStore />}>
           <Route path="/store/dashboard/buyproduct" element={<BuyProduct />}></Route>
+          <Route
+            path="/store/dashboard/buyproduct/selectvendors"
+            element={<SelectVendor />}
+          ></Route>
           <Route path="/store/dashboard/allvendors" element={<AllVendors />}></Route>
           <Route path="/store/dashboard/create-vendors" element={<CreateVendor />}></Route>
           <Route path="/store/dashboard/inventorytask" element={<InventoryTask />}></Route>

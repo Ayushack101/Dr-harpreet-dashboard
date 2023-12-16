@@ -171,7 +171,7 @@ function Overview() {
     { Header: "ProductName", accessor: "ProductName" },
     { Header: "Product Description", accessor: "Description" },
     { Header: "Product Category", accessor: "Category" },
-    { Header: "Price", accessor: "Price" },
+    // { Header: "Price", accessor: "Price" },
     { Header: "DeleteProduct", accessor: "DeleteProduct", align: "center" },
   ];
   const rows = allProduct.map((item) => {
@@ -179,10 +179,11 @@ function Overview() {
       ProductName: <ProductName productName={item?.productName} />,
       Price: <Price price={item?.price} />,
       Description: (
-        <MDBox display="flex" alignItems="center" lineHeight={1}>
+        <MDBox display="flex" alignItems="center" lineHeight={1} sx={{ width: "200px" }}>
           <MDBox ml={0} lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
-              {item.description.split(" ").slice(0, 25).join(" ")}...
+              {/* {item.description.split(" ").slice(0, 25).join(" ")}... */}
+              {item?.description}
             </MDTypography>
           </MDBox>
         </MDBox>

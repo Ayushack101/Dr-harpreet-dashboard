@@ -71,7 +71,6 @@ const AddProduct = () => {
   const onSubmit = async (data) => {
     const productData = {
       category: data.category,
-      price: data.price,
       description: data.productDescription,
       productName: data.productName,
     };
@@ -152,7 +151,7 @@ const AddProduct = () => {
                         </MDTypography>
                       </MDBox>
                     </Grid>
-                    <Grid item xs={12} lg={6}>
+                    {/* <Grid item xs={12} lg={6}>
                       <MDBox>
                         <MDInput
                           type="number"
@@ -167,25 +166,7 @@ const AddProduct = () => {
                           {errors?.price?.message}
                         </MDTypography>
                       </MDBox>
-                    </Grid>
-                    <Grid item xs={12} lg={6}>
-                      <MDBox>
-                        <MDInput
-                          type="text"
-                          label="Description (optional)"
-                          rows={4}
-                          multiline
-                          fullWidth
-                          {...register("productDescription", {
-                            required: "Product Description is required",
-                          })}
-                        />
-                        <MDTypography color="error" fontWeight="bold" style={{ fontSize: "16px" }}>
-                          {errors?.productDescription?.message}
-                        </MDTypography>
-                      </MDBox>
-                    </Grid>
-
+                    </Grid> */}
                     <Grid item xs={12} lg={6}>
                       <MDBox>
                         <FormControl variant="standard" sx={{ mt: 0 }} style={{ width: "100%" }}>
@@ -222,6 +203,24 @@ const AddProduct = () => {
                         </MDTypography>
                       </MDBox>
                     </Grid>
+                    <Grid item xs={12} lg={6}>
+                      <MDBox>
+                        <MDInput
+                          type="text"
+                          label="Description (optional)"
+                          rows={4}
+                          multiline
+                          fullWidth
+                          {...register("productDescription", {
+                            required: "Product Description is required",
+                          })}
+                        />
+                        <MDTypography color="error" fontWeight="bold" style={{ fontSize: "16px" }}>
+                          {errors?.productDescription?.message}
+                        </MDTypography>
+                      </MDBox>
+                    </Grid>
+
                     <Grid item xs={12}>
                       <MDBox sx={{ display: "flex", justifyContent: "space-between" }}>
                         <MDButton

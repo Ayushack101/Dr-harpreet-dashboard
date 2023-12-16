@@ -74,7 +74,7 @@ function InventoryTask() {
   const columns = [
     { Header: "ProductName", accessor: "ProductName" },
     { Header: "Description", accessor: "Description" },
-    { Header: "Price", accessor: "Price", align: "center" },
+    // { Header: "Price", accessor: "Price", align: "center" },
     { Header: "Quantity", accessor: "Quantity", align: "center" },
     { Header: "Task_no", accessor: "Task_no", align: "center" },
     { Header: "Admin", accessor: "Admin", align: "center" },
@@ -114,7 +114,7 @@ function InventoryTask() {
       ),
       Description: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox lineHeight={1} sx={{ width: "170px" }}>
+          <MDBox lineHeight={1} sx={{ width: "270px" }}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               {item?.description}
             </MDTypography>

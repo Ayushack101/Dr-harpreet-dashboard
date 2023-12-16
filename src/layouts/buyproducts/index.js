@@ -124,10 +124,9 @@ function BuyProduct() {
     fetchCategory();
   }, []);
 
-  const buyProduct = async (_id) => {
+  const buyProduct = (_id) => {
     const inputValue = productRange.inputValues[_id];
     const inputValue1 = description.inputValues[_id];
-    console.log(inputValue, inputValue1);
     if (inputValue === "") {
       toast.warn(`Error occured, Quantity is required`, {
         position: toast.POSITION.TOP_RIGHT,
@@ -140,41 +139,43 @@ function BuyProduct() {
       });
       return;
     }
-    try {
-      const productData = {
-        product_id: _id,
-        quantity: inputValue,
-        description: inputValue1,
-      };
-      const resp = await axios.post(
-        "http://localhost:3000/buyProduct",
-
-        productData,
-        {
-          headers: {
-            Authorization: user?.token,
-          },
-        }
-      );
-      if (resp.data.success === false) {
-        toast.warn(`Error occured, ${resp.data.message}`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        return;
-      }
-      if (resp.data.success === true) {
-        toast.success(`Success, ${resp.data.message}`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        setTimeout(() => {
-          navigate("/store/dashboard/inventorytask");
-        }, 500);
-      }
-    } catch (error) {
-      toast.error(`Error, ${error}`, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    }
+    const productData = {
+      product_id: _id,
+      quantity: inputValue,
+      description: inputValue1,
+    };
+    console.log(productData);
+    navigate("/store/dashboard/buyproduct/selectvendors");
+    // try {
+    //   const productData = {
+    //     product_id: _id,
+    //     quantity: inputValue,
+    //     description: inputValue1,
+    //   };
+    //   const resp = await axios.post("http://localhost:3000/buyProduct", productData, {
+    //     headers: {
+    //       Authorization: user?.token,
+    //     },
+    //   });
+    //   if (resp.data.success === false) {
+    //     toast.warn(`Error occured, ${resp.data.message}`, {
+    //       position: toast.POSITION.TOP_RIGHT,
+    //     });
+    //     return;
+    //   }
+    //   if (resp.data.success === true) {
+    //     toast.success(`Success, ${resp.data.message}`, {
+    //       position: toast.POSITION.TOP_RIGHT,
+    //     });
+    //     setTimeout(() => {
+    //       navigate("/store/dashboard/inventorytask");
+    //     }, 500);
+    //   }
+    // } catch (error) {
+    //   toast.error(`Error, ${error}`, {
+    //     position: toast.POSITION.TOP_RIGHT,
+    //   });
+    // }
   };
 
   const handleInputChange = (_id, value) => {
@@ -198,8 +199,9 @@ function BuyProduct() {
 
   const columns = [
     { Header: "ProductName", accessor: "ProductName" },
-    { Header: "Price", accessor: "Price" },
-    { Header: "Product Category", accessor: "Category" },
+    // { Header: "Price", accessor: "Price" },
+    { Header: "Product Description", accessor: "descriptionP" },
+    { Header: "Category", accessor: "Category" },
     { Header: "Quantity", accessor: "Range", align: "center" },
     { Header: "Description", accessor: "description", align: "center" },
     { Header: "Action", accessor: "BuyProduct", align: "center" },
@@ -221,6 +223,15 @@ function BuyProduct() {
           <MDBox ml={0} lineHeight={1}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               {item?.price}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      descriptionP: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox ml={0} lineHeight={1} sx={{ width: "150px" }}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.description}
             </MDTypography>
           </MDBox>
         </MDBox>
