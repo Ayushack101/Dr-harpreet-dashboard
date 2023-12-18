@@ -82,11 +82,11 @@ import "react-toastify/dist/ReactToastify.css";
 import MDInput from "components/MDInput";
 import MDBadge from "components/MDBadge";
 
-function SelectVendor() {
-  const navigate = useNavigate();
+function SelectVendor({ productData }) {
   const { user } = useAuthContext();
   const [allVendor, setAllVendor] = useState([]);
   const [isLoading, setLoading] = useState(false);
+  const [selectedVendorsId, setSelectedVendorsId] = useState([]);
   const fetchAllVendors = async () => {
     try {
       setLoading(true);
@@ -111,6 +111,71 @@ function SelectVendor() {
   useEffect(() => {
     fetchAllVendors();
   }, []);
+
+  const selectedVendors = (_id) => {
+    setSelectedVendorsId([...selectedVendorsId, _id]);
+  };
+  console.log({ ...productData, selectedVendorsId });
+
+  const emailToSelectedVendors = async () => {
+    try {
+      const resp = await axios.post(
+        "http://localhost:3000/",
+        { ...productData, selectedVendorsId },
+        {
+          headers: {
+            Authorization: user?.token,
+          },
+        }
+      );
+      if (resp.data.success === false) {
+        toast.warn(`Error occured, ${resp.data.message}`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (resp.data.success === true) {
+        toast.success(`Success, Email send to selected vendors and new task created`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        setTimeout(() => {
+          navigate("/store/dashboard/inventorytask");
+        }, 1000);
+      }
+    } catch (error) {
+      toast.error(`Error, ${error}`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
+
+  const emailToAllVendors = async () => {
+    try {
+      const resp = await axios.post("http://localhost:3000/buyProduct", productData, {
+        headers: {
+          Authorization: user?.token,
+        },
+      });
+      if (resp.data.success === false) {
+        toast.warn(`Error occured, ${resp.data.message}`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (resp.data.success === true) {
+        toast.success(`Success, Email send to All vendors and new task created`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        setTimeout(() => {
+          navigate("/store/dashboard/inventorytask");
+        }, 1000);
+      }
+    } catch (error) {
+      toast.error(`Error, ${error}`, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
 
   const columns = [
     { Header: "Vender Name", accessor: "venderName" },
@@ -173,9 +238,21 @@ function SelectVendor() {
       Select: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
-            <MDButton color="info" fontWeight="medium">
-              Select
-            </MDButton>
+            {selectedVendorsId.find((id) => item?._id === id) ? (
+              <MDButton color="warning" fontWeight="medium">
+                Selected
+              </MDButton>
+            ) : (
+              <MDButton
+                color="info"
+                fontWeight="medium"
+                onClick={() => {
+                  selectedVendors(item?._id);
+                }}
+              >
+                Select
+              </MDButton>
+            )}
           </MDBox>
         </MDBox>
       ),
@@ -183,84 +260,85 @@ function SelectVendor() {
   });
 
   return (
-    <DashboardLayout>
-      <DashboardNavbar />
-      <ToastContainer />
+    // <DashboardLayout>
+    //   <DashboardNavbar />
+    //   <ToastContainer />
 
-      <MDBox pt={6} pb={3}>
-        <Grid container spacing={6}>
-          <Grid item xs={12}>
-            <Card>
-              <MDBox
-                mx={2}
-                mt={-3}
-                py={3}
-                px={2}
-                variant="gradient"
-                bgColor="info"
-                borderRadius="lg"
-                coloredShadow="info"
-              >
-                <Grid container spacing={1}>
-                  <Grid item xs={5} lg={5}>
-                    <MDBox variant="h6" color="white">
-                      Select Vendors for Product
-                    </MDBox>
-                  </Grid>
-                  {/* <Grid item xs={6} lg={3}>
-                    <MDButton
-                      color="dark"
-                      onClick={() => {
-                        navigate("/store/dashboard/create-vendors");
-                      }}
-                    >
-                      Create New Vendor
-                    </MDButton>
-                  </Grid> */}
+    <MDBox pt={6} pb={3}>
+      <Grid container spacing={6}>
+        <Grid item xs={12}>
+          <Card>
+            <MDBox
+              mx={2}
+              mt={-3}
+              py={3}
+              px={2}
+              variant="gradient"
+              bgColor="info"
+              borderRadius="lg"
+              coloredShadow="info"
+            >
+              <Grid container spacing={1}>
+                <Grid item xs={5} lg={3}>
+                  <MDBox variant="h6" color="white">
+                    Select Vendors for Product
+                  </MDBox>
                 </Grid>
-              </MDBox>
+                <Grid item xs={5} lg={2}>
+                  <MDButton color="dark" onClick={emailToSelectedVendors}>
+                    Email Vendors
+                  </MDButton>
+                </Grid>
+                <Grid item xs={5} lg={3}>
+                  <MDButton color="dark" onClick={emailToAllVendors}>
+                    Send Email to All Vendors
+                  </MDButton>
+                </Grid>
+              </Grid>
+            </MDBox>
 
-              {isLoading === true ? (
-                <MDBox
+            {isLoading === true ? (
+              <MDBox
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  marginTop: "25px",
+                  marginBottom: "25px",
+                }}
+              >
+                <CircularProgress
+                  variant="indeterminate"
+                  disableShrink
                   sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: "25px",
-                    marginBottom: "25px",
-                  }}
-                >
-                  <CircularProgress
-                    variant="indeterminate"
-                    disableShrink
-                    sx={{
-                      color: (theme) => (theme.palette.mode === "light" ? "#1a90ff" : "#308fe8"),
-                      animationDuration: "550ms",
+                    color: (theme) => (theme.palette.mode === "light" ? "#1a90ff" : "#308fe8"),
+                    animationDuration: "550ms",
 
-                      [`& .${circularProgressClasses.circle}`]: {
-                        strokeLinecap: "round",
-                      },
-                    }}
-                    size={50}
-                    thickness={4}
-                  />
-                </MDBox>
-              ) : (
-                <MDBox pt={3}>
-                  <DataTable
-                    table={{ columns, rows }}
-                    isSorted={false}
-                    entriesPerPage={false}
-                    showTotalEntries={false}
-                    noEndBorder
-                  />
-                </MDBox>
-              )}
-            </Card>
-          </Grid>
+                    [`& .${circularProgressClasses.circle}`]: {
+                      strokeLinecap: "round",
+                    },
+                  }}
+                  size={50}
+                  thickness={4}
+                />
+              </MDBox>
+            ) : (
+              <MDBox pt={3}>
+                <DataTable
+                  table={{ columns, rows }}
+                  isSorted={false}
+                  entriesPerPage={{ defaultValue: 20, entries: [20, 40, 60, 80, 100] }}
+                  showTotalEntries={true}
+                  noEndBorder={false}
+                  pagination={true}
+                />
+              </MDBox>
+            )}
+          </Card>
         </Grid>
-      </MDBox>
-    </DashboardLayout>
+      </Grid>
+    </MDBox>
+    // </DashboardLayout>
   );
 }
 

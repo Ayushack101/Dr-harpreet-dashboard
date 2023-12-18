@@ -41,6 +41,7 @@ import "react-toastify/dist/ReactToastify.css";
 import CircularProgress, { circularProgressClasses } from "@mui/material/CircularProgress";
 import MDInput from "components/MDInput";
 import { useNavigate } from "react-router-dom";
+import SelectVendor from "./components/SelectVendor";
 
 function BuyProduct() {
   const { user } = useAuthContext();
@@ -50,6 +51,8 @@ function BuyProduct() {
   const [isLoading, setLoading] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedCategoryName, setSelectedCategoryName] = useState("");
+  const [activeComponent, setActiveComponent] = useState("buy-product");
+  const [productData, setProductData] = useState("");
 
   const [productRange, setProductRange] = useState({});
   const [description, setDescription] = useState({});
@@ -144,38 +147,8 @@ function BuyProduct() {
       quantity: inputValue,
       description: inputValue1,
     };
-    console.log(productData);
-    navigate("/store/dashboard/buyproduct/selectvendors");
-    // try {
-    //   const productData = {
-    //     product_id: _id,
-    //     quantity: inputValue,
-    //     description: inputValue1,
-    //   };
-    //   const resp = await axios.post("http://localhost:3000/buyProduct", productData, {
-    //     headers: {
-    //       Authorization: user?.token,
-    //     },
-    //   });
-    //   if (resp.data.success === false) {
-    //     toast.warn(`Error occured, ${resp.data.message}`, {
-    //       position: toast.POSITION.TOP_RIGHT,
-    //     });
-    //     return;
-    //   }
-    //   if (resp.data.success === true) {
-    //     toast.success(`Success, ${resp.data.message}`, {
-    //       position: toast.POSITION.TOP_RIGHT,
-    //     });
-    //     setTimeout(() => {
-    //       navigate("/store/dashboard/inventorytask");
-    //     }, 500);
-    //   }
-    // } catch (error) {
-    //   toast.error(`Error, ${error}`, {
-    //     position: toast.POSITION.TOP_RIGHT,
-    //   });
-    // }
+    setProductData(productData);
+    setActiveComponent("select-vendor");
   };
 
   const handleInputChange = (_id, value) => {
@@ -229,7 +202,7 @@ function BuyProduct() {
       ),
       descriptionP: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox ml={0} lineHeight={1} sx={{ width: "150px" }}>
+          <MDBox ml={0} lineHeight={1} sx={{ width: "170px" }}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               {item?.description}
             </MDTypography>
@@ -247,7 +220,7 @@ function BuyProduct() {
       ),
       Range: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox ml={0} lineHeight={1}>
+          <MDBox ml={0} lineHeight={1} sx={{ width: "140px" }}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               <form itemID={item?._id}>
                 <MDInput
@@ -300,101 +273,103 @@ function BuyProduct() {
     <DashboardLayout>
       <DashboardNavbar />
       <ToastContainer />
-      <MDBox pt={6} pb={3}>
-        <Grid container spacing={6}>
-          <Grid item xs={12}>
-            <Card>
-              <MDBox
-                mx={2}
-                mt={-3}
-                py={3}
-                px={2}
-                variant="gradient"
-                bgColor="info"
-                borderRadius="lg"
-                coloredShadow="info"
-              >
-                <MDTypography color="white">Buy Products</MDTypography>
-              </MDBox>
-              <Grid item xs={12} md={6} lg={3}>
-                <MDBox mx={2} px={2} pt={3}>
-                  <FormControl variant="standard" sx={{ mt: 0 }} style={{ width: "100%" }}>
-                    <InputLabel
-                      id="demo-simple-select-standard-label"
-                      sx={{ mt: -2, fontSize: "14px" }}
-                    >
-                      <MDTypography sx={{ fontSize: "14px", fontWeight: "500" }} color="text">
-                        Category
-                      </MDTypography>
-                    </InputLabel>
-                    <Select
-                      labelId="demo-simple-select-standard-label"
-                      id="demo-simple-select-standard"
-                      label="category"
-                      value={selectedCategory}
-                      onChange={(e) => {
-                        handleCategoryChange(e);
-                      }}
-                    >
-                      {category?.map((category, i) => {
-                        return (
-                          <MenuItem value={category?._id} key={i}>
-                            <MDTypography sx={{ fontSize: "14px" }} color="text">
-                              {category?.categoryName}
-                            </MDTypography>
-                          </MenuItem>
-                        );
-                      })}
-                    </Select>
-                  </FormControl>
-                </MDBox>
-              </Grid>
-              <Grid item xs={12} md={6} lg={5}>
-                <MDBox mx={2} px={2}>
-                  <MDTypography fontWeight="bold" style={{ fontSize: "16px", marginTop: "7px" }}>
-                    selected Category : <em>{selectedCategoryName}</em>
-                  </MDTypography>
-                </MDBox>
-              </Grid>
-              {isLoading === true ? (
+      {activeComponent === "buy-product" ? (
+        <MDBox pt={6} pb={3}>
+          <Grid container spacing={6}>
+            <Grid item xs={12}>
+              <Card>
                 <MDBox
-                  sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginTop: "25px",
-                    marginBottom: "25px",
-                  }}
+                  mx={2}
+                  mt={-3}
+                  py={3}
+                  px={2}
+                  variant="gradient"
+                  bgColor="info"
+                  borderRadius="lg"
+                  coloredShadow="info"
                 >
-                  <CircularProgress
-                    variant="indeterminate"
-                    disableShrink
+                  <MDTypography color="white">Buy Products</MDTypography>
+                </MDBox>
+                <Grid item xs={12} md={6} lg={3}>
+                  <MDBox mx={2} px={2} pt={3}>
+                    <FormControl variant="standard" sx={{ mt: 0 }} style={{ width: "100%" }}>
+                      <InputLabel
+                        id="demo-simple-select-standard-label"
+                        sx={{ mt: -2, fontSize: "14px" }}
+                      >
+                        <MDTypography sx={{ fontSize: "14px", fontWeight: "500" }} color="text">
+                          Category
+                        </MDTypography>
+                      </InputLabel>
+                      <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        label="category"
+                        value={selectedCategory}
+                        onChange={(e) => {
+                          handleCategoryChange(e);
+                        }}
+                      >
+                        {category?.map((category, i) => {
+                          return (
+                            <MenuItem value={category?._id} key={i}>
+                              <MDTypography sx={{ fontSize: "14px" }} color="text">
+                                {category?.categoryName}
+                              </MDTypography>
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    </FormControl>
+                  </MDBox>
+                </Grid>
+                <Grid item xs={12} md={6} lg={5}>
+                  <MDBox mx={2} px={2}>
+                    <MDTypography fontWeight="bold" style={{ fontSize: "16px", marginTop: "7px" }}>
+                      selected Category : <em>{selectedCategoryName}</em>
+                    </MDTypography>
+                  </MDBox>
+                </Grid>
+                {isLoading === true ? (
+                  <MDBox
                     sx={{
-                      color: (theme) => (theme.palette.mode === "light" ? "#1a90ff" : "#308fe8"),
-                      animationDuration: "550ms",
-
-                      [`& .${circularProgressClasses.circle}`]: {
-                        strokeLinecap: "round",
-                      },
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                      marginTop: "25px",
+                      marginBottom: "25px",
                     }}
-                    size={50}
-                    thickness={4}
-                  />
-                </MDBox>
-              ) : (
-                <MDBox pt={3}>
-                  <DataTable
-                    table={{ columns, rows }}
-                    isSorted={false}
-                    entriesPerPage={false}
-                    showTotalEntries={false}
-                    noEndBorder
-                  />
-                </MDBox>
-              )}
-              {/* )} */}
+                  >
+                    <CircularProgress
+                      variant="indeterminate"
+                      disableShrink
+                      sx={{
+                        color: (theme) => (theme.palette.mode === "light" ? "#1a90ff" : "#308fe8"),
+                        animationDuration: "550ms",
 
-              {/* <MDBox pt={2} px={2} lineHeight={1.25}>
+                        [`& .${circularProgressClasses.circle}`]: {
+                          strokeLinecap: "round",
+                        },
+                      }}
+                      size={50}
+                      thickness={4}
+                    />
+                  </MDBox>
+                ) : (
+                  <MDBox pt={3}>
+                    <DataTable
+                      table={{ columns, rows }}
+                      isSorted={false}
+                      entriesPerPage={{ defaultValue: 20, entries: [20, 40, 60, 80, 100] }}
+                      showTotalEntries={true}
+                      noEndBorder={false}
+                      pagination={true}
+                    />
+                  </MDBox>
+                )}
+                {/* )} */}
+
+                {/* <MDBox pt={2} px={2} lineHeight={1.25}>
                 <MDTypography variant="h6" fontWeight="medium">
                   Projects
                 </MDTypography>
@@ -508,10 +483,15 @@ function BuyProduct() {
                   </Grid>
                 </Grid>
               </MDBox> */}
-            </Card>
+              </Card>
+            </Grid>
           </Grid>
-        </Grid>
-      </MDBox>
+        </MDBox>
+      ) : (
+        ""
+      )}
+
+      {activeComponent === "select-vendor" ? <SelectVendor productData={productData} /> : ""}
     </DashboardLayout>
   );
 }

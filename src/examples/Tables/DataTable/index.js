@@ -40,6 +40,7 @@ import DataTableHeadCell from "examples/Tables/DataTable/DataTableHeadCell";
 import DataTableBodyCell from "examples/Tables/DataTable/DataTableBodyCell";
 
 function DataTable({
+  tableTitle,
   entriesPerPage,
   canSearch,
   showTotalEntries,
@@ -148,7 +149,19 @@ function DataTable({
   return (
     <TableContainer sx={{ boxShadow: "none" }}>
       {entriesPerPage || canSearch ? (
-        <MDBox display="flex" justifyContent="space-between" alignItems="center" p={3}>
+        <MDBox
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
+          p={3}
+          pt={2}
+          pb={1}
+        >
+          {tableTitle && (
+            <MDBox display="flex" alignItems="center">
+              <MDTypography color="dark">{tableTitle}</MDTypography>
+            </MDBox>
+          )}
           {entriesPerPage && (
             <MDBox display="flex" alignItems="center">
               <Autocomplete
@@ -169,23 +182,13 @@ function DataTable({
           )}
           {canSearch && (
             <MDBox width="12rem" ml="auto">
-              {/* <MDInput
-                placeholder="Search..."
-                value={search}
-                size="small"
-                fullWidth
-                onChange={({ currentTarget }) => {
-                  setSearch(search);
-                  onSearchChange(currentTarget.value);
-                }}
-              /> */}
               <MDInput
                 placeholder="Search..."
                 value={search}
                 size="small"
                 fullWidth
                 onChange={({ currentTarget }) => {
-                  setSearch(currentTarget.value);
+                  setSearch(search);
                   onSearchChange(currentTarget.value);
                 }}
               />
@@ -281,6 +284,7 @@ function DataTable({
 
 // Setting default values for the props of DataTable
 DataTable.defaultProps = {
+  tableTitle: "",
   entriesPerPage: { defaultValue: 10, entries: [5, 10, 15, 20, 25] },
   canSearch: false,
   showTotalEntries: true,
@@ -291,6 +295,7 @@ DataTable.defaultProps = {
 
 // Typechecking props for the DataTable
 DataTable.propTypes = {
+  tableTitle: PropTypes.string,
   entriesPerPage: PropTypes.oneOfType([
     PropTypes.shape({
       defaultValue: PropTypes.number,

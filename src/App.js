@@ -227,10 +227,10 @@ export default function App() {
         {/* Inventory dashboard */}
         <Route element={<ProtectedRouteStore />}>
           <Route path="/store/dashboard/buyproduct" element={<BuyProduct />}></Route>
-          <Route
+          {/* <Route
             path="/store/dashboard/buyproduct/selectvendors"
             element={<SelectVendor />}
-          ></Route>
+          ></Route> */}
           <Route path="/store/dashboard/allvendors" element={<AllVendors />}></Route>
           <Route path="/store/dashboard/create-vendors" element={<CreateVendor />}></Route>
           <Route path="/store/dashboard/inventorytask" element={<InventoryTask />}></Route>

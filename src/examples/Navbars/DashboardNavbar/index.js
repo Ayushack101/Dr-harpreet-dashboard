@@ -54,7 +54,7 @@ import {
 } from "context";
 
 function DashboardNavbar({ absolute, light, isMini }) {
-  const [navbarType, setNavbarType] = useState();
+  const [navbarType, setNavbarType] = useState("sticky");
   const [controller, dispatch] = useMaterialUIController();
   const { miniSidenav, transparentNavbar, fixedNavbar, openConfigurator, darkMode } = controller;
   const [openMenu, setOpenMenu] = useState(false);
@@ -62,29 +62,31 @@ function DashboardNavbar({ absolute, light, isMini }) {
 
   useEffect(() => {
     // Setting the navbar type
-    if (fixedNavbar) {
-      setNavbarType("sticky");
-    } else {
-      setNavbarType("static");
-    }
+    // if (fixedNavbar) {
+    //   setNavbarType("sticky");
+    // } else {
+    //   setNavbarType("static");
+    // }
 
     // A function that sets the transparent state of the navbar.
     function handleTransparentNavbar() {
       setTransparentNavbar(dispatch, (fixedNavbar && window.scrollY === 0) || !fixedNavbar);
     }
+    // handleTransparentNavbar();
 
-    /** 
-     The event listener that's calling the handleTransparentNavbar function when 
+    /**
+     The event listener that's calling the handleTransparentNavbar function when
      scrolling the window.
     */
-    window.addEventListener("scroll", handleTransparentNavbar);
+    // window.addEventListener("scroll", handleTransparentNavbar);
 
     // Call the handleTransparentNavbar function to set the state with the initial value.
-    handleTransparentNavbar();
+    // handleTransparentNavbar();
 
     // Remove event listener on cleanup
-    return () => window.removeEventListener("scroll", handleTransparentNavbar);
-  }, [dispatch, fixedNavbar]);
+    // return () => window.removeEventListener("scroll", handleTransparentNavbar);
+  }, []);
+  // }, [dispatch, fixedNavbar]);
 
   const handleMiniSidenav = () => setMiniSidenav(dispatch, !miniSidenav);
   const handleConfiguratorOpen = () => setOpenConfigurator(dispatch, !openConfigurator);
@@ -126,6 +128,7 @@ function DashboardNavbar({ absolute, light, isMini }) {
   return (
     <AppBar
       position={absolute ? "absolute" : navbarType}
+      // position="static"
       color="inherit"
       sx={(theme) => navbar(theme, { transparentNavbar, absolute, light, darkMode })}
     >

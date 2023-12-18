@@ -269,15 +269,18 @@ function AllVendors() {
                   />
                 </MDBox>
               ) : (
-                <MDBox pt={3}>
-                  <DataTable
-                    table={{ columns, rows }}
-                    isSorted={false}
-                    entriesPerPage={false}
-                    showTotalEntries={false}
-                    noEndBorder
-                  />
-                </MDBox>
+                <>
+                  <MDBox pt={3}>
+                    <DataTable
+                      table={{ columns, rows }}
+                      isSorted={false}
+                      entriesPerPage={{ defaultValue: 20, entries: [20, 40, 60, 80, 100] }}
+                      showTotalEntries={true}
+                      noEndBorder={false}
+                      pagination={true}
+                    />
+                  </MDBox>
+                </>
               )}
             </Card>
           </Grid>
