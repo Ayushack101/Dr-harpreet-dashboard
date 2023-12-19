@@ -91,6 +91,9 @@ function SelectVendor({ productData }) {
     try {
       setLoading(true);
       const resp = await axios.get("http://localhost:3000/allvender", {
+        params: {
+          product_id: productData.product_id,
+        },
         headers: {
           Authorization: user?.token,
         },

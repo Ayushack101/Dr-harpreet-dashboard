@@ -46,6 +46,7 @@ import { useForm } from "react-hook-form";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useAuthContext } from "context/Auth/AuthContext";
+import { CircularProgress, circularProgressClasses } from "@mui/material";
 // import {useState}from "react";
 function Basic() {
   useEffect(() => {
@@ -54,10 +55,9 @@ function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
   const { authDispatch } = useAuthContext();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleSetRememberMe = () => setRememberMe(!rememberMe);
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
 
   const {
     register,
@@ -66,6 +66,7 @@ function Basic() {
   } = useForm();
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     const userData = {
       email: data.email,
       password: data.password,
@@ -77,6 +78,7 @@ function Basic() {
         toast.warning(`Error occured, ${resp.data.message}!`, {
           position: toast.POSITION.TOP_RIGHT,
         });
+        setIsLoading(false);
         return;
       }
       console.log(resp);
@@ -90,6 +92,7 @@ function Basic() {
           type: "LOGIN",
           payload: resp.data.data,
         });
+        setIsLoading(false);
         if (user.user.userType === 1) {
           navigate("/admin/alltask");
         }
@@ -111,6 +114,7 @@ function Basic() {
       toast.error(`Error occured, ${error}`, {
         position: toast.POSITION.TOP_RIGHT,
       });
+      setIsLoading(false);
     }
   };
 
@@ -209,7 +213,24 @@ function Basic() {
             </MDBox>
             <MDBox mt={4} mb={1}>
               <MDButton type="submit" variant="gradient" color="info" fullWidth>
-                sign in
+                {isLoading === true ? (
+                  <CircularProgress
+                    variant="indeterminate"
+                    disableShrink
+                    sx={{
+                      color: (theme) => (theme.palette.mode === "light" ? "#fcfffe" : "#fcfffe"),
+                      animationDuration: "550ms",
+
+                      [`& .${circularProgressClasses.circle}`]: {
+                        strokeLinecap: "round",
+                      },
+                    }}
+                    size={25}
+                    thickness={5}
+                  />
+                ) : (
+                  "sign in"
+                )}
               </MDButton>
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">
