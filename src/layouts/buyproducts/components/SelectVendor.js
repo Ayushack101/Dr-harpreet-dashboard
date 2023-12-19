@@ -123,7 +123,7 @@ function SelectVendor({ productData }) {
   const emailToSelectedVendors = async () => {
     try {
       const resp = await axios.post(
-        "http://localhost:3000/",
+        "http://localhost:3000/buyProduct/perticular",
         { ...productData, selectedVendorsId },
         {
           headers: {
