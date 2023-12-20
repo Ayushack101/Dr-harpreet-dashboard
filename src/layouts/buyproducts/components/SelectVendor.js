@@ -88,6 +88,7 @@ function SelectVendor({ productData }) {
   const [allVendor, setAllVendor] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const [selectedVendorsId, setSelectedVendorsId] = useState([]);
+  const navigate = useNavigate();
   const fetchAllVendors = async () => {
     try {
       setLoading(true);
