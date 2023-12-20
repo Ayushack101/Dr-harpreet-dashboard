@@ -52,6 +52,7 @@ function Basic() {
   useEffect(() => {
     localStorage.clear();
   }, []);
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const [rememberMe, setRememberMe] = useState(false);
   const { authDispatch } = useAuthContext();
   const navigate = useNavigate();
@@ -73,7 +74,7 @@ function Basic() {
     };
     console.log(userData);
     try {
-      const resp = await axios.post("http://localhost:3000/login", userData);
+      const resp = await axios.post(`${BASE_URL}/login`, userData);
       if (resp.data.success === false) {
         toast.warning(`Error occured, ${resp.data.message}!`, {
           position: toast.POSITION.TOP_RIGHT,
@@ -97,7 +98,7 @@ function Basic() {
           navigate("/admin/alltask");
         }
         if (user.user.userType === 2) {
-          navigate("/dashboard/account");
+          navigate("account/dashboard/account");
         }
         if (user.user.userType === 3) {
           navigate("/store/dashboard/buyproduct");

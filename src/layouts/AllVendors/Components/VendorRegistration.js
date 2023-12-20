@@ -53,6 +53,7 @@ const MenuProps = {
 };
 
 const VendorRegistration = () => {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const { val } = useParams();
   const { user } = useAuthContext();
   const [category, setCategory] = useState([]);
@@ -75,7 +76,7 @@ const VendorRegistration = () => {
   } = useForm();
   const fetchCategory = async () => {
     try {
-      const resp = await axios.get("http://localhost:3000/alls/category", {
+      const resp = await axios.get(`${BASE_URL}/alls/category`, {
         headers: {
           Authorization: user?.token,
         },
@@ -115,7 +116,7 @@ const VendorRegistration = () => {
     };
     console.log(vendorData);
     try {
-      const resp = await axios.post("http://localhost:3000/post/email/form", {
+      const resp = await axios.post(`${BASE_URL}/post/email/form`, {
         ...vendorData,
       });
       console.log(resp);

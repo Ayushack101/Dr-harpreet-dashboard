@@ -41,6 +41,7 @@ import "react-toastify/dist/ReactToastify.css";
 import CircularProgress, { circularProgressClasses } from "@mui/material/CircularProgress";
 
 function Accounts() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const { user } = useAuthContext();
   const [allAccounts, setAllAccounts] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -48,7 +49,7 @@ function Accounts() {
   const fetchQuality = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/allAccount", {
+      const resp = await axios.get(`${BASE_URL}/allAccount`, {
         headers: {
           Authorization: user?.token,
         },
@@ -68,7 +69,7 @@ function Accounts() {
   const deleteUser = async (_id) => {
     try {
       const resp = await axios.post(
-        "http://localhost:3000/delete",
+        `${BASE_URL}/delete`,
         {
           id: _id,
         },

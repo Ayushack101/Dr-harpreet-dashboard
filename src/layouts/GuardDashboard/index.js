@@ -43,6 +43,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { useAuthContext } from "context/Auth/AuthContext";
 
 function GuardDashboard() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const { user } = useAuthContext();
   const [guardTask, setGuardTask] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -50,7 +51,7 @@ function GuardDashboard() {
   const fetchTaskApprovedByAccount = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/guard/allTask", {
+      const resp = await axios.get(`${BASE_URL}/guard/allTask`, {
         headers: {
           Authorization: user?.token,
         },
@@ -74,7 +75,7 @@ function GuardDashboard() {
   const approvedByGuard = async (_id) => {
     try {
       const resp = await axios.post(
-        "http://localhost:3000/guard/taskApproved",
+        `${BASE_URL}/guard/taskApproved`,
         {
           _id: _id,
         },

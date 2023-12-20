@@ -83,6 +83,7 @@ import MDInput from "components/MDInput";
 import MDBadge from "components/MDBadge";
 
 function SelectVendor({ productData }) {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const { user } = useAuthContext();
   const [allVendor, setAllVendor] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -90,7 +91,7 @@ function SelectVendor({ productData }) {
   const fetchAllVendors = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/allvender", {
+      const resp = await axios.get(`${BASE_URL}/get/allvender/Quality`, {
         params: {
           product_id: productData.product_id,
         },
@@ -123,7 +124,7 @@ function SelectVendor({ productData }) {
   const emailToSelectedVendors = async () => {
     try {
       const resp = await axios.post(
-        "http://localhost:3000/buyProduct/perticular",
+        `${BASE_URL}/buyProduct/perticular`,
         { ...productData, selectedVendorsId },
         {
           headers: {
@@ -154,7 +155,7 @@ function SelectVendor({ productData }) {
 
   const emailToAllVendors = async () => {
     try {
-      const resp = await axios.post("http://localhost:3000/buyProduct", productData, {
+      const resp = await axios.post(`${BASE_URL}/buyProduct`, productData, {
         headers: {
           Authorization: user?.token,
         },

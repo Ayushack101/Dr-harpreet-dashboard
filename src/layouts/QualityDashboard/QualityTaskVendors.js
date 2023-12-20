@@ -43,6 +43,7 @@ import MDBadge from "components/MDBadge";
 import { useNavigate, useParams } from "react-router-dom";
 
 function QualityTaskVendors() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const { user } = useAuthContext();
   const { ser_no, _id } = useParams();
   const [allVendorTask, setAllVendorTask] = useState([]);
@@ -57,7 +58,7 @@ function QualityTaskVendors() {
     console.log(_id, vender);
     try {
       const resp = await axios.post(
-        "http://localhost:3000/quality/taskApproved",
+        `${BASE_URL}/quality/taskApproved`,
         {
           _id,
           vender,
@@ -91,7 +92,7 @@ function QualityTaskVendors() {
   const fetchAllVendorTask = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/allvender/task", {
+      const resp = await axios.get(`${BASE_URL}/allvender/task`, {
         params: {
           ser_no,
         },

@@ -39,6 +39,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { useState } from "react";
 
 function Cover() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const {
     register,
     handleSubmit,
@@ -55,7 +56,7 @@ function Cover() {
     };
     console.log(userData);
     try {
-      const resp = await axios.post("http://localhost:3000/signup", userData);
+      const resp = await axios.post(`${BASE_URL}/signup`, userData);
       console.log(resp);
       if (resp.data.success === false) {
         toast.warning(`Error occured, ${resp.data.message}!`, {

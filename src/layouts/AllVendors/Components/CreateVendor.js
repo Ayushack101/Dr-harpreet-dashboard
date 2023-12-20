@@ -35,6 +35,7 @@ import MDInput from "components/MDInput";
 import { useForm } from "react-hook-form";
 
 const CreateVendor = () => {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const {
@@ -46,7 +47,7 @@ const CreateVendor = () => {
   const onSubmit = async (data) => {
     try {
       const resp = await axios.post(
-        "http://localhost:3000/get/email",
+        `${BASE_URL}/get/email`,
         {
           email: data.email,
         },

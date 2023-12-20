@@ -41,6 +41,7 @@ import "react-toastify/dist/ReactToastify.css";
 import CircularProgress, { circularProgressClasses } from "@mui/material/CircularProgress";
 
 function Task() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const { user } = useAuthContext();
   const [inventoryTask, setInventoryTask] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -49,7 +50,7 @@ function Task() {
     try {
       setLoading(true);
 
-      const resp = await axios.get("http://localhost:3000/allTask", {
+      const resp = await axios.get(`${BASE_URL}/allTask`, {
         headers: {
           Authorization: user?.token,
         },
@@ -73,7 +74,7 @@ function Task() {
   const approvedByAdmin = async (_id) => {
     try {
       const resp = await axios.post(
-        "http://localhost:3000/approvedTask",
+        `${BASE_URL}/approvedTask`,
         {
           _id: _id,
         },
@@ -103,7 +104,7 @@ function Task() {
   const deleteByAdmin = async (_id) => {
     try {
       const resp = await axios.post(
-        "http://localhost:3000/deleteTask",
+        `${BASE_URL}/deleteTask`,
         {
           _id: _id,
         },

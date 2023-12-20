@@ -82,6 +82,7 @@ import "react-toastify/dist/ReactToastify.css";
 import MDInput from "components/MDInput";
 
 function Overview() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const [productName, setProductName] = useState("");
   const [productPrice, setProductPrice] = useState("");
   const navigate = useNavigate();
@@ -92,7 +93,7 @@ function Overview() {
   const fetchProduct = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/allProducts", {
+      const resp = await axios.get(`${BASE_URL}/allProducts`, {
         headers: {
           Authorization: user?.token,
         },
@@ -119,7 +120,7 @@ function Overview() {
     try {
       console.log("--www--", _id);
       const resp = await axios.post(
-        "http://localhost:3000/deleteProduct",
+        `${BASE_URL}/deleteProduct`,
         {
           _id,
         },

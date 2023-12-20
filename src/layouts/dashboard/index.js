@@ -55,13 +55,14 @@ function Dashboard() {
   // const { sales, tasks } = reportsLineChartData;
   // const { columns, rows } = authorsTableData();
   // const { columns: pColumns, rows: pRows } = projectsTableData();
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const [allUsers, setAllUsers] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const { user } = useAuthContext();
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/inventry/user", {
+      const resp = await axios.get(`${BASE_URL}/inventry/user`, {
         headers: {
           Authorization: user?.token,
         },
@@ -82,7 +83,7 @@ function Dashboard() {
   const deleteUser = async (_id) => {
     try {
       const resp = await axios.post(
-        "http://localhost:3000/delete",
+        `${BASE_URL}/delete`,
         {
           id: _id,
         },

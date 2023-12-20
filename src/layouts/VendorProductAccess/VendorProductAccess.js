@@ -43,6 +43,7 @@ import DefaultNavbar from "examples/Navbars/DefaultNavbar";
 import DoneAllIcon from "@mui/icons-material/DoneAll";
 
 const VendorProductAccess = () => {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const { ser_no } = useParams();
   const { id } = useParams();
   const {
@@ -53,7 +54,7 @@ const VendorProductAccess = () => {
 
   const onSubmit = async (data) => {
     try {
-      const resp = await axios.post("http://localhost:3000/buy/product/vender", {
+      const resp = await axios.post(`${BASE_URL}/buy/product/vender`, {
         price: data.price,
         date: data.date,
         description: data.productDescription,

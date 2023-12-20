@@ -44,6 +44,7 @@ import { useNavigate } from "react-router-dom";
 import SelectVendor from "./components/SelectVendor";
 
 function BuyProduct() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const { user } = useAuthContext();
   const navigate = useNavigate();
   const [allProduct, setAllProducts] = useState([]);
@@ -59,7 +60,7 @@ function BuyProduct() {
 
   const fetchCategory = async () => {
     try {
-      const resp = await axios.get("http://localhost:3000/inventory/all/category", {
+      const resp = await axios.get(`${BASE_URL}/inventory/all/category`, {
         headers: {
           Authorization: user?.token,
         },
@@ -97,7 +98,7 @@ function BuyProduct() {
   const fetchProductByCategory = async (id) => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/invetry/all/product", {
+      const resp = await axios.get(`${BASE_URL}/invetry/all/product`, {
         params: {
           id: id,
         },

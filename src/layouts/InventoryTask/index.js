@@ -42,6 +42,7 @@ import CircularProgress, { circularProgressClasses } from "@mui/material/Circula
 import MDBadge from "components/MDBadge";
 
 function InventoryTask() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const { user } = useAuthContext();
   const [inventoryTask, setInventoryTask] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -50,7 +51,7 @@ function InventoryTask() {
     try {
       setLoading(true);
 
-      const resp = await axios.get("http://localhost:3000/inventry/allTask", {
+      const resp = await axios.get(`${BASE_URL}/inventry/allTask`, {
         headers: {
           Authorization: user?.token,
         },

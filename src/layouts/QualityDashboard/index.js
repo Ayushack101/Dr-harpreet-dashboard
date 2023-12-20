@@ -43,6 +43,7 @@ import MDBadge from "components/MDBadge";
 import { useNavigate } from "react-router-dom";
 
 function QualityDashboard() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const { user } = useAuthContext();
   const [qualityTask, setQualityTask] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -56,7 +57,7 @@ function QualityDashboard() {
     try {
       setLoading(true);
 
-      const resp = await axios.get("http://localhost:3000/allTask/quality", {
+      const resp = await axios.get(`${BASE_URL}/allTask/quality`, {
         headers: {
           Authorization: user?.token,
         },

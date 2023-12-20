@@ -35,6 +35,7 @@ import MDInput from "components/MDInput";
 import { useForm } from "react-hook-form";
 
 const AddProduct = () => {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const [category, setCategory] = useState([]);
@@ -45,7 +46,7 @@ const AddProduct = () => {
   } = useForm();
   const fetchCategory = async () => {
     try {
-      const resp = await axios.get("http://localhost:3000/all/category", {
+      const resp = await axios.get(`${BASE_URL}/all/category`, {
         headers: {
           Authorization: user?.token,
         },
@@ -77,7 +78,7 @@ const AddProduct = () => {
     console.log(productData);
     try {
       const resp = await axios.post(
-        "http://localhost:3000/create/product",
+        `${BASE_URL}/create/product`,
         {
           ...productData,
         },

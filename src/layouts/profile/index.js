@@ -75,6 +75,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function Alluser() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const [allUsers, setAllUsers] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const { user } = useAuthContext();
@@ -82,7 +83,7 @@ function Alluser() {
   const fetchUsers = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/allUser", {
+      const resp = await axios.get(`${BASE_URL}/allUser`, {
         headers: {
           Authorization: user?.token,
         },
@@ -107,7 +108,7 @@ function Alluser() {
   const changeQuality = async (_id) => {
     try {
       const resp = await axios.put(
-        "http://localhost:3000/convert/Quality",
+        `${BASE_URL}/convert/Quality`,
         {
           _id,
         },
@@ -138,7 +139,7 @@ function Alluser() {
   const changeAccounts = async (_id) => {
     try {
       const resp = await axios.put(
-        "http://localhost:3000/convert/account",
+        `${BASE_URL}/convert/account`,
         {
           _id,
         },
@@ -169,7 +170,7 @@ function Alluser() {
   const changeGuards = async (_id) => {
     try {
       const resp = await axios.put(
-        "http://localhost:3000/convert/guard",
+        `${BASE_URL}/convert/guard`,
         {
           _id,
         },
@@ -200,7 +201,7 @@ function Alluser() {
   const changeInventory = async (_id) => {
     try {
       const resp = await axios.put(
-        "http://localhost:3000/convert/inventry",
+        `${BASE_URL}/convert/inventry`,
         {
           _id,
         },

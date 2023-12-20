@@ -41,6 +41,7 @@ import "react-toastify/dist/ReactToastify.css";
 import CircularProgress, { circularProgressClasses } from "@mui/material/CircularProgress";
 
 function AccountDashboard() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const { user } = useAuthContext();
   const [accountTask, setAccountTask] = useState([]);
   const [isLoading, setLoading] = useState(false);
@@ -49,7 +50,7 @@ function AccountDashboard() {
     try {
       setLoading(true);
 
-      const resp = await axios.get("http://localhost:3000/account/allTask", {
+      const resp = await axios.get(`${BASE_URL}/account/allTask`, {
         headers: {
           Authorization: user?.token,
         },
@@ -73,7 +74,7 @@ function AccountDashboard() {
   const approvedByAccount = async (_id) => {
     try {
       const resp = await axios.post(
-        "http://localhost:3000/account/taskApproved",
+        `${BASE_URL}/account/taskApproved`,
         {
           _id: _id,
         },

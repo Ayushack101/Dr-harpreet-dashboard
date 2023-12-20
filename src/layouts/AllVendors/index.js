@@ -83,6 +83,7 @@ import MDInput from "components/MDInput";
 import MDBadge from "components/MDBadge";
 
 function AllVendors() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const navigate = useNavigate();
   const { user } = useAuthContext();
   const [allVendor, setAllVendor] = useState([]);
@@ -90,7 +91,7 @@ function AllVendors() {
   const fetchAllVendors = async () => {
     try {
       setLoading(true);
-      const resp = await axios.get("http://localhost:3000/allvender", {
+      const resp = await axios.get(`${BASE_URL}/allvender`, {
         headers: {
           Authorization: user?.token,
         },

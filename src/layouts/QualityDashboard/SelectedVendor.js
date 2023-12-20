@@ -43,6 +43,7 @@ import MDBadge from "components/MDBadge";
 import { useNavigate, useParams } from "react-router-dom";
 
 function SelectedVendor() {
+  const BASE_URL = process.env.REACT_APP_API_URL;
   const { user } = useAuthContext();
   const { ser_no, selectedVender } = useParams();
   const [allVendorTask, setAllVendorTask] = useState([]);
@@ -57,7 +58,7 @@ function SelectedVendor() {
     try {
       setLoading(true);
 
-      const resp = await axios.get("http://localhost:3000/allvender/task", {
+      const resp = await axios.get(`${BASE_URL}/allvender/task`, {
         params: {
           ser_no,
         },
