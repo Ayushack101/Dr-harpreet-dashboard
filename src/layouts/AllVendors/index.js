@@ -147,20 +147,29 @@ function AllVendors() {
 
   const columns = [
     { Header: "Vender Name", accessor: "venderName" },
+    { Header: "Email", accessor: "email" },
     { Header: "Complete Info", accessor: "completeinfo" },
     { Header: "Address", accessor: "address" },
     { Header: "Phone", accessor: "phoneNum", align: "center" },
     { Header: "Category", accessor: "category", align: "center" },
-    // { Header: "Delete", accessor: "delete", align: "center" },
   ];
 
   const rows = allVendor.map((item) => {
     return {
       venderName: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox lineHeight={1}>
+          <MDBox lineHeight={1} sx={{ width: "100px" }}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               {item?.venderName}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      email: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {item?.email}
             </MDTypography>
           </MDBox>
         </MDBox>
@@ -194,7 +203,7 @@ function AllVendors() {
       ),
       category: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox lineHeight={1} sx={{ width: "220px" }}>
+          <MDBox lineHeight={1} sx={{ width: "150px" }}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               {item?.category.map((item) => {
                 return `${item}, `;
