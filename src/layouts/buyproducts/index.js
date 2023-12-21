@@ -173,7 +173,7 @@ function BuyProduct() {
 
   const columns = [
     { Header: "ProductName", accessor: "ProductName" },
-    // { Header: "Price", accessor: "Price" },
+    { Header: "Price", accessor: "Price" },
     { Header: "Product Description", accessor: "descriptionP" },
     { Header: "Category", accessor: "Category" },
     { Header: "Quantity", accessor: "Range", align: "center" },
@@ -203,7 +203,7 @@ function BuyProduct() {
       ),
       descriptionP: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox ml={0} lineHeight={1} sx={{ width: "170px" }}>
+          <MDBox ml={0} lineHeight={1} sx={{ width: "160px" }}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               {item?.description}
             </MDTypography>
@@ -221,7 +221,7 @@ function BuyProduct() {
       ),
       Range: (
         <MDBox display="flex" alignItems="center" lineHeight={1}>
-          <MDBox ml={0} lineHeight={1} sx={{ width: "140px" }}>
+          <MDBox ml={0} lineHeight={1} sx={{ width: "130px" }}>
             <MDTypography display="block" variant="button" fontWeight="medium">
               <form itemID={item?._id}>
                 <MDInput
@@ -241,7 +241,7 @@ function BuyProduct() {
             <MDTypography display="block" variant="button" fontWeight="medium">
               <form itemID={item?._id}>
                 <MDInput
-                  sx={{ width: "270px" }}
+                  sx={{ width: "260px" }}
                   placeholder="Description"
                   type="text"
                   multiline
@@ -258,12 +258,13 @@ function BuyProduct() {
       BuyProduct: (
         <MDTypography component="a" href="#" variant="caption" color="text" fontWeight="medium">
           <MDButton
+            sx={{ width: "100px" }}
             color="info"
             onClick={() => {
               buyProduct(item?._id);
             }}
           >
-            Buy Product
+            Vendors
           </MDButton>
         </MDTypography>
       ),

@@ -84,6 +84,7 @@ import VendorProductAccess from "layouts/VendorProductAccess/VendorProductAccess
 import QualityTaskVendors from "layouts/QualityDashboard/QualityTaskVendors";
 import SelectedVendor from "layouts/QualityDashboard/SelectedVendor";
 import SelectVendor from "layouts/buyproducts/components/SelectVendor";
+import VendorNegotiationForm from "layouts/VendorProductAccess/VendorNegotiationForm";
 
 export default function App() {
   // const { user, authDispatch } = useAuthContext();
@@ -245,11 +246,11 @@ export default function App() {
         <Route element={<ProtectedRouteQuality />}>
           <Route path="quality/dashboard/qualitytask" element={<QualityDashboard />} />
           <Route
-            path="quality/dashboard/taskvendors/:ser_no/:_id"
+            path="quality/dashboard/taskvendors/:ser_no/:_id/:price"
             element={<QualityTaskVendors />}
           />
           <Route
-            path="quality/dashboard/approvedvendor/:ser_no/:selectedVender"
+            path="quality/dashboard/approvedvendor/:ser_no/:selectedVender/:price"
             element={<SelectedVendor />}
           />
         </Route>
@@ -259,6 +260,12 @@ export default function App() {
 
         {/* Vendor product access */}
         <Route path="/vendor/product/access/:ser_no/:id" element={<VendorProductAccess />}></Route>
+
+        {/* Vendor negotiation form */}
+        <Route
+          path="/vendor/negotaition/form/:ser_no/:id/:price"
+          element={<VendorNegotiationForm />}
+        ></Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </ThemeProvider>

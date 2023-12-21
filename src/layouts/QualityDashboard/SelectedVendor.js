@@ -45,7 +45,7 @@ import { useNavigate, useParams } from "react-router-dom";
 function SelectedVendor() {
   const BASE_URL = process.env.REACT_APP_API_URL;
   const { user } = useAuthContext();
-  const { ser_no, selectedVender } = useParams();
+  const { ser_no, selectedVender, price } = useParams();
   const [allVendorTask, setAllVendorTask] = useState([]);
   const [isLoading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -92,10 +92,11 @@ function SelectedVendor() {
     // { Header: "Address", accessor: "address" },
     { Header: "Phone", accessor: "phoneNum", align: "center" },
     { Header: "Category", accessor: "category" },
-    { Header: "Product Price", accessor: "price", align: "center" },
-    { Header: "Product Description", accessor: "description", align: "center" },
-    { Header: "Date", accessor: "date", align: "center" },
-    { Header: "Approve", accessor: "Approve", align: "center" },
+    { Header: "Product Price", accessor: "product price" },
+    { Header: "Vendor Price", accessor: "price", align: "center" },
+    { Header: "Details", accessor: "description", align: "center" },
+    { Header: "Delivery Date", accessor: "date", align: "center" },
+    { Header: "Status", accessor: "Approve", align: "center" },
   ];
 
   const rows = allVendorTask?.map((item) => {
@@ -143,6 +144,15 @@ function SelectedVendor() {
               {item?.ven_info?.category.map((item) => {
                 return `${item}, `;
               })}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      "product price": (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              {price}
             </MDTypography>
           </MDBox>
         </MDBox>

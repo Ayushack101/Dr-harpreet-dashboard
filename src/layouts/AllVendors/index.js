@@ -58,6 +58,7 @@ import {
   CircularProgress,
   FormControl,
   InputLabel,
+  Menu,
   MenuItem,
   OutlinedInput,
   Select,
@@ -117,7 +118,7 @@ function AllVendors() {
     try {
       console.log("--www--", _id);
       const resp = await axios.post(
-        "http://localhost:3000/deleteProduct",
+        `${BASE_URL}/deleteVenders`,
         {
           _id,
         },
@@ -138,7 +139,7 @@ function AllVendors() {
         toast.success(`Success, ${resp.data.message}`, {
           position: toast.POSITION.TOP_RIGHT,
         });
-        fetchProduct();
+        fetchAllVendors();
       }
     } catch (error) {
       console.log(error);
@@ -149,9 +150,10 @@ function AllVendors() {
     { Header: "Vender Name", accessor: "venderName" },
     { Header: "Email", accessor: "email" },
     { Header: "Complete Info", accessor: "completeinfo" },
-    { Header: "Address", accessor: "address" },
+    // { Header: "Address", accessor: "address" },
     { Header: "Phone", accessor: "phoneNum", align: "center" },
     { Header: "Category", accessor: "category", align: "center" },
+    { Header: "Action", accessor: "delete", align: "center" },
   ];
 
   const rows = allVendor.map((item) => {
@@ -208,6 +210,22 @@ function AllVendors() {
               {item?.category.map((item) => {
                 return `${item}, `;
               })}
+            </MDTypography>
+          </MDBox>
+        </MDBox>
+      ),
+      delete: (
+        <MDBox display="flex" alignItems="center" lineHeight={1}>
+          <MDBox lineHeight={1} sx={{ width: "150px" }}>
+            <MDTypography display="block" variant="button" fontWeight="medium">
+              <MDButton
+                color="info"
+                onClick={() => {
+                  deleteVendor(item?._id);
+                }}
+              >
+                Delete
+              </MDButton>
             </MDTypography>
           </MDBox>
         </MDBox>

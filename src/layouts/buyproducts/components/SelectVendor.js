@@ -57,7 +57,9 @@ import {
   Card,
   CircularProgress,
   FormControl,
+  Icon,
   InputLabel,
+  Menu,
   MenuItem,
   OutlinedInput,
   Select,
@@ -89,6 +91,12 @@ function SelectVendor({ productData }) {
   const [isLoading, setLoading] = useState(false);
   const [selectedVendorsId, setSelectedVendorsId] = useState([]);
   const navigate = useNavigate();
+
+  const [menu, setMenu] = useState(null);
+
+  const openMenu = ({ currentTarget }) => setMenu(currentTarget);
+  const closeMenu = () => setMenu(null);
+
   const fetchAllVendors = async () => {
     try {
       setLoading(true);
@@ -182,6 +190,26 @@ function SelectVendor({ productData }) {
     }
   };
 
+  const renderMenu = (
+    <Menu
+      id="simple-menu"
+      anchorEl={menu}
+      anchorOrigin={{
+        vertical: "top",
+        horizontal: "left",
+      }}
+      transformOrigin={{
+        vertical: "top",
+        horizontal: "right",
+      }}
+      open={Boolean(menu)}
+      onClose={closeMenu}
+    >
+      <MenuItem onClick={emailToSelectedVendors}>Send Email to selected Vendors</MenuItem>
+      <MenuItem onClick={emailToAllVendors}>Send Email to All Vendors</MenuItem>
+    </Menu>
+  );
+
   const columns = [
     { Header: "Vender Name", accessor: "venderName" },
     { Header: "Complete Info", accessor: "completeinfo" },
@@ -244,8 +272,14 @@ function SelectVendor({ productData }) {
         <MDBox display="flex" alignItems="center" lineHeight={1}>
           <MDBox lineHeight={1}>
             {selectedVendorsId.find((id) => item?._id === id) ? (
-              <MDButton color="warning" fontWeight="medium">
-                Selected
+              <MDButton
+                color="warning"
+                fontWeight="medium"
+                onClick={() => {
+                  setSelectedVendorsId(selectedVendorsId.filter((id) => item?._id !== id));
+                }}
+              >
+                Unselect
               </MDButton>
             ) : (
               <MDButton
@@ -282,24 +316,13 @@ function SelectVendor({ productData }) {
               bgColor="info"
               borderRadius="lg"
               coloredShadow="info"
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
             >
-              <Grid container spacing={1}>
-                <Grid item xs={5} lg={3}>
-                  <MDBox variant="h6" color="white">
-                    Select Vendors for Product
-                  </MDBox>
-                </Grid>
-                <Grid item xs={5} lg={2}>
-                  <MDButton color="dark" onClick={emailToSelectedVendors}>
-                    Email Vendors
-                  </MDButton>
-                </Grid>
-                <Grid item xs={5} lg={3}>
-                  <MDButton color="dark" onClick={emailToAllVendors}>
-                    Send Email to All Vendors
-                  </MDButton>
-                </Grid>
-              </Grid>
+              <MDBox variant="h6" color="white">
+                Select Vendors for Product
+              </MDBox>
             </MDBox>
 
             {isLoading === true ? (
@@ -329,10 +352,24 @@ function SelectVendor({ productData }) {
               </MDBox>
             ) : (
               <MDBox pt={3}>
+                <MDBox display="flex" justifyContent="space-between" alignItems="center" pb={2}>
+                  <MDTypography px={3}>Vendors List</MDTypography>
+                  <MDBox color="text" px={4}>
+                    <Icon
+                      sx={{ cursor: "pointer", fontWeight: "light" }}
+                      fontSize="medium"
+                      onClick={openMenu}
+                    >
+                      more_vert
+                    </Icon>
+                    {renderMenu}
+                  </MDBox>
+                </MDBox>
                 <DataTable
                   table={{ columns, rows }}
                   isSorted={false}
-                  entriesPerPage={{ defaultValue: 20, entries: [20, 40, 60, 80, 100] }}
+                  // entriesPerPage={{ defaultValue: 20, entries: [20, 40, 60, 80, 100] }}
+                  entriesPerPage={false}
                   showTotalEntries={true}
                   noEndBorder={false}
                   pagination={true}

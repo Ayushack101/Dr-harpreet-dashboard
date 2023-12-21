@@ -82,7 +82,7 @@ function QualityDashboard() {
   const columns = [
     { Header: "ProductName", accessor: "ProductName" },
     { Header: "Description", accessor: "Description" },
-    // { Header: "Price", accessor: "Price", align: "center" },
+    { Header: "Product Price", accessor: "Price", align: "center" },
     { Header: "Quantity", accessor: "Quantity", align: "center" },
     { Header: "Task_no", accessor: "Task_no", align: "center" },
     { Header: "Vendors", accessor: "Vendors", align: "center" },
@@ -143,7 +143,9 @@ function QualityDashboard() {
             <MDButton
               color="info"
               onClick={() => {
-                navigate(`/quality/dashboard/taskvendors/${item?.task_no}/${item?._id}`);
+                navigate(
+                  `/quality/dashboard/taskvendors/${item?.task_no}/${item?._id}/${item?.price}`
+                );
               }}
             >
               View Vendors
@@ -153,7 +155,7 @@ function QualityDashboard() {
               color="info"
               onClick={() => {
                 navigate(
-                  `/quality/dashboard/approvedvendor/${item?.task_no}/${item?.selectedVender}`
+                  `/quality/dashboard/approvedvendor/${item?.task_no}/${item?.selectedVender}/${item?.price}`
                 );
               }}
             >
