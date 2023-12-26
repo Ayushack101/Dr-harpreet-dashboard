@@ -40,6 +40,7 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 import PageLayout from "examples/LayoutContainers/PageLayout";
 import DefaultNavbar from "examples/Navbars/DefaultNavbar";
+import DoneAllIcon from "@mui/icons-material/DoneAll";
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -58,6 +59,8 @@ const VendorRegistration = () => {
   const { user } = useAuthContext();
   const [category, setCategory] = useState([]);
   const [personName, setPersonName] = useState([]);
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChange = (event) => {
     const {
@@ -100,10 +103,13 @@ const VendorRegistration = () => {
   }, []);
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     if (personName.length === 0) {
       toast.warn(`Error, Please select the category`, {
         position: toast.POSITION.TOP_RIGHT,
       });
+      setIsLoading(false);
+      return;
     }
     const vendorData = {
       category: personName,
@@ -121,22 +127,38 @@ const VendorRegistration = () => {
       });
       console.log(resp);
       if (resp.data.success === true) {
-        toast.success(`Success, ${resp.data.message}`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        // setTimeout(() => {
-        //   navigate("/admin/allproduct");
-        // }, 700);
+        setIsLoading(false);
+        setTimeout(() => {
+          setIsSuccess(true);
+        }, 500);
       }
       if (resp.data.success === false) {
+        setIsLoading(false);
         toast.warn(`Error, ${resp.data.message}`, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
+
+  if (isSuccess) {
+    return (
+      <MDBox sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <Card sx={{ py: 4, px: 8, my: 4 }}>
+          <MDTypography variant="h3">
+            Success
+            <DoneAllIcon />
+          </MDTypography>
+          <MDTypography variant="h5">
+            Vendor registration complete successfully. You can close this page now!
+          </MDTypography>
+        </Card>
+      </MDBox>
+    );
+  }
   return (
     <PageLayout>
       <DefaultNavbar
@@ -317,7 +339,25 @@ const VendorRegistration = () => {
 
                     <Grid item xs={12}>
                       <MDButton type="submit" variant="gradient" color="info" fullWidth>
-                        Submit
+                        {isLoading === true ? (
+                          <CircularProgress
+                            variant="indeterminate"
+                            disableShrink
+                            sx={{
+                              color: (theme) =>
+                                theme.palette.mode === "light" ? "#fcfffe" : "#fcfffe",
+                              animationDuration: "550ms",
+
+                              [`& .${circularProgressClasses.circle}`]: {
+                                strokeLinecap: "round",
+                              },
+                            }}
+                            size={25}
+                            thickness={5}
+                          />
+                        ) : (
+                          "Submit"
+                        )}
                       </MDButton>
                     </Grid>
                   </Grid>

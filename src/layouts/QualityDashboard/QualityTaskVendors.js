@@ -132,7 +132,7 @@ function QualityTaskVendors() {
       console.log(error);
     }
   };
-  const negotiateVendor = async (_id, venderid) => {
+  const negotiateVendor = async (_id) => {
     if (negotiateValue === "") {
       toast.warn(`Negotaite value cannot be empty!`, {
         position: toast.POSITION.TOP_RIGHT,
@@ -140,13 +140,12 @@ function QualityTaskVendors() {
       return;
     }
     setIsLoadingSend(true);
-    console.log(_id, venderid, negotiateValue);
     try {
       const resp = await axios.post(
         `${BASE_URL}/negotiable/vender`,
         {
           _id,
-          venderid,
+          venderid: item?.ven_id,
           negotiateValue,
         },
         {
@@ -411,7 +410,7 @@ function QualityTaskVendors() {
                 <MDButton
                   color="info"
                   onClick={() => {
-                    negotiateVendor(_id, item?.ven_id);
+                    negotiateVendor(_id);
                   }}
                 >
                   {isLoadingSend === true ? (

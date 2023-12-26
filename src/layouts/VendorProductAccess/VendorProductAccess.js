@@ -46,6 +46,8 @@ const VendorProductAccess = () => {
   const BASE_URL = process.env.REACT_APP_API_URL;
   const { ser_no } = useParams();
   const { id } = useParams();
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -53,6 +55,7 @@ const VendorProductAccess = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    setIsLoading(true);
     try {
       const resp = await axios.post(`${BASE_URL}/buy/product/vender`, {
         price: data.price,
@@ -63,19 +66,38 @@ const VendorProductAccess = () => {
       });
       console.log(resp);
       if (resp.data.success === true) {
-        toast.success(`Success, ${resp.data.message}`, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        setIsLoading(false);
+        setTimeout(() => {
+          setIsSuccess(true);
+        }, 500);
       }
       if (resp.data.success === false) {
+        setIsLoading(false);
         toast.warn(`Error, ${resp.data.message}`, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
     } catch (error) {
+      setIsLoading(false);
       console.log(error);
     }
   };
+
+  if (isSuccess) {
+    return (
+      <MDBox sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <Card sx={{ py: 4, px: 8, my: 4 }}>
+          <MDTypography variant="h3">
+            Success
+            <DoneAllIcon />
+          </MDTypography>
+          <MDTypography variant="h5">
+            Vendor product access successfully. You can close this page now!
+          </MDTypography>
+        </Card>
+      </MDBox>
+    );
+  }
 
   return (
     <PageLayout>
@@ -180,7 +202,25 @@ const VendorProductAccess = () => {
 
                     <Grid item xs={12}>
                       <MDButton type="submit" variant="gradient" color="info" fullWidth>
-                        Submit
+                        {isLoading === true ? (
+                          <CircularProgress
+                            variant="indeterminate"
+                            disableShrink
+                            sx={{
+                              color: (theme) =>
+                                theme.palette.mode === "light" ? "#fcfffe" : "#fcfffe",
+                              animationDuration: "550ms",
+
+                              [`& .${circularProgressClasses.circle}`]: {
+                                strokeLinecap: "round",
+                              },
+                            }}
+                            size={25}
+                            thickness={5}
+                          />
+                        ) : (
+                          "Submit"
+                        )}
                       </MDButton>
                     </Grid>
                   </Grid>
